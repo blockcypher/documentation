@@ -52,7 +52,7 @@
   <h2>Introduction</h2>
   <p>The BlockCypher API is a simple JSON API that can be accessed over HTTP or HTTPS from the api.blockcypher.com domain. It tries to adhere to the REST principles as much as possible and all URLs are versioned. In addition to straight HTTP APIs we also provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and <em>web hooks</em>. Web hooks let you register a URL that we will POST to anytime an event you're interested in happens.<p>
 
-  <p>Most of our resources exist under a given blockchain resource. For example the complete URL to the Bitcoin main blockcain is:</p>
+  <p>Most of our resources exist under a given blockchain resource. For example the complete URL to the Bitcoin main blockchain is:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main</code></pre>
 
   <p>Opening that URL in your browser will produce the following JSON document, showing the current height of the chain as well as the hashes and URLs of that last 2 blocks (note that this is actually extracted in real time from our API).</p>
@@ -62,15 +62,16 @@
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
 267</code></pre>
   <p></p>
+
   <h1>Blockchain API</h1>
   <p>The Blockchain API gives you access to the raw information that makes up the blockchain: blocks and transactions. If those concepts aren't familiar, refer to the Bitcoin wiki for more information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
-  <p>Three main resources make up the Blockchain API:</p>
+  <p>Three main resources make up the Blockchain API.</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
       <td>Chain</td><td>/v1/{coin}/{chain}</td><td><a href="https://api.blockcypher.com/v1/btc/main">https://api.blockcypher.com/v1/btc/main</a></td>
-      <td>Returns the current state of the specified blockchain, like the two latest blocks.</td>
+      <td>Returns the current state of the specified blockchain, including height and the two latest blocks.</td>
     </tr>
     <tr>
       <td>Block</td><td>/v1/{coin}/{chain}/blocks/{hash|height}</td>
@@ -84,6 +85,101 @@
     </tr>
     </tbody>
   </table>
+  <h2>Chains</h2>
+  <p>The only supported blockchain at the moment is the Bitcoin main blockchain. We plan to add addition blockchains and altcoins depending on popularity and demands. If you would like us to consider adding one, please <a href="mailto:contact@blockcypher.com">contact us</a>.</p>
+  <p>A request to a given chain returns the following properties:</p>
+  <table>
+    <thead><tr><th>Property</th><th>Example (long URLs abbreviated)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>name</td><td>BTC.main</td><td>Chain name</td>
+    </tr>
+    <tr>
+      <td>latest</td><td>0000000000000000b90b199e699b6df77433666cde55c98703af5edcd18f974f</td>
+      <td>Hash of the current latest block in the chain.</td>
+    </tr>
+    <tr>
+      <td>previous</td><td>00000000000000008a317621eb28de89e4e97d64eee5ab2cf0561eac99b41d66</td>
+      <td>Hash of the block previous to the latest in the chain.</td>
+    </tr>
+    <tr>
+      <td>latestUrl</td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666cde55c98703af5edcd18f974f">http://api.blockcypher.com/v1/btc/main/blocks/0000...974f</a></td>
+      <td>URL to retrieve information about the current latest block in the chain.</td>
+    </tr>
+    <tr>
+      <td>previousUrl</td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64eee5ab2cf0561eac99b41d66">http://api.blockcypher.com/v1/btc/main/blocks/0000...1d66</a></td>
+      <td>URL to retrieve information about the block previous to the latest in the chain.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h2>Blocks</h2>
+  <p>Blocks are located under a chain's URL space, their main function is to group validated transactions together. The most interesting properties of blocks are listed below. Additional, lower-level properties are also included, if you're interested in them please refer to documentation on the <a href="https://en.bitcoin.it/wiki/Block_hashing_algorithm">block hashing algorithm</a>.
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (long URLs abbreviated)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>hash</td><td>00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa</td><td>Block hash, can be used as a unique identifier.</td>
+    </tr>
+    <tr>
+      <td>height</td><td>293268</td>
+      <td>The height of the block is it's distance from the root of the chain. The first block, also called the genesis block has for height 0.</td>
+    </tr>
+    <tr>
+      <td>chain</td><td>BTC.main</td>
+      <td>The name of the chain this block comes from.</td>
+    </tr>
+    <tr>
+      <td>total</td><td>448188159094</td>
+      <td>The total amount in <a href="https://en.bitcoin.it/wiki/Units">satoshis</a> transacted in this block. Divide by 10^8 to obtain the number of bitcoins.</td>
+    </tr>
+    <tr>
+      <td>fees</td><td>13383533</td>
+      <td>Amount of fees in satoshis collected by miners on this block.</td>
+    </tr>
+    <tr>
+      <td>time</td><td>2014-03-30T18:52:44Z</td>
+      <td>Time this block was built at. Note that miners rarely have an accurate clock time so this time should'nt considered completely accurate in general.</td>
+    </tr>
+    <tr>
+      <td>received</td><td>2014-03-30T18:52:36.539Z</td>
+      <td>Time at which our servers received the block. Our servers time is continuously adjusted and accurate.</td>
+    </tr>
+    <tr>
+      <td>n_tx</td><td>579</td>
+      <td>Number of transactions in this block.</td>
+    </tr>
+    <tr>
+      <td>prev_block</td><td>00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa</td>
+      <td>Hash of the block previous to this one.</td>
+    </tr>
+    <tr>
+      <td>prev_block_url</td><td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa">http://api.blockcypher.com/v1/btc/main/blocks/0000...35fa</a></td>
+      <td>URL to get details about the block previous to this one.</td>
+    </tr>
+    <tr>
+      <td>tx_url</td><td>http://api.blockcypher.com/v1/btc/main/txs/</td>
+      <td>Base URL transactions can be retrieved from. To get a transaction's full URL, concatenate this URL with the transaction's hash.</td>
+    </tr>
+    <tr>
+      <td>txs</td><td>["96d8...4f6ab", "3b2c...12bb", "7fa2...90d1", ...]</td>
+      <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions, to obtain more use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
+    </tr>
+    <tr>
+      <td>next_txids</td><td>http://api.blockcypher.com/v1/btc/main/blocks/0000...7b72?txstart=20&limit=20</td>
+      <td>URL to get the same block information but including the 20 transactions next to the current ones.</td>
+    </tr>
+  </table>
+
+  <h3>Example</h3>
+
+  <h2>Transactions</h2>
+  <h2>Websocket and Web Hook</h2>
+
+  <h1>More coming very soon...</h1>
   <pre data-src="../samples/browser-websocket.js"></pre>
 
   <script src="js/prism.js"></script>
