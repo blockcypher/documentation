@@ -89,27 +89,27 @@
   <p>The only supported blockchain at the moment is the Bitcoin main blockchain. We plan to add addition blockchains and altcoins depending on popularity and demands. If you would like us to consider adding one, please <a href="mailto:contact@blockcypher.com">contact us</a>.</p>
   <p>A request to a given chain returns the following properties:</p>
   <table>
-    <thead><tr><th>Property</th><th>Example (long URLs abbreviated)</th><th>Description</th></tr></thead>
+    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
       <td>name</td><td>BTC.main</td><td>Chain name</td>
     </tr>
     <tr>
-      <td>latest</td><td>0000000000000000b90b199e699b6df77433666cde55c98703af5edcd18f974f</td>
+      <td>latest</td><td>0000...974f</td>
       <td>Hash of the current latest block in the chain.</td>
     </tr>
     <tr>
-      <td>previous</td><td>00000000000000008a317621eb28de89e4e97d64eee5ab2cf0561eac99b41d66</td>
+      <td>previous</td><td>0000...1d66</td>
       <td>Hash of the block previous to the latest in the chain.</td>
     </tr>
     <tr>
       <td>latestUrl</td>
-      <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666cde55c98703af5edcd18f974f">http://api.blockcypher.com/v1/btc/main/blocks/0000...974f</a></td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666cde55c98703af5edcd18f974f">.../v1/btc/main/blocks/0000...974f</a></td>
       <td>URL to retrieve information about the current latest block in the chain.</td>
     </tr>
     <tr>
       <td>previousUrl</td>
-      <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64eee5ab2cf0561eac99b41d66">http://api.blockcypher.com/v1/btc/main/blocks/0000...1d66</a></td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64eee5ab2cf0561eac99b41d66">.../v1/btc/main/blocks/0000...1d66</a></td>
       <td>URL to retrieve information about the block previous to the latest in the chain.</td>
     </tr>
     </tbody>
@@ -119,10 +119,10 @@
   <p>Blocks are located under a chain's URL space, their main function is to group validated transactions together. The most interesting properties of blocks are listed below. Additional, lower-level properties are also included, if you're interested in them please refer to documentation on the <a href="https://en.bitcoin.it/wiki/Block_hashing_algorithm">block hashing algorithm</a>.
 
   <table>
-    <thead><tr><th>Property</th><th>Example (long URLs abbreviated)</th><th>Description</th></tr></thead>
+    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
-      <td>hash</td><td>00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa</td><td>Block hash, can be used as a unique identifier.</td>
+      <td>hash</td><td>0000...35fa</td><td>Block hash, can be used as a unique identifier.</td>
     </tr>
     <tr>
       <td>height</td><td>293268</td>
@@ -153,11 +153,11 @@
       <td>Number of transactions in this block.</td>
     </tr>
     <tr>
-      <td>prev_block</td><td>00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa</td>
+      <td>prev_block</td><td>0000...35fa</td>
       <td>Hash of the block previous to this one.</td>
     </tr>
     <tr>
-      <td>prev_block_url</td><td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa">http://api.blockcypher.com/v1/btc/main/blocks/0000...35fa</a></td>
+      <td>prev_block_url</td><td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa">.../v1/btc/main/blocks/0000...35fa</a></td>
       <td>URL to get details about the block previous to this one.</td>
     </tr>
     <tr>
@@ -169,7 +169,7 @@
       <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions, to obtain more use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
     </tr>
     <tr>
-      <td>next_txids</td><td>http://api.blockcypher.com/v1/btc/main/blocks/0000...7b72?txstart=20&limit=20</td>
+      <td>next_txids</td><td>.../v1/btc/main/blocks/0000...7b72?txstart=20&limit=20</td>
       <td>URL to get the same block information but including the 20 transactions next to the current ones.</td>
     </tr>
   </table>
