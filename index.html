@@ -65,22 +65,22 @@
 
   <h1>Blockchain API</h1>
   <p>The Blockchain API gives you access to the raw information that makes up the blockchain: blocks and transactions. If those concepts aren't familiar, refer to the Bitcoin wiki for more information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
-  <p>Three main resources make up the Blockchain API.</p>
+  <p>Three main resources make up the Blockchain API (all located under https://api.blockcypher.com).</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
-      <td>Chain</td><td>/v1/{coin}/{chain}</td><td><a href="https://api.blockcypher.com/v1/btc/main">https://api.blockcypher.com/v1/btc/main</a></td>
+      <td>Chain</td><td>/v1/{coin}/{chain}</td><td><a href="https://api.blockcypher.com/v1/btc/main">/v1/btc/main</a></td>
       <td>Returns the current state of the specified blockchain, including height and the two latest blocks.</td>
     </tr>
     <tr>
       <td>Block</td><td>/v1/{coin}/{chain}/blocks/{hash|height}</td>
-      <td><a href="http://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">https://api.blockcypher.com/v1/btc/main/blocks/293000</a></td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/blocks/293000</a></td>
       <td>All the details about a given block, including transaction hashes. Can be retrieved either by block height or block hash.</td>
     </tr>
     <tr>
       <td>Transaction</td><td>/v1/{coin}/{chain}/txs/{hash}</td>
-      <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">https://api.blockcypher.com/v1/btc/main/txs/f854aeba...</a></td>
+      <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/txs/f854aeba...</a></td>
       <td>All the details about a given transaction, including involved addresses, inputs and outputs.</td>
     </tr>
     </tbody>
