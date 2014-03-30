@@ -8,11 +8,84 @@
       font-size: 18px;
       line-height: 25px;
     }
+    h1, h2 {
+      font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+    }
+    code {
+      font-size: 15px;
+    }
+    table {
+      border-collapse: collapse;
+      text-align: left;
+      width: 100%;
+      font: normal 16px Arial, Helvetica, sans-serif;
+      background: #fff;
+      overflow: hidden;
+      border: 1px solid #171812;
+      border-radius: 3px;
+    }
+    table td, table th { padding: 12px 15px; }
+    table thead th {
+      background-color:#5A5D50;
+      color:#FFFFFF;
+      font-weight: bold;
+      border-left: 1px solid #171812;
+    }
+    table thead th:first-child { border: none; }
+    table tbody td {
+      color: #333;
+      border-left: 1px solid #171812;
+      font-weight: normal;
+      padding: 12px 15px;
+    }
+    table thead th:first-child { border: none; }
+    table tbody .alt td {
+      background: #E1EEf4;
+      color: #333;
+    }
+    table tbody td:first-child { border-left: none; }
+    table tbody tr:last-child td { border-bottom: none; }
   </style>
 </head>
 <body>
-  <p>This is a normal paragraph.</p>
+  <p>This describes the resources that make up the BlockCypher API. If you have any problem or request please <a href="mailto:contact@blockcypher.com">contact us</a>.</p>
+  <h2>Introduction</h2>
+  <p>The BlockCypher API is a simple JSON API that can be accessed over HTTP or HTTPS from the api.blockcypher.com domain. It tries to adhere to the REST principles as much as possible and all URLs are versioned. In addition to straight HTTP APIs we also provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and <em>web hooks</em>. Web hooks let you register a URL that we will POST to anytime an event you're interested in happens.<p>
+
+  <p>Most of our resources exist under a given blockchain resource. For example the complete URL to the Bitcoin main blockcain is:</p>
+  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main</code></pre>
+
+  <p>Opening that URL in your browser will produce the following JSON document, showing the current height of the chain as well as the hashes and URLs of that last 2 blocks (note that this is actually extracted in real time from our API).</p>
+  <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
+
+  <p>The examples and samples in this documentation are in Javascript (browser or node.js) or using the command line. More samples will be added over time and complete examples can be fund in our <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we recommend using <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a>. While installing them isn't required to get started, we will be using them in this documentation to illustrate some usage patterns. Like this little piece of magic showing the number of transactions in the latest block (see the Blockchain API section for more information):</p>
+  <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
+267</code></pre>
+  <p></p>
+  <h1>Blockchain API</h1>
+  <p>The Blockchain API gives you access to the raw information that makes up the blockchain: blocks and transactions. If those concepts aren't familiar, refer to the Bitcoin wiki for more information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
+  <p>Three main resources make up the Blockchain API:</p>
+  <table>
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>Chain</td><td>/v1/{coin}/{chain}</td><td><a href="https://api.blockcypher.com/v1/btc/main">https://api.blockcypher.com/v1/btc/main</a></td>
+      <td>Returns the current state of the specified blockchain, like the two latest blocks.</td>
+    </tr>
+    <tr>
+      <td>Block</td><td>/v1/{coin}/{chain}/blocks/{hash|height}</td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">https://api.blockcypher.com/v1/btc/main/blocks/293000</a></td>
+      <td>All the details about a given block, including transaction hashes. Can be retrieved either by block height or block hash.</td>
+    </tr>
+    <tr>
+      <td>Transaction</td><td>/v1/{coin}/{chain}/txs/{hash}</td>
+      <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">https://api.blockcypher.com/v1/btc/main/txs/f854aeba...</a></td>
+      <td>All the details about a given transaction, including involved addresses, inputs and outputs.</td>
+    </tr>
+    </tbody>
+  </table>
   <pre data-src="../samples/browser-websocket.js"></pre>
+
   <script src="js/prism.js"></script>
 </body>
 </html>
