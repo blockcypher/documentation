@@ -95,19 +95,17 @@
   </style>
 </head>
 <body>
-  <p>This describes the resources that make up the BlockCypher APIs. If you have any problems or requests please <a href="mailto:contact@blockcypher.com">contact us</a>.</p>
-  <h1>Introduction</h1>
-  <h2>APIs</h2>
-  <p>The BlockCypher APIs are simple JSON APIs that can be accessed over HTTP or HTTPS from the api.blockcypher.com domain. It tries to adhere to the REST principles as much as possible and all URLs are versioned. In addition to straight HTTP APIs we also provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and <em>web hooks</em>. Web hooks let you register a URL that we will POST to anytime an event you're interested in happens.<p>
+  <p>This document describes the BlockCypher API resources. Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
+  <h2>Introduction</h2>
+  <p>The BlockCypher API is a simple JSON API that can be accessed over HTTP or HTTPS from the api.blockcypher.com domain. It adheres to REST principles as much as possible. All URLs are versioned. In addition to straight HTTP APIs we provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and <em>web hooks</em>. Web hooks let you register a URL to POST to when an event happens.<p>
 
-  <p>Most of our resources exist under a given blockchain resource. For example, the complete URL to the Bitcoin main blockchain is:</p>
+  <p>Most of our resources exist under a given blockchain. For example, the URL to the Bitcoin main blockchain is:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main</code></pre>
 
-  <p>Opening that URL in your browser will produce the following JSON document, showing the current height of the chain as well as the hashes and URLs of that last 2 blocks (note that this is actually extracted in real time from our API).</p>
+  <p>Opening the URL will produce the following JSON document. It will show the current chain height, the hashes and URLs of the last 2 blocks (note: this is extracted in real time from our API).</p>
   <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
 
-  <h2>Example Code</h2>
-  <p>The examples and samples in this documentation are in Javascript (browser or node.js) or using the command line. More samples will be added over time and complete examples can be found in our <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we recommend using <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a>. While installing them isn't required to get started, we will be using them in this documentation to illustrate some usage patterns. Like this little piece of magic showing the number of transactions in the latest block (see the Blockchain API section for more information):</p>
+  <p>The examples and samples in this documentation are in Javascript (browser or node.js) or using the command line. More samples will be added over time. Complete examples can be found in our <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we recommend using <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a>. Installation is not required to get started, but we will use them to illustrate sample usage patterns. For example, this shows the number of transactions in the latest block (see the Blockchain API section for more information):</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
 267</code></pre>
 
