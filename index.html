@@ -97,18 +97,24 @@
 <body>
   <p>This describes the resources that make up the BlockCypher APIs. If you have any problems or requests please <a href="mailto:contact@blockcypher.com">contact us</a>.</p>
   <h1>Introduction</h1>
+  <h2>APIs</h2>
   <p>The BlockCypher APIs are simple JSON APIs that can be accessed over HTTP or HTTPS from the api.blockcypher.com domain. It tries to adhere to the REST principles as much as possible and all URLs are versioned. In addition to straight HTTP APIs we also provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and <em>web hooks</em>. Web hooks let you register a URL that we will POST to anytime an event you're interested in happens.<p>
 
-  <p>Most of our resources exist under a given blockchain resource. For example the complete URL to the Bitcoin main blockchain is:</p>
+  <p>Most of our resources exist under a given blockchain resource. For example, the complete URL to the Bitcoin main blockchain is:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main</code></pre>
 
   <p>Opening that URL in your browser will produce the following JSON document, showing the current height of the chain as well as the hashes and URLs of that last 2 blocks (note that this is actually extracted in real time from our API).</p>
   <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
 
+  <h2>Example Code</h2>
   <p>The examples and samples in this documentation are in Javascript (browser or node.js) or using the command line. More samples will be added over time and complete examples can be found in our <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we recommend using <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a>. While installing them isn't required to get started, we will be using them in this documentation to illustrate some usage patterns. Like this little piece of magic showing the number of transactions in the latest block (see the Blockchain API section for more information):</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
 267</code></pre>
-  <p></p>
+
+  <h2>Rate limiting</h2>
+  <p>Our APIs can be used without contacting us. However, requests have a rate limit above which we ask you <a href="mailto:contact@blockcypher.com">email us</a> to let us know about your usage. We will provide you a user token that will lift all limits.</p>
+  <p>For classic requests the limits are 5 per second and 600 per hour. For webhooks or websockets, there's a single limit of 600 per hour.</p>
+  <p>While in beta, all our services are entirely <i>free</i>.</p>
 
   <h1>Blockchain API</h1>
   <p>The Blockchain API gives you access to the raw information that makes up the blockchain: blocks and transactions. If those concepts aren't familiar, refer to the Bitcoin wiki for more information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
@@ -212,7 +218,7 @@
       <td>Base URL transactions can be retrieved from. To get a transaction's full URL, concatenate this URL with the transaction's hash.</td>
     </tr>
     <tr>
-      <td>txs</td><td>["96d8...4f6ab", "3b2c...12bb", "7fa2...90d1", ...]</td>
+      <td>txids</td><td>["96d8...4f6ab", "3b2c...12bb", "7fa2...90d1", ...]</td>
       <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions, to obtain more use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
     </tr>
     <tr>
@@ -294,6 +300,68 @@
     <tr>
       <td>outputs</td><td>(see below)</td>
       <td>Array of outputs, limited to 20. Use paging to get more outputs (see blocks).</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>Inputs ans outputs rely on scripts that when executed, define both if the transaction is valid and what type of transaction it is. We recognize 6 types of transaction scripts:</p>
+  <ul>
+    <li>pay-to-pubkey-hash: most common transaction transfering to a public key hash</li>
+    <li>pay-to-multi-pubkey-hash: multi-signatures transaction</li>
+    <li>pay-to-pubkey: used for some mining transactions</li>
+    <li>pay-to-script-hash: used for transactions relying on arbitrary scripts, rare</li>
+    <li>empty: no script present, mostly for the input of a mining transaction</li>
+    <li>unknown: non-standard script</li>
+  </ul>
+
+  <p>Transaction inputs have the following properties:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>prev_hash</td><td>0000...35fa</td>
+      <td>Hash of the transaction for which an output is being spent by this input. Not present for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
+    </tr>
+    <tr>
+      <td>output_index</td><td>1</td>
+      <td>Index in the previous transaction of the output being spent. Not present for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
+    </tr>
+    <tr>
+      <td>script_type</td><td>pay-to-pubkey-hash</td>
+      <td>Type of the script in the transaction output being spent.</td>
+    </tr>
+    <tr>
+      <td>addresses</td><td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
+      <td>Addresses referenced in the transaction output being spent.</td>
+    </tr>
+    <tr>
+      <td>script</td><td>76a914...ac</td>
+      <td>Raw hexadecimal encoding of the script.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>Transaction outputs have the following properties:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>value</td><td>2508682714</td>
+      <td>Value in staoshi transfered by this transaction output.</td>
+    </tr>
+    <tr>
+      <td>script_type</td><td>pay-to-pubkey-hash</td>
+      <td>Type of the script in this output.</td>
+    </tr>
+    <tr>
+      <td>addresses</td><td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
+      <td>Addresses the value is being transfered to.</td>
+    </tr>
+    <tr>
+      <td>script</td><td>76a914...ac</td>
+      <td>Raw hexadecimal encoding of the script.</td>
     </tr>
     </tbody>
   </table>
