@@ -110,13 +110,13 @@
 267</code></pre>
 
   <h2>Rate limiting</h2>
-  <p>Our APIs can be used without contacting us. However, requests have a rate limit above which we ask you <a href="mailto:contact@blockcypher.com">email us</a> to let us know about your usage. We will provide you a user token that will lift all limits.</p>
-  <p>For classic requests the limits are 5 per second and 600 per hour. For webhooks or websockets, there's a single limit of 600 per hour.</p>
   <p>While in beta, all our services are entirely <i>free</i>.</p>
+  <p>Our APIs can be used freely up to a certain rate limit. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed our limits:</p>
+  <p>Classic requests have a limit of 5 requests/sec and 600 requests/hr. For webhooks or websockets, the limit is 600 requests/hr.</p>
 
   <h1>Blockchain API</h1>
-  <p>The Blockchain API gives you access to the raw information that makes up the blockchain: blocks and transactions. If those concepts aren't familiar, refer to the Bitcoin wiki for more information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
-  <p>Three main resources make up the Blockchain API (all located under https://api.blockcypher.com).</p>
+  <p>The Blockchain API allows you to access raw information on the blocks and transactions that make up the blockchain. Information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a> can be found on the Bitcoin wiki.
+  <p>Three main resources make up the Blockchain API (all under https://api.blockcypher.com):</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
     <tbody>
@@ -127,17 +127,17 @@
     <tr>
       <td>Block</td><td>/v1/{coin}/{chain}/blocks/{hash|height}</td>
       <td><a href="http://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/blocks/293000</a></td>
-      <td>All the details about a given block, including transaction hashes. Can be retrieved either by block height or block hash.</td>
+      <td>All details about a given block, including transaction hashes. Can be retrieved either by block height or block hash.</td>
     </tr>
     <tr>
       <td>Transaction</td><td>/v1/{coin}/{chain}/txs/{hash}</td>
       <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/txs/f854aeba...</a></td>
-      <td>All the details about a given transaction, including involved addresses, inputs and outputs.</td>
+      <td>All details about a given transaction, including involved addresses, inputs and outputs.</td>
     </tr>
     </tbody>
   </table>
   <h2>Chains</h2>
-  <p>The only supported blockchain at the moment is the Bitcoin main blockchain. We plan to add addition blockchains and altcoins depending on popularity and demands. If you would like us to consider adding one, please <a href="mailto:contact@blockcypher.com">contact us</a>.</p>
+  <p>The only supported blockchain at the moment is the Bitcoin main blockchain. We will add additional blockchains and altcoins in the future: please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
   <p>A request to a given chain returns the following properties:</p>
   <table>
     <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
@@ -147,21 +147,21 @@
     </tr>
     <tr>
       <td>latest</td><td>0000...974f</td>
-      <td>Hash of the current latest block in the chain.</td>
+      <td>Hash of the latest block in the chain.</td>
     </tr>
     <tr>
       <td>previous</td><td>0000...1d66</td>
-      <td>Hash of the block previous to the latest in the chain.</td>
+      <td>Hash of the second to last block in the chain.</td>
     </tr>
     <tr>
       <td>latestUrl</td>
       <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666cde55c98703af5edcd18f974f">.../v1/btc/main/blocks/0000...974f</a></td>
-      <td>URL to retrieve information about the current latest block in the chain.</td>
+      <td>URL to retrieve information on the latest block in the chain.</td>
     </tr>
     <tr>
       <td>previousUrl</td>
       <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64eee5ab2cf0561eac99b41d66">.../v1/btc/main/blocks/0000...1d66</a></td>
-      <td>URL to retrieve information about the block previous to the latest in the chain.</td>
+      <td>URL to retrieve information on the second to last block in the chain.</td>
     </tr>
     </tbody>
   </table>
