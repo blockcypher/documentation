@@ -5,14 +5,14 @@
   <style media="screen" type="text/css">
     p {
       font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
-      font-size: 18px;
+      font-size: 16px;
       line-height: 25px;
     }
     h1, h2 {
       font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
     }
     code {
-      font-size: 15px;
+      font-size: 12px;
     }
     table {
       border-collapse: collapse;
@@ -24,8 +24,9 @@
       border: 1px solid #171812;
       border-radius: 3px;
     }
-    table td, table th { padding: 12px 15px; }
+    table td, table th { padding: 9px 12px; }
     table thead th {
+      font-size: 13px;
       background-color:#5A5D50;
       color:#FFFFFF;
       font-weight: bold;
@@ -33,10 +34,11 @@
     }
     table thead th:first-child { border: none; }
     table tbody td {
+      font-size: 13px;
       color: #333;
       border-left: 1px solid #171812;
       font-weight: normal;
-      padding: 12px 15px;
+      padding: 6px 10px;
     }
     table thead th:first-child { border: none; }
     table tbody .alt td {
@@ -45,12 +47,57 @@
     }
     table tbody td:first-child { border-left: none; }
     table tbody tr:last-child td { border-bottom: none; }
+    button.tryme {
+      -moz-box-shadow:inset 0px 1px 0px 0px #cae3fc;
+      -webkit-box-shadow:inset 0px 1px 0px 0px #cae3fc;
+      box-shadow:inset 0px 1px 0px 0px #cae3fc;
+      background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #4197ee) );
+      background:-moz-linear-gradient( center top, #79bbff 5%, #4197ee 100% );
+      filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#4197ee');
+      background-color:#79bbff;
+      -webkit-border-top-left-radius:10px;
+      -moz-border-radius-topleft:10px;
+      border-top-left-radius:10px;
+      -webkit-border-top-right-radius:10px;
+      -moz-border-radius-topright:10px;
+      border-top-right-radius:10px;
+      -webkit-border-bottom-right-radius:10px;
+      -moz-border-radius-bottomright:10px;
+      border-bottom-right-radius:10px;
+      -webkit-border-bottom-left-radius:10px;
+      -moz-border-radius-bottomleft:10px;
+      border-bottom-left-radius:10px;
+      text-indent:0;
+      border:1px solid #469df5;
+      display:inline-block;
+      color:#ffffff;
+      font-family:Arial;
+      font-size:14px;
+      font-weight:bold;
+      font-style:normal;
+      height:34px;
+      line-height:32px;
+      width:90px;
+      text-decoration:none;
+      text-align:center;
+      text-shadow:1px 1px 0px #287ace;
+    }
+    button.tryme:hover {
+      background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #4197ee), color-stop(1, #79bbff) );
+      background:-moz-linear-gradient( center top, #4197ee 5%, #79bbff 100% );
+      filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#4197ee', endColorstr='#79bbff');
+      background-color:#4197ee;
+    }
+    button.tryme:active {
+      position:relative;
+      top:1px;
+    }
   </style>
 </head>
 <body>
-  <p>This describes the resources that make up the BlockCypher API. If you have any problem or request please <a href="mailto:contact@blockcypher.com">contact us</a>.</p>
-  <h2>Introduction</h2>
-  <p>The BlockCypher API is a simple JSON API that can be accessed over HTTP or HTTPS from the api.blockcypher.com domain. It tries to adhere to the REST principles as much as possible and all URLs are versioned. In addition to straight HTTP APIs we also provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and <em>web hooks</em>. Web hooks let you register a URL that we will POST to anytime an event you're interested in happens.<p>
+  <p>This describes the resources that make up the BlockCypher APIs. If you have any problems or requests please <a href="mailto:contact@blockcypher.com">contact us</a>.</p>
+  <h1>Introduction</h1>
+  <p>The BlockCypher APIs are simple JSON APIs that can be accessed over HTTP or HTTPS from the api.blockcypher.com domain. It tries to adhere to the REST principles as much as possible and all URLs are versioned. In addition to straight HTTP APIs we also provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and <em>web hooks</em>. Web hooks let you register a URL that we will POST to anytime an event you're interested in happens.<p>
 
   <p>Most of our resources exist under a given blockchain resource. For example the complete URL to the Bitcoin main blockchain is:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main</code></pre>
@@ -58,7 +105,7 @@
   <p>Opening that URL in your browser will produce the following JSON document, showing the current height of the chain as well as the hashes and URLs of that last 2 blocks (note that this is actually extracted in real time from our API).</p>
   <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
 
-  <p>The examples and samples in this documentation are in Javascript (browser or node.js) or using the command line. More samples will be added over time and complete examples can be fund in our <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we recommend using <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a>. While installing them isn't required to get started, we will be using them in this documentation to illustrate some usage patterns. Like this little piece of magic showing the number of transactions in the latest block (see the Blockchain API section for more information):</p>
+  <p>The examples and samples in this documentation are in Javascript (browser or node.js) or using the command line. More samples will be added over time and complete examples can be found in our <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we recommend using <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a>. While installing them isn't required to get started, we will be using them in this documentation to illustrate some usage patterns. Like this little piece of magic showing the number of transactions in the latest block (see the Blockchain API section for more information):</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
 267</code></pre>
   <p></p>
@@ -175,13 +222,93 @@
   </table>
 
   <h3>Example</h3>
+  <p>In this example we will retrieve the last 10 block from the Bitcoin blockchain and render a page with a summary for each of them. To achieve this we will start from the chain, which gives us the URL of the latest block. We will then use the previousUrl of the block to load the previous, traversing the block chain back block by block.</p>
+  <p>From the command line, we can retrieve the latest block in the chain using the following:</p>
+  <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s</code></pre>
+
+  <p>Here we use the json command to extract the latestUrl property from the chain and pass it to curl using xargs (which invokes a command passing as a parameter what comes from stdin). This can be chained a little further to go one block back:</p>
+  <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json prev_block_url | xargs curl -s</code></pre>
+
+  <p>We could continue chaining those calls but it would get quickly very long. So we're going to write a short Javascript program that can run in your browser to do the same thing using JQuery.</p>
+  
+  <pre data-src="samples/3-latest-blocks.js"></pre>
+  <button class="tryme">Try me!</button>
+
+  <p>The calls to JQuery.get above directly call our APIs and leverage the URLs returned by every single call. We also allow cross-origin resource sharing which enables requests from your domain.</p>
+  <p>Finally, we improve on the code above by adding more details when displaying our blocks and adding a loop to go 10 blocks back instead of just 3.</p>
+
+  <pre data-src="samples/10-latest-blocks.js"></pre>
+  <button class="tryme" id="10-latest-blocks">Try me!</button>
 
   <h2>Transactions</h2>
+  <p>Transactions are at the core of any crypto-currency system, even the ones that don't exchange a currency. Transactions can either be confirmed (part of a block), in the pool of non-confirmed transactions or orphaned (referencing a yet-unknown transaction). Bitcoin transactions transfer a certain amount of bitcoin from previous transactions, referenced by inputs and controlled by a set of addresses, to a set of target addresses. If these concepts are unfamiliar, consider reading more about Bitcoin <a href="https://en.bitcoin.it/wiki/Address">addresses</a> and <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a>.</p>
+  <p>The main properties included in a transaction are the following:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>block_hash</td><td>0000...35fa</td>
+      <td>Hash of the block this transaction is included in. Only present for confirmed transactions.</td>
+    </tr>
+    <tr>
+      <td>block_height</td><td>293331</td>
+      <td>Height of the block this transaction is included in. Only present for confirmed transactions.</td>
+    </tr>
+    <tr>
+      <td>hash</td><td>9a20...9e84</td>
+      <td>Hash of the transaction. Note that while hashes are reasonably unique, using them has identifiers may be <a href="https://en.bitcoin.it/wiki/Transaction_Malleability">unsafe.</a></td>
+    </tr>
+    <tr>
+      <td>addresses</td><td>["1EJFhJDvS2ncpPotz6Lb3mGGchHfr3zgXv", "1N32Ts6eA2YHrcUjwZnzmPsLUnThZ6bDbb"]</td>
+      <td>Array of Bitcoin addresses involved in the transaction.</td> </tr>
+    </tr>
+    <tr>
+      <td>total</td><td>22180950000</td>
+      <td>Total amount exchanged in this transaction in satoshis.</td>
+    </tr>
+    <tr>
+      <td>fees</td><td>10000</td>
+      <td>Fees collected by miners included in the transaction, in satoshis.</td>
+    </tr>
+    <tr>
+      <td>received</td><td>2014-03-31T04:23:44.833536145Z</td>
+      <td>When this transaction was received by our servers.</td>
+    </tr>
+    <tr>
+      <td>confirmed</td><td>5</td>
+      <td>Number of transaction confirmations (number of blocks, including the one this transaction is part of, that have been added to the blockchain after). Unconfirmed transactions have 0 for confirmation.</td>
+    </tr>
+    <tr>
+      <td>vin_sz</td><td>1</td>
+      <td>Total number of inputs</td>
+    </tr>
+    <tr>
+      <td>vout_sz</td><td>2</td>
+      <td>Total number of outputs</td>
+    </tr>
+    <tr>
+      <td>inputs</td><td>(see below)</td>
+      <td>Array of inputs, limited to 20. Use paging to get more inputs (see blocks).</td>
+    </tr>
+    <tr>
+      <td>outputs</td><td>(see below)</td>
+      <td>Array of outputs, limited to 20. Use paging to get more outputs (see blocks).</td>
+    </tr>
+    </tbody>
+  </table>
+
   <h2>Websocket and Web Hook</h2>
 
   <h1>More coming very soon...</h1>
   <pre data-src="../samples/browser-websocket.js"></pre>
 
   <script src="site/js/prism.js"></script>
+  <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <script>
+    $('button.tryme').click(function(e) {
+      eval($(this).prev().children().text());
+    })
+  </script>
 </body>
 </html>
