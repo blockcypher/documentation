@@ -167,21 +167,21 @@
   </table>
 
   <h2>Blocks</h2>
-  <p>Blocks are located under a chain's URL space, their main function is to group validated transactions together. The most interesting properties of blocks are listed below. Additional, lower-level properties are also included, if you're interested in them please refer to documentation on the <a href="https://en.bitcoin.it/wiki/Block_hashing_algorithm">block hashing algorithm</a>.
+  <p>Blocks are located under a chain's URL. The most interesting properties of blocks are listed below. For information on lower-level properties, please see <a href="https://en.bitcoin.it/wiki/Block_hashing_algorithm">block hashing algorithm</a>.
 
   <table>
-    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
-      <td>hash</td><td>0000...35fa</td><td>Block hash, can be used as a unique identifier.</td>
+      <td>hash</td><td>0000...35fa</td><td>Block hash. Can be used as a unique identifier.</td>
     </tr>
     <tr>
       <td>height</td><td>293268</td>
-      <td>The height of the block is it's distance from the root of the chain. The first block, also called the genesis block has for height 0.</td>
+      <td>The height of the block is the distance from the root of the chain, the genesis block at height = 0.</td>
     </tr>
     <tr>
       <td>chain</td><td>BTC.main</td>
-      <td>The name of the chain this block comes from.</td>
+      <td>The name of the chain the block is from.</td>
     </tr>
     <tr>
       <td>total</td><td>448188159094</td>
@@ -193,11 +193,11 @@
     </tr>
     <tr>
       <td>time</td><td>2014-03-30T18:52:44Z</td>
-      <td>Time this block was built at. Note that miners rarely have an accurate clock time so this time should'nt considered completely accurate in general.</td>
+      <td>Recorded time at which the block was built. (Note: miners rarely have an accurate clock time).</td>
     </tr>
     <tr>
       <td>received</td><td>2014-03-30T18:52:36.539Z</td>
-      <td>Time at which our servers received the block. Our servers time is continuously adjusted and accurate.</td>
+      <td>Time the BlockCypher servers received the block. Our servers time is continuously adjusted and accurate.</td>
     </tr>
     <tr>
       <td>n_tx</td><td>579</td>
@@ -209,31 +209,31 @@
     </tr>
     <tr>
       <td>prev_block_url</td><td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa">.../v1/btc/main/blocks/0000...35fa</a></td>
-      <td>URL to get details about the block previous to this one.</td>
+      <td>URL for the previous block's details.</td>
     </tr>
     <tr>
       <td>tx_url</td><td>http://api.blockcypher.com/v1/btc/main/txs/</td>
-      <td>Base URL transactions can be retrieved from. To get a transaction's full URL, concatenate this URL with the transaction's hash.</td>
+      <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
     </tr>
     <tr>
       <td>txids</td><td>["96d8...4f6ab", "3b2c...12bb", "7fa2...90d1", ...]</td>
-      <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions, to obtain more use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
+      <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions. To obtain more, use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
     </tr>
     <tr>
       <td>next_txids</td><td>.../v1/btc/main/blocks/0000...7b72?txstart=20&limit=20</td>
-      <td>URL to get the same block information but including the 20 transactions next to the current ones.</td>
+      <td>URL to get the same block information with the next 20 transactions.</td>
     </tr>
   </table>
 
   <h3>Example</h3>
-  <p>In this example we will retrieve the last 10 block from the Bitcoin blockchain and render a page with a summary for each of them. To achieve this we will start from the chain, which gives us the URL of the latest block. We will then use the previousUrl of the block to load the previous, traversing the block chain back block by block.</p>
-  <p>From the command line, we can retrieve the latest block in the chain using the following:</p>
+  <p>In this example, we retrieve the last 10 block from the Bitcoin blockchain and render a summary page. We start with the chain property to get the URL of the latest block. We then use the prev_block_url to load the previous, hence traversing the block chain back block by block.</p>
+  <p>From the command line, we retrieve the latest block using the following:</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s</code></pre>
 
-  <p>Here we use the json command to extract the latestUrl property from the chain and pass it to curl using xargs (which invokes a command passing as a parameter what comes from stdin). This can be chained a little further to go one block back:</p>
+  <p>Here we use the json command to extract the latestUrl property from the chain and pass it to curl using xargs (invokes a command passing the stdin parameters). This can be chained further to go one block back:</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json prev_block_url | xargs curl -s</code></pre>
 
-  <p>We could continue chaining those calls but it would get quickly very long. So we're going to write a short Javascript program that can run in your browser to do the same thing using JQuery.</p>
+  <p>We can continue chaining calls but it will quickly get very long. Here's a short Javascript program which can be run in the browser to do the same thing using JQuery.</p>
   
   <pre data-src="samples/3-latest-blocks.js"></pre>
   <button class="tryme">Try me!</button>
