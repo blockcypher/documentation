@@ -239,15 +239,15 @@
   <pre data-src="samples/3-latest-blocks.js"></pre>
   <button class="tryme">Try me!</button>
 
-  <p>The calls to JQuery.get above directly call our APIs and leverage the URLs returned by every single call. We also allow cross-origin resource sharing which enables requests from your domain.</p>
-  <p>Finally, we improve on the code above by adding more details when displaying our blocks and adding a loop to go 10 blocks back instead of just 3.</p>
+  <p>The above JQuery.get calls our APIs and utilize the URLs returned by every call. We also allow cross-origin resource sharing which enables requests from your domain.</p>
+  <p>To improve on the above code, we add more details and a loop to get 10 blocks (instead of 3).</p>
 
   <pre data-src="samples/10-latest-blocks.js"></pre>
   <button class="tryme" id="10-latest-blocks">Try me!</button>
 
   <h2>Transactions</h2>
-  <p>Transactions are at the core of any crypto-currency system, even the ones that don't exchange a currency. Transactions can either be confirmed (part of a block), in the pool of non-confirmed transactions or orphaned (referencing a yet-unknown transaction). Bitcoin transactions transfer a certain amount of bitcoin from previous transactions, referenced by inputs and controlled by a set of addresses, to a set of target addresses. If these concepts are unfamiliar, consider reading more about Bitcoin <a href="https://en.bitcoin.it/wiki/Address">addresses</a> and <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a>.</p>
-  <p>The main properties included in a transaction are the following:</p>
+  <p>Transactions can be confirmed (part of a block), be in the pool of non-confirmed transactions, or orphaned (referencing a yet-unknown transaction). Confirmed transactions transfer a certain amount of bitcoin from previous transactions (referenced by inputs and controlled by a set of addresses) to a set of target addresses. For more information, read  Bitcoin <a href="https://en.bitcoin.it/wiki/Address">addresses</a> and <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a>.</p>
+  <p>The main properties in a transaction are:</p>
 
   <table>
     <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
