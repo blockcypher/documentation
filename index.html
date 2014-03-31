@@ -111,13 +111,13 @@
 
   <a id="rate-limiting"/>
   <h2>Rate limiting</h2>
-  <p>Our APIs can be used without contacting us. However, requests have a rate limit above which we ask you <a href="mailto:contact@blockcypher.com">email us</a> to let us know about your usage. We will provide you a user token that will lift all limits.</p>
-  <p>For classic requests the limits are 5 per second and 600 per hour. For webhooks or websockets, there's a single limit of 600 per hour.</p>
   <p>While in beta, all our services are entirely <i>free</i>.</p>
+  <p>Our APIs can be used freely up to a certain rate limit. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed our limits:</p>
+  <p>Classic requests have a limit of 5 requests/sec and 600 requests/hr. For webhooks or websockets, the limit is 600 requests/hr.</p>
 
   <h1>Blockchain API</h1>
-  <p>The Blockchain API gives you access to the raw information that makes up the blockchain: blocks and transactions. If those concepts aren't familiar, refer to the Bitcoin wiki for more information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
-  <p>Three main resources make up the Blockchain API (all located under https://api.blockcypher.com).</p>
+  <p>The Blockchain API allows you to access raw information on the blocks and transactions that make up the blockchain. Information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a> can be found on the Bitcoin wiki.
+  <p>Three main resources make up the Blockchain API (all under https://api.blockcypher.com):</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
     <tbody>
@@ -128,17 +128,17 @@
     <tr>
       <td>Block</td><td>/v1/{coin}/{chain}/blocks/{hash|height}</td>
       <td><a href="http://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/blocks/293000</a></td>
-      <td>All the details about a given block, including transaction hashes. Can be retrieved either by block height or block hash.</td>
+      <td>All details about a given block, including transaction hashes. Can be retrieved either by block height or block hash.</td>
     </tr>
     <tr>
       <td>Transaction</td><td>/v1/{coin}/{chain}/txs/{hash}</td>
       <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/txs/f854aeba...</a></td>
-      <td>All the details about a given transaction, including involved addresses, inputs and outputs.</td>
+      <td>All details about a given transaction, including involved addresses, inputs and outputs.</td>
     </tr>
     </tbody>
   </table>
   <h2>Chains</h2>
-  <p>The only supported blockchain at the moment is the Bitcoin main blockchain. We plan to add addition blockchains and altcoins depending on popularity and demands. If you would like us to consider adding one, please <a href="mailto:contact@blockcypher.com">contact us</a>.</p>
+  <p>The only supported blockchain at the moment is the Bitcoin main blockchain. We will add additional blockchains and altcoins in the future: please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
   <p>A request to a given chain returns the following properties:</p>
   <table>
     <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
@@ -148,41 +148,41 @@
     </tr>
     <tr>
       <td>latest</td><td>0000...974f</td>
-      <td>Hash of the current latest block in the chain.</td>
+      <td>Hash of the latest block in the chain.</td>
     </tr>
     <tr>
       <td>previous</td><td>0000...1d66</td>
-      <td>Hash of the block previous to the latest in the chain.</td>
+      <td>Hash of the second to last block in the chain.</td>
     </tr>
     <tr>
       <td>latestUrl</td>
       <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666cde55c98703af5edcd18f974f">.../v1/btc/main/blocks/0000...974f</a></td>
-      <td>URL to retrieve information about the current latest block in the chain.</td>
+      <td>URL to retrieve information on the latest block in the chain.</td>
     </tr>
     <tr>
       <td>previousUrl</td>
       <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64eee5ab2cf0561eac99b41d66">.../v1/btc/main/blocks/0000...1d66</a></td>
-      <td>URL to retrieve information about the block previous to the latest in the chain.</td>
+      <td>URL to retrieve information on the second to last block in the chain.</td>
     </tr>
     </tbody>
   </table>
 
   <h2>Blocks</h2>
-  <p>Blocks are located under a chain's URL space, their main function is to group validated transactions together. The most interesting properties of blocks are listed below. Additional, lower-level properties are also included, if you're interested in them please refer to documentation on the <a href="https://en.bitcoin.it/wiki/Block_hashing_algorithm">block hashing algorithm</a>.
+  <p>Blocks are located under a chain's URL. The most interesting properties of blocks are listed below. For information on lower-level properties, please see <a href="https://en.bitcoin.it/wiki/Block_hashing_algorithm">block hashing algorithm</a>.
 
   <table>
-    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
-      <td>hash</td><td>0000...35fa</td><td>Block hash, can be used as a unique identifier.</td>
+      <td>hash</td><td>0000...35fa</td><td>Block hash. Can be used as a unique identifier.</td>
     </tr>
     <tr>
       <td>height</td><td>293268</td>
-      <td>The height of the block is it's distance from the root of the chain. The first block, also called the genesis block has for height 0.</td>
+      <td>The height of the block is the distance from the root of the chain, the genesis block at height = 0.</td>
     </tr>
     <tr>
       <td>chain</td><td>BTC.main</td>
-      <td>The name of the chain this block comes from.</td>
+      <td>The name of the chain the block is from.</td>
     </tr>
     <tr>
       <td>total</td><td>448188159094</td>
@@ -194,11 +194,11 @@
     </tr>
     <tr>
       <td>time</td><td>2014-03-30T18:52:44Z</td>
-      <td>Time this block was built at. Note that miners rarely have an accurate clock time so this time should'nt considered completely accurate in general.</td>
+      <td>Recorded time at which the block was built. (Note: miners rarely have an accurate clock time).</td>
     </tr>
     <tr>
       <td>received</td><td>2014-03-30T18:52:36.539Z</td>
-      <td>Time at which our servers received the block. Our servers time is continuously adjusted and accurate.</td>
+      <td>Time the BlockCypher servers received the block. Our servers time is continuously adjusted and accurate.</td>
     </tr>
     <tr>
       <td>n_tx</td><td>579</td>
@@ -210,31 +210,31 @@
     </tr>
     <tr>
       <td>prev_block_url</td><td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa">.../v1/btc/main/blocks/0000...35fa</a></td>
-      <td>URL to get details about the block previous to this one.</td>
+      <td>URL for the previous block's details.</td>
     </tr>
     <tr>
       <td>tx_url</td><td>http://api.blockcypher.com/v1/btc/main/txs/</td>
-      <td>Base URL transactions can be retrieved from. To get a transaction's full URL, concatenate this URL with the transaction's hash.</td>
+      <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
     </tr>
     <tr>
       <td>txids</td><td>["96d8...4f6ab", "3b2c...12bb", "7fa2...90d1", ...]</td>
-      <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions, to obtain more use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
+      <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions. To obtain more, use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
     </tr>
     <tr>
       <td>next_txids</td><td>.../v1/btc/main/blocks/0000...7b72?txstart=20&limit=20</td>
-      <td>URL to get the same block information but including the 20 transactions next to the current ones.</td>
+      <td>URL to get the same block information with the next 20 transactions.</td>
     </tr>
   </table>
 
   <h3>Example</h3>
-  <p>In this example we will retrieve the last 10 block from the Bitcoin blockchain and render a page with a summary for each of them. To achieve this we will start from the chain, which gives us the URL of the latest block. We will then use the previousUrl of the block to load the previous, traversing the block chain back block by block.</p>
-  <p>From the command line, we can retrieve the latest block in the chain using the following:</p>
+  <p>In this example, we retrieve the last 10 block from the Bitcoin blockchain and render a summary page. We start with the chain property to get the URL of the latest block. We then use the prev_block_url to load the previous, hence traversing the block chain back block by block.</p>
+  <p>From the command line, we retrieve the latest block using the following:</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s</code></pre>
 
-  <p>Here we use the json command to extract the latestUrl property from the chain and pass it to curl using xargs (which invokes a command passing as a parameter what comes from stdin). This can be chained a little further to go one block back:</p>
+  <p>Here we use the json command to extract the latestUrl property from the chain and pass it to curl using xargs (invokes a command passing the stdin parameters). This can be chained further to go one block back:</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json prev_block_url | xargs curl -s</code></pre>
 
-  <p>We could continue chaining those calls but it would get quickly very long. So we're going to write a short Javascript program that can run in your browser to do the same thing using JQuery.</p>
+  <p>We can continue chaining calls but it will quickly get very long. Here's a short Javascript program which can be run in the browser to do the same thing using JQuery.</p>
   
   <pre data-src="samples/3-latest-blocks.js"></pre>
   <button class="tryme">Try me!</button>
