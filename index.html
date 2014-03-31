@@ -109,6 +109,7 @@
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
 267</code></pre>
 
+  <a id="rate-limiting"/>
   <h2>Rate limiting</h2>
   <p>Our APIs can be used without contacting us. However, requests have a rate limit above which we ask you <a href="mailto:contact@blockcypher.com">email us</a> to let us know about your usage. We will provide you a user token that will lift all limits.</p>
   <p>For classic requests the limits are 5 per second and 600 per hour. For webhooks or websockets, there's a single limit of 600 per hour.</p>
@@ -364,17 +365,56 @@
     </tbody>
   </table>
 
-  <h1>Websocket and Web Hook</h1>
+  <h1>WebSocket and WebHook</h1>
   <p>As crypto-currencies are highly transactional systems, many usage patterns require knowing when a given event occurs. For example, it may be important to know when a transaction gets included into a block, therefore getting its first confirmation. Instead of relying on polling resources, we provide push APIs to facilitate those use cases.</p>
-  <p>We support both Websockets and Web Hooks, use of one versus the other depends on your usage:</p>
+  <p>We support both WebSockets and WebHooks, use of one versus the other depends on your usage:</p>
   <ul>
-    <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">Websockets</a>: typically in client applications, when you don't already have a web server running. For example a web page that displays all the most recent transactions or a wallet app that updates its UI when a transaction has been confirmed. However websockets are less reliable in longer interactions (over several hours) as they require a connection to stay open.</li> 
-    <li><a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a>: the most reliable way to get notified but requires you to run a web server to receive the calls. Weautomatically retry HTTP requests 3 times.</li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a>: typically in client applications, when you don't already have a web server running. For example a web page that displays all the most recent transactions or a wallet app that updates its UI when a transaction has been confirmed. However websockets are less reliable in longer interactions (over several hours) as they require a connection to stay open.</li> 
+    <li><a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a>: the most reliable way to get notified but requires you to run a web server to receive the calls. We automatically retry HTTP requests 3 times.</li>
   </ul>
 
   <h2>WebSockets</h2>
   <p>Opening a WebSocket to start listening to some of our feeds is rather simple:</p>
   <pre><code class="language-javascript">new WebSocket("ws://api.blockcypher.com/v1/btc/main/socket");</code></pre>
+  <p>The code may differ a bit if you're not programming in Javascript but the URL should be identical. Once the socket opened, a JSON document describing the event you're interested in should be sent. The document should have the following format:</p>
+  <pre><code class="language-javascript">{
+  "filter": "event=new-block",
+  "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+}</code></pre>
+  <p>The token is optional and should be the value we provided to you (see <a href="#rate-limiting">rate limiting</a>). The filter is an expression associating keys with values. Supported keys at this time are:</p>
+  <table>
+    <thead><tr><th>Key</th><th>Example filter</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>event</td><td>event=new-orphan-tx</td>
+      <td>Type of event to receive. Supported event types at this time are: new-block, new-pool-tx and new-orphan-tx.</td>
+    </tr>
+    <tr>
+      <td>hash</td><td>hash=346a5...b77e5 (abbreviated)</td>
+      <td>Only objects that have a matching hash will be sent. The hash can either be for a block or a transaction.</td>
+    </tr>
+    <tr>
+      <td>addr</td><td>addr=1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC</td>
+      <td>Only transactions associated with the given address will be sent.</td>
+    </tr>
+    </tbody>
+  </table>
+  <p>Depending on your filter expression the payload of the message may be either a transaction or a block.</p>
+  <p>Filters can also compose key/value pairs using the & operator. For example, to receive only new pool transactions for a given address you could use: event=new-pool-tx&addr={myaddress}.</p>
+
+  <h2>WebHooks</h2>
+  <p>WebHooks follow the same format of interaction as WebSockets with two notable differences:</p>
+  <ul>
+    <li>The JSON document describing the event subscription should be sent using a POST request to https://api.blockcypher.com/v1/btc/main/hooks and include an additional url property containing the url you would like the be called back at.</li>
+    <li>The transaction or block associated with the event you subscribed to will be POSTed to the provided url. The POST request will also include a X-EventType HTTP header specifying the type of even that triggered the request.</li>
+  </ul>
+  <p>For example, to create a new WebHook:</p>
+  <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/hooks
+{
+  "filter": "event=new-block",
+  "url": "https://my.domain.com/callbacks/new-block"
+  "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+}</code></pre>
 
   <h1>Address API</h1>
   <h2>More coming soon...</h2>
