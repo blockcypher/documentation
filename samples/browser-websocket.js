@@ -1,8 +1,13 @@
-var ws = new WebSocket("ws://api.bc.local:3322/v1/btc/main/socket");
+var ws = new WebSocket("ws://socket.blockcypher.com/v1/btc/main");
 ws.onmessage = function (event) {
-  var child = document.createElement("div");
-  var d = JSON.parse(event.data);
-  child.innerHTML = "New block " + d.height + " / " + d.hash + " with " + d.n_tx + "transactions.";
-  document.body.insertBefore(child, document.body.firstChild);
+  var tx = JSON.parse(event.data);
+  var shortHash = tx.hash.substring(0, 6) + "...";
+  var total = tx.total / 100000000;
+  var addrs = tx.addresses.join(", ");
+  $('#browser-websockets').before("<div>Unconfirmed transaction " + shortHash + "of" + total +
+                                   "involving addresses" + addrs + "</div>");
 }
-ws.send(JSON.stringify({filter: "event=new-block"}));
+ws.onopen = function(event) {
+  console.log("connected");
+  ws.send(JSON.stringify({filter: "event=new-pool-tx"}));
+}

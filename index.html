@@ -375,7 +375,7 @@
 
   <h2>WebSockets</h2>
   <p>Opening a WebSocket to start listening to some of our feeds is rather simple:</p>
-  <pre><code class="language-javascript">new WebSocket("ws://api.blockcypher.com/v1/btc/main/socket");</code></pre>
+  <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
   <p>The code may differ a bit if you're not programming in Javascript but the URL should be identical. Once the socket opened, a JSON document describing the event you're interested in should be sent. The document should have the following format:</p>
   <pre><code class="language-javascript">{
   "filter": "event=new-block",
@@ -416,9 +416,14 @@
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
 
+  <h2>Example</h2>
+  <p>In this example, using a WebSocket, we will subscribe to all pool transactions: new transactions that are issued and validated but not confirmed yet. We will then display a summary as they come.</p>
+
+  <pre data-src="samples/browser-websocket.js"></pre>
+  <button class="tryme" id="browser-websocket">Try me!</button>
+
   <h1>Address API</h1>
   <h2>More coming soon...</h2>
-  <pre data-src="../samples/browser-websocket.js"></pre>
 
   <script src="site/js/prism.js"></script>
   <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
