@@ -1,7 +1,7 @@
 // Displays the block by rendering a div summarizing some of its most important details
 function showBlock(b) {
   var total = b.total / 100000000
-  $('#10-latest-blocks').before("<div>Block at "+b.height+" transfered "+ total+" in "+b.n_tx+" transactions.</div>");
+  $('#10-latest-blocks').before("<div>Block at "+b.height+" transferred "+ total+" in "+b.n_tx+" transactions.</div>");
 }
 
 // Gets the JSON data returned by the previous JQuery.get, parse it and returns a
