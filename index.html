@@ -95,9 +95,10 @@
   </style>
 </head>
 <body>
-  <p>This document describes the BlockCypher API resources. Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
+  
   <h2>Introduction</h2>
-  <p>The BlockCypher API is a simple JSON API that can be accessed over HTTP or HTTPS from the api.blockcypher.com domain. It adheres to REST principles as much as possible. All URLs are versioned. In addition to straight HTTP APIs we provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and <em>web hooks</em>. Web hooks let you register a URL to POST to when an event happens.<p>
+  <p>This document describes the BlockCypher API resources. Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
+  <p>The BlockCypher API is a simple JSON API that can be accessed over HTTP or HTTPS from the api.blockcypher.com domain. It adheres to REST principles as much as possible. All URLs are versioned. In addition to straight HTTP APIs we provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and <em>web hooks</em>. Web hooks allow you to register a URL on which to POST when an event happens.<p>
 
   <p>Most of our resources exist under a given blockchain. For example, the URL to the Bitcoin main blockchain is:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main</code></pre>
@@ -111,12 +112,11 @@
 
   <a id="rate-limiting"/>
   <h2>Rate limiting</h2>
-  <p>While in beta, all our services are entirely <i>free</i>.</p>
-  <p>Our APIs can be used freely up to a certain rate limit. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed our limits:</p>
-  <p>Classic requests have a limit of 5 requests/sec and 600 requests/hr. For webhooks or websockets, the limit is 600 requests/hr.</p>
+  <p>During BlockCypher's beta, our services are <i>free</i>. Our APIs can be used freely up to a certain rate limit. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed these limits:</p>
+  <p>Classic requests have a limit of 5 requests/sec and 600 requests/hr. Webhooks and websockets have a limit of 600 requests/hr.</p>
 
   <h1>Blockchain API</h1>
-  <p>The Blockchain API allows you to access raw information on the blocks and transactions that make up the blockchain. Information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a> can be found on the Bitcoin wiki.
+  <p>The Blockchain API allows you to access raw data from the blockchain's blocks and transactions. Information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a> can be found on the Bitcoin wiki.
   <p>Three main resources make up the Blockchain API (all under https://api.blockcypher.com):</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
@@ -138,7 +138,7 @@
     </tbody>
   </table>
   <h2>Chains</h2>
-  <p>The only supported blockchain at the moment is the Bitcoin main blockchain. We will add additional blockchains and altcoins in the future: please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
+  <p>The only supported blockchain is the Bitcoin main blockchain for now. Depending on market demands, we'll add additional blockchains and altcoins: please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
   <p>A request to a given chain returns the following properties:</p>
   <table>
     <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
@@ -239,15 +239,15 @@
   <pre data-src="samples/3-latest-blocks.js"></pre>
   <button class="tryme">Try me!</button>
 
-  <p>The calls to JQuery.get above directly call our APIs and leverage the URLs returned by every single call. We also allow cross-origin resource sharing which enables requests from your domain.</p>
-  <p>Finally, we improve on the code above by adding more details when displaying our blocks and adding a loop to go 10 blocks back instead of just 3.</p>
+  <p>The above JQuery.get calls our APIs and utilize the URLs returned by every call. We also allow cross-origin resource sharing which enables requests from your domain.</p>
+  <p>To improve on the above code, we add more details and a loop to get 10 blocks (instead of 3).</p>
 
   <pre data-src="samples/10-latest-blocks.js"></pre>
   <button class="tryme" id="10-latest-blocks">Try me!</button>
 
   <h2>Transactions</h2>
-  <p>Transactions are at the core of any crypto-currency system, even the ones that don't exchange a currency. Transactions can either be confirmed (part of a block), in the pool of non-confirmed transactions or orphaned (referencing a yet-unknown transaction). Bitcoin transactions transfer a certain amount of bitcoin from previous transactions, referenced by inputs and controlled by a set of addresses, to a set of target addresses. If these concepts are unfamiliar, consider reading more about Bitcoin <a href="https://en.bitcoin.it/wiki/Address">addresses</a> and <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a>.</p>
-  <p>The main properties included in a transaction are the following:</p>
+  <p>Transactions can be confirmed (part of a block), be in the pool of non-confirmed transactions, or orphaned (referencing a yet-unknown transaction). Confirmed transactions transfer a certain amount of bitcoin from previous transactions (referenced by inputs and controlled by a set of addresses) to a set of target addresses. For more information, read  Bitcoin <a href="https://en.bitcoin.it/wiki/Address">addresses</a> and <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a>.</p>
+  <p>The main properties in a transaction are:</p>
 
   <table>
     <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
