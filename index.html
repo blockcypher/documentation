@@ -372,6 +372,7 @@
     <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> - used typically in client applications when a web server is not already running. For example, a web page that displays the most recent transactions or a wallet app that updates its UI when a transaction has been confirmed. Websockets are less reliable in longer interactions (over several hours) as they require a connection to stay open.</li> 
     <li><a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a> - the most reliable way to get notified but requires running a web server to receive the calls. We automatically retry HTTP requests 3 times.</li>
   </ul>
+  <p>For an example, check our <a href="https://github.com/blockcypher/documentation/tree/master/samples/nodejs-webhook.js">sample code</a> creating a WebHook and starting a web server to receive callbacks using node.js.</p>
 
   <h2>WebSockets</h2>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
