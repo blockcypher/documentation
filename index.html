@@ -416,9 +416,13 @@
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
 
+  <h2>Example</h2>
+  <p>In this example, using a WebSocket, we will subscribe to all pool transactions: new transactions that haven't been confirmed yet. To do so we open a new WebSocket and send the filter we're interested in. As we get notified of new transactions, we just format them and add them into the page.</p>
+
+  <pre data-src="samples/browser-websocket.js"></pre>
+  <button class="tryme" id="browser-websocket">Try me!</button>
+
   <h1>Address API</h1>
-  <h2>Coming soon...</h2>
-  <pre data-src="../samples/browser-websocket.js"></pre>
 
   <script src="site/js/prism.js"></script>
   <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>

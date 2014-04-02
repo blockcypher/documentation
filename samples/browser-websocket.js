@@ -5,7 +5,6 @@ ws.onmessage = function (event) {
   var shortHash = tx.hash.substring(0, 6) + "...";
   var total = tx.total / 100000000;
   var addrs = tx.addresses.join(", ");
-  console.log(tx.addresses)
   $('#browser-websocket').before("<div>Unconfirmed transaction " + shortHash + " totalling " + total +
                                    "BTC involving addresses " + addrs + "</div>");
   count++;
