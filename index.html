@@ -219,7 +219,7 @@
       <td>URL for the previous block's details.</td>
     </tr>
     <tr>
-      <td>tx_url</td><td>http://api.blockcypher.com/v1/btc/main/txs/</td>
+      <td>tx_url</td><td>https://api.blockcypher.com/v1/btc/main/txs/</td>
       <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
     </tr>
     <tr>
@@ -235,10 +235,10 @@
   <h4><i>Example</i></h4>
   <p>In this example, we retrieve the last 10 block from the Bitcoin blockchain and render a summary page. We start with the chain property to get the URL of the latest block. We then use the prev_block_url to load the previous, hence traversing the block chain back block by block.</p>
   <p>From the command line, we retrieve the latest block using the following:</p>
-  <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s</code></pre>
+  <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s</code></pre>
 
   <p>Here we use the json command to extract the latestUrl property from the chain and pass it to curl using xargs (invokes a command passing the stdin parameters). This can be chained further to go one block back:</p>
-  <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json prev_block_url | xargs curl -s</code></pre>
+  <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json prev_block_url | xargs curl -s</code></pre>
 
   <p>We can continue chaining calls, but it quickly gets very long. Here's a short Javascript program which can be run in the browser to do the same thing using JQuery:</p>
   
