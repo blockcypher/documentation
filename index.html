@@ -3,7 +3,7 @@
 <head>
   <link rel="stylesheet" href="site/css/prism.css"/>
   <style media="screen" type="text/css">
-    p {
+    p, ul, ol {
       font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
       font-size: 16px;
       line-height: 25px;
@@ -97,26 +97,32 @@
 <body>
   
   <h1>Introduction</h1>
-  <p>This document describes the BlockCypher API resources. Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
-  <p>The BlockCypher API is a simple JSON API that can be accessed over HTTP or HTTPS from the api.blockcypher.com domain. It adheres to REST principles as much as possible. All URLs are versioned. In addition to straight HTTP APIs we provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and <em>web hooks</em>. Web hooks allow you to register a URL on which to POST when an event happens.<p>
-
-  <p>Most of our resources exist under a given blockchain. For example, the URL to the Bitcoin main blockchain is:</p>
+  <p>BlockCypher hosts full-nodes of the main and test Bitcoin blockchains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">webhooks</a>.
+	<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
+  <p>Most resources exist under a given blockchain. For example, the URL to Bitcoin main is:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main</code></pre>
 
-  <p>Opening the URL will produce the following JSON document. It will show the current chain height, the hashes and URLs of the last 2 blocks (note: this is extracted in real time from our API).</p>
+  <p>Opening the URL will produce the following JSON document. It will show the current chain height, hashes and URLs of the last 2 blocks which are extracted in <i>real-time</i> from our API.</p>
   <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
 
-  <p>The examples and samples in this documentation are in Javascript (browser or node.js) or using the command line. More samples will be added over time. Complete examples can be found in our <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we recommend using <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a>. Installation is not required to get started, but we will use them to illustrate sample usage patterns. For example, this shows the number of transactions in the latest block (see the Blockchain API section for more information):</p>
+  <p>The samples in this documentation are in Javascript (browser or node.js) or can be accessed using the command line. Complete examples can be found in BlockCypher's <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we use <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a> to illustrate. 
+	
+	<p>For example, this shows the number of transactions in the latest block (see the Blockchain API section for more information):</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
 267</code></pre>
 
-  <a id="rate-limiting"/>
-  <h2>Rate limiting</h2>
-  <p>During BlockCypher's beta, our services are free. Our APIs can be used freely up to a certain rate limit. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed these limits:</p>
-  <p>Classic requests have a limit of 5 requests/sec and 600 requests/hr. Webhooks and websockets have a limit of 600 requests/hr.</p>
-
-  <h1>Blockchain API</h1>
-  <p>The Blockchain API allows you to access raw data from the blockchain's blocks and transactions. Information about <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a> can be found on the Bitcoin wiki.
+  <a id="rate-limits"/>
+  <h2>Rate Limits</h2>
+  <p>During our beta, all services are free. BlockCypher APIs can be used up to these rate limits: 
+	<ul>
+	<li>Classic requests, up to 5 requests/sec and 600 requests/hr</il>
+  	<li>Webhooks and websockets, up to 600 requests/hr</li>
+	</ul>
+<p>Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed those limits.</p>
+ 
+<p>&nbsp;</p>
+<h1>Blockchain API</h1>
+  <p>The Blockchain API allows you to access raw data from the blockchain's <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
   <p>Three main resources make up the Blockchain API (all under https://api.blockcypher.com):</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
@@ -137,8 +143,8 @@
     </tr>
     </tbody>
   </table>
-  <h2>Chains</h2>
-  <p>The only supported blockchain is the Bitcoin main blockchain for now. Depending on market demands, we'll add additional blockchains and altcoins: please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
+  <p><h2>Chains</h2></pr>
+  <p>Currently, we support the main and test Bitcoin blockchains. Depending on market demands, we'll add additional blockchains and altcoins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
   <p>A request to a given chain returns the following properties:</p>
   <table>
     <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
@@ -167,8 +173,8 @@
     </tbody>
   </table>
 
-  <h2>Blocks</h2>
-  <p>Blocks are located under a chain's URL. The most interesting properties of blocks are listed below. For information on lower-level properties, please see <a href="https://en.bitcoin.it/wiki/Block_hashing_algorithm">block hashing algorithm</a>.
+  <p><h2>Blocks</h2></p>
+  <p>Blocks are located under a chain's URL. The most interesting properties of blocks are:</p>
 
   <table>
     <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
@@ -190,7 +196,7 @@
     </tr>
     <tr>
       <td>fees</td><td>13383533</td>
-      <td>Amount of fees in satoshis collected by miners on this block.</td>
+      <td>Amount of fees, in satoshis, collected by miners on this block.</td>
     </tr>
     <tr>
       <td>time</td><td>2014-03-30T18:52:44Z</td>
@@ -198,7 +204,7 @@
     </tr>
     <tr>
       <td>received</td><td>2014-03-30T18:52:36.539Z</td>
-      <td>Time the BlockCypher servers received the block. Our servers time is continuously adjusted and accurate.</td>
+      <td>Time our BlockCypher servers received the block. Our servers' time is continuously adjusted and accurate.</td>
     </tr>
     <tr>
       <td>n_tx</td><td>579</td>
@@ -226,7 +232,7 @@
     </tr>
   </table>
 
-  <h3>Example</h3>
+  <h4><i>Example</i></h4>
   <p>In this example, we retrieve the last 10 block from the Bitcoin blockchain and render a summary page. We start with the chain property to get the URL of the latest block. We then use the prev_block_url to load the previous, hence traversing the block chain back block by block.</p>
   <p>From the command line, we retrieve the latest block using the following:</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s</code></pre>
@@ -234,19 +240,19 @@
   <p>Here we use the json command to extract the latestUrl property from the chain and pass it to curl using xargs (invokes a command passing the stdin parameters). This can be chained further to go one block back:</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json prev_block_url | xargs curl -s</code></pre>
 
-  <p>We can continue chaining calls but it will quickly get very long. Here's a short Javascript program which can be run in the browser to do the same thing using JQuery.</p>
+  <p>We can continue chaining calls, but it quickly gets very long. Here's a short Javascript program which can be run in the browser to do the same thing using JQuery:</p>
   
   <pre data-src="samples/3-latest-blocks.js"></pre>
   <button class="tryme">Try me!</button>
 
-  <p>The above JQuery.get calls our APIs and utilize the URLs returned by every call. We also allow cross-origin resource sharing which enables requests from your domain.</p>
-  <p>To improve on the above code, we add more details and a loop to get 10 blocks, instead of 3.</p>
+  <p>The above JQuery.get calls our APIs and utilizes the URLs returned by every call. We allow cross-origin resource sharing which enables requests from your domain.</p>
+  <p>To improve on the above code, we add more details and a loop to get 10 blocks, instead of 3:</p>
 
   <pre data-src="samples/10-latest-blocks.js"></pre>
   <button class="tryme" id="10-latest-blocks">Try me!</button>
 
-  <h2>Transactions</h2>
-  <p>Transactions can be confirmed into a block, be in the pool of non-confirmed transactions, or be orphaned. Confirmed transactions transfer a certain amount of bitcoin from previous transactions (referenced by inputs and controlled by a set of addresses) to a set of target addresses. For more information, read  Bitcoin <a href="https://en.bitcoin.it/wiki/Address">addresses</a> and <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a>.</p>
+  <p><h2>Transactions</h2></p>
+  <p>Transactions can be confirmed into a block, in a pool of non-confirmed transactions, or orphaned. Confirmed transactions transfer a certain amount of bitcoin from previous <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a> (referenced by inputs and controlled by a set of addresses) to a set of target <a href="https://en.bitcoin.it/wiki/Address">addresses</a>.</p>
   <p>The main properties in a transaction are:</p>
 
   <table>
@@ -294,24 +300,24 @@
     </tr>
     <tr>
       <td>inputs</td><td>(see below)</td>
-      <td>Array of inputs, limited to 20. Use paging to get more inputs (see blocks paragraph).</td>
+      <td>Array of inputs, limited to 20. Use paging to get more inputs (see section on blocks).</td>
     </tr>
     <tr>
       <td>outputs</td><td>(see below)</td>
-      <td>Array of outputs, limited to 20. Use paging to get more outputs (see blocks paragraph).</td>
+      <td>Array of outputs, limited to 20. Use paging to get more outputs (see section on blocks).</td>
     </tr>
     </tbody>
   </table>
 
-  <p>Inputs ans outputs rely on scripts. When executed, they define if the transaction is valid and what type of transaction it is. We recognize 6 types of transaction scripts:</p>
-  <ul>
-    <li>pay-to-pubkey-hash (most common transaction transfering to a public key hash)</li>
-    <li>pay-to-multi-pubkey-hash (multi-signatures transaction)</li>
-    <li>pay-to-pubkey (used for mining transactions)</li>
-    <li>pay-to-script-hash (used for transactions relying on arbitrary scripts. Rarely used)</li>
-    <li>empty (no script present, mostly used for the input of a mining transaction)</li>
-    <li>unknown (non-standard script)</li>
-  </ul>
+  <p>Inputs and outputs rely on scripts. When executed, they define if the transaction is valid and what type of transaction it is. We recognize 6 types of transaction scripts:</p>
+  <ol>
+    <li>Pay-to-pubkey-hash (most common transaction transferring to a public key hash)</li>
+    <li>Pay-to-multi-pubkey-hash (multi-signatures transaction)</li>
+    <li>Pay-to-pubkey (used for mining transactions)</li>
+    <li>Pay-to-script-hash (used for transactions relying on arbitrary scripts, rarely used)</li>
+    <li>Empty (no script present, mostly used for the input of a mining transaction)</li>
+    <li>Unknown (non-standard script)</li>
+  </ol>
 
   <p>Transaction inputs have the following properties:</p>
 
@@ -348,7 +354,7 @@
     <tbody>
     <tr>
       <td>value</td><td>2508682714</td>
-      <td>Value transfered by this transaction output, in satoshi.</td>
+      <td>Value transferred by the transaction output, in satoshi.</td>
     </tr>
     <tr>
       <td>script_type</td><td>pay-to-pubkey-hash</td>
@@ -365,16 +371,17 @@
     </tbody>
   </table>
 
-  <h1>WebSocket and WebHook</h1>
-  <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when a given event occurs. For example: when a transaction gets included into a block, get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
-  <p>We support both WebSockets and WebHooks. Using one versus the other depends on your needs:</p>
+<p>  &nbsp; </p>
+  <p><h1>WebSocket and WebHook</h1></p>
+  <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
+  <p>We support both WebSockets and WebHooks:</p>
   <ul>
-    <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> - used typically in client applications when a web server is not already running. For example, a web page that displays the most recent transactions or a wallet app that updates its UI when a transaction has been confirmed. Websockets are less reliable in longer interactions (over several hours) as they require a connection to stay open.</li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> - used typically in client applications when a web server is not already running: e.g., a web page displaying the most recent transactions or a wallet app updating its UI when a transaction has been confirmed. Websockets are less reliable in longer interactions (over several hours) because they require a connection to stay open.</li> 
     <li><a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a> - the most reliable way to get notified but requires running a web server to receive the calls. We automatically retry HTTP requests 3 times.</li>
   </ul>
-  <p>For an example, check our <a href="https://github.com/blockcypher/documentation/tree/master/samples/nodejs-webhook.js">sample code</a> creating a WebHook and starting a web server to receive callbacks using node.js.</p>
+  <p>Check our <a href="https://github.com/blockcypher/documentation/tree/master/samples/nodejs-webhook.js">sample code</a> to create a WebHook and start a web server to receive callbacks using node.js.</p>
 
-  <h2>WebSockets</h2>
+  <p><h2>WebSockets</h2></p>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
   <pre><code class="language-javascript">new WebSocket("ws://api.blockcypher.com/v1/btc/main/socket");</code></pre>
   <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, a JSON document describing the event you're interested in will be sent. The document will have the following format:</p>
@@ -382,7 +389,7 @@
   "filter": "event=new-block",
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
-  <p>The token is optional and should be the value we provide to you (see <a href="#rate-limiting">rate limiting</a>). The filter is an expression associating keys with values. Supported keys at this time are:</p>
+  <p>The token is optional and is the value we provide you (see <a href="#rate-limits">rate limits</a>). The filter is an expression associating keys with values. Currently supported keys are:</p>
   <table>
     <thead><tr><th>Key</th><th>Example filter</th><th>Description</th></tr></thead>
     <tbody>
@@ -392,7 +399,7 @@
     </tr>
     <tr>
       <td>hash</td><td>hash=346a5...b77e5 (abbreviated)</td>
-      <td>Only objects that have a matching hash will be sent. The hash can either be for a block or a transaction.</td>
+      <td>Only objects with a matching hash will be sent. The hash can either be for a block or a transaction.</td>
     </tr>
     <tr>
       <td>addr</td><td>addr=1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC</td>
@@ -403,13 +410,13 @@
   <p>Depending on your filter expression, the message content will be either a transaction or a block.</p>
   <p>Filters can also combine key/value pairs using the & operator. For example, to receive only new pool transactions for a given address: event=new-pool-tx&addr={myaddress}.</p>
 
-  <h2>WebHooks</h2>
+  <p><h2>WebHooks</h2></p>
   <p>WebHooks have the same interaction format but with two key differences:</p>
   <ul>
-    <li>The JSON document describing the event subscription should be sent using a POST request to https://api.blockcypher.com/v1/btc/main/hooks and include an additional URL property containing the URL you want to be called at.</li>
+    <li>The JSON document describing the event subscription should be sent using a POST request to https://api.blockcypher.com/v1/btc/main/hooks and include an additional property containing the URL to be called.</li>
     <li>The transaction or block associated with the event you subscribed to will be POSTed to the provided URL. The POST request will also include a X-EventType HTTP header specifying the type of event which triggered the request.</li>
   </ul>
-  <p>For example, to create a new WebHook:</p>
+  <p>To create a new WebHook:</p>
   <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/hooks
 {
   "filter": "event=new-block",
@@ -417,13 +424,14 @@
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
 
-  <h2>Example</h2>
-  <p>In this example, using a WebSocket, we will subscribe to all pool transactions: new transactions that haven't been confirmed yet. To do so we open a new WebSocket and send the filter we're interested in. As we get notified of new transactions, we just format them and add them into the page.</p>
+  <i><h4>Example</i></h4>
+  <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
 
   <pre data-src="samples/browser-websocket.js"></pre>
   <button class="tryme" id="browser-websocket">Try me!</button>
 
-  <h1>Address API</h1>
+<p>  &nbsp; </p>
+  <p><h1>Address API</h1></p>
 
   <script src="site/js/prism.js"></script>
   <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
