@@ -97,12 +97,13 @@
 <body>
   
   <h1>Introduction</h1>
-  <p>BlockCypher hosts full-nodes of the main and test Bitcoin blockchains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">webhooks</a>.
+  <p>BlockCypher hosts full-nodes of the main and test Bitcoin block chains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">webhooks</a>.
 	<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
-  <p>Most resources exist under a given blockchain. For example, the URL to Bitcoin main is:</p>
+  <p>Most resources exist under a given blockchain. For example, the URLs to Bitcoin Main and Test are:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main</code></pre>
+  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/test3</code></pre>
 
-  <p>Opening the URL will produce the following JSON document. It will show the current chain height, hashes and URLs of the last 2 blocks which are extracted in <i>real-time</i> from our API.</p>
+  <p>Opening the URL to Bitcoin Main will produce the following JSON document. It will show the current chain height, hashes and URLs of the last 2 blocks which are extracted in <i>real-time</i> from our API.</p>
   <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
 
   <p>The samples in this documentation are in Javascript (browser or node.js) or can be accessed using the command line. Complete examples can be found in BlockCypher's <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we use <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a> to illustrate. 
@@ -122,14 +123,14 @@
  
 <p>&nbsp;</p>
 <h1>Blockchain API</h1>
-  <p>The Blockchain API allows you to access raw data from the blockchain's <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
+  <p>The Blockchain API allows you to access raw data from the block chain's <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
   <p>Three main resources make up the Blockchain API (all under https://api.blockcypher.com):</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
       <td>Chain</td><td>/v1/{coin}/{chain}</td><td><a href="https://api.blockcypher.com/v1/btc/main">/v1/btc/main</a></td>
-      <td>Returns the current state of the specified blockchain, including height and the two latest blocks.</td>
+      <td>Returns the current state of the specified block chain, including height and the two latest blocks.</td>
     </tr>
     <tr>
       <td>Block</td><td>/v1/{coin}/{chain}/blocks/{hash|height}</td>
@@ -144,7 +145,7 @@
     </tbody>
   </table>
   <p><h2>Chains</h2></pr>
-  <p>Currently, we support the main and test Bitcoin blockchains. Depending on market demands, we'll add additional blockchains and altcoins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
+  <p>Currently, we support the main and test Bitcoin block chains. Depending on market demands, we'll add additional blockchains and altcoins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
   <p>A request to a given chain returns the following properties:</p>
   <table>
     <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
@@ -233,7 +234,7 @@
   </table>
 
   <h4><i>Example</i></h4>
-  <p>In this example, we retrieve the last 10 block from the Bitcoin blockchain and render a summary page. We start with the chain property to get the URL of the latest block. We then use the prev_block_url to load the previous, hence traversing the block chain back block by block.</p>
+  <p>In this example, we retrieve the last 10 block from the Bitcoin block chain and render a summary page. We start with the chain property to get the URL of the latest block. We then use the prev_block_url to load the previous, hence traversing the block chain back block by block.</p>
   <p>From the command line, we retrieve the latest block using the following:</p>
   <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s</code></pre>
 
@@ -432,6 +433,37 @@
 
 <p>  &nbsp; </p>
   <p><h1>Address API</h1></p>
+
+<p><a href="https://en.bitcoin.it/wiki/Address">Address</a> are identifiers used to send and receive bitcoin payments. The Address API gives you the current balance, total inputs, and transactions made for any address. The URL Pattern is /v1/{coin}/{addrs}, for example: 
+	
+  <p>The resource for the Address API (under https://api.blockcypher.com):</p>
+  <table>
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>Address</td><td>/v1/{coin}/{addrs}</td><td><a href="https://api.blockcypher.com/v1/btc/main/addrs/1EHAQaypq12KcaUZbJpE4qWDNrefFHN3ub">/v1/btc/addrs/1EHAQaypq...</a></td>
+      <td>Returns the current balance, total inputs, and transactions for the specified address.</td>
+    </tr>
+    </tbody>
+  </table>
+
+<p>A request to a given address returns the following properties:</p>
+<table>
+    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>total</td><td>25125030000</td><td> Total inputs on the specified address.</td>
+    </tr>
+    <tr>
+      <td>balance</td><td>12550020000</td>
+      <td>Balance on the specified address.</td>
+    </tr>
+    <tr>
+      <td>txrefs</td><td>["c292d...e31a", "ca010d...a338", "35eb4...e79ff"]</td>
+      <td>Transactions for the specified address.</td>
+    </tr>
+    </tbody>
+  </table>
 
   <script src="site/js/prism.js"></script>
   <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
