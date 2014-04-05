@@ -92,9 +92,21 @@
       position:relative;
       top:1px;
     }
+    div.content-table {
+      position: fixed;
+      background-color: #eee;
+      top: 20px;
+      right: 20px;
+      width: 200px;
+      padding: 15px;
+      border: 1px solid #555;
+    }
   </style>
 </head>
 <body>
+  <div class="content-table">
+    <div class="top"><a href="#blockchain-api">Blockchain API</a></div>
+  </div>
   
   <h1>Introduction</h1>
   <p>BlockCypher hosts full-nodes of the main and test Bitcoin block chains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">webhooks</a>.
@@ -112,7 +124,6 @@
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
 267</code></pre>
 
-  <a id="rate-limits"/>
   <h2>Rate Limits</h2>
   <p>During our beta, all services are free. BlockCypher APIs can be used up to these rate limits: 
 	<ul>
@@ -122,8 +133,9 @@
 <p>Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed those limits.</p>
  
 <p>&nbsp;</p>
-<h1>Blockchain API</h1>
+<h1 id="blockchain-api">Blockchain API</h1>
   <p>The Blockchain API allows you to access raw data from the block chain's <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
+
   <p>Three main resources make up the Blockchain API (all under https://api.blockcypher.com):</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
@@ -148,7 +160,7 @@
   <p>Currently, we support the main and test Bitcoin block chains. Depending on market demands, we'll add additional blockchains and altcoins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
   <p>A request to a given chain returns the following properties:</p>
   <table>
-    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
       <td>name</td><td>BTC.main</td><td>Chain name</td>
@@ -257,7 +269,7 @@
   <p>The main properties in a transaction are:</p>
 
   <table>
-    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
       <td>block_hash</td><td>0000...35fa</td>
@@ -323,7 +335,7 @@
   <p>Transaction inputs have the following properties:</p>
 
   <table>
-    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
       <td>prev_hash</td><td>0000...35fa</td>
@@ -351,7 +363,7 @@
   <p>Transaction outputs have the following properties:</p>
 
   <table>
-    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
       <td>value</td><td>2508682714</td>
@@ -434,7 +446,7 @@
 <p>  &nbsp; </p>
   <p><h1>Address API</h1></p>
 
-<p><a href="https://en.bitcoin.it/wiki/Address">Address</a> are identifiers used to send and receive bitcoin payments. The Address API gives you the current balance, total inputs, and transactions made for any address. The URL Pattern is /v1/{coin}/{addrs}, for example: 
+<p><a href="https://en.bitcoin.it/wiki/Address">Address</a> are identifiers used to send and receive payments. The Address API gives you the total inputs, current balance, and transactions made for any address.</p> 
 	
   <p>The resource for the Address API (under https://api.blockcypher.com):</p>
   <table>
@@ -442,25 +454,25 @@
     <tbody>
     <tr>
       <td>Address</td><td>/v1/{coin}/{addrs}</td><td><a href="https://api.blockcypher.com/v1/btc/main/addrs/1EHAQaypq12KcaUZbJpE4qWDNrefFHN3ub">/v1/btc/addrs/1EHAQaypq...</a></td>
-      <td>Returns the current balance, total inputs, and transactions for the specified address.</td>
+      <td>Returns the total inputs, current balance, and transactions for the specified address.</td>
     </tr>
     </tbody>
   </table>
 
 <p>A request to a given address returns the following properties:</p>
 <table>
-    <thead><tr><th>Property</th><th>Example (URLs and hashes abbreviated)</th><th>Description</th></tr></thead>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
-      <td>total</td><td>25125030000</td><td> Total inputs on the specified address.</td>
+      <td>total</td><td>25125030000</td><td> Total inputs on the specified address, in satoshi.</td>
     </tr>
     <tr>
       <td>balance</td><td>12550020000</td>
-      <td>Balance on the specified address.</td>
+      <td>Balance on the specified address, in satoshi.</td>
     </tr>
     <tr>
       <td>txrefs</td><td>["c292d...e31a", "ca010d...a338", "35eb4...e79ff"]</td>
-      <td>Transactions for the specified address.</td>
+      <td>All transactions for the specified address.</td>
     </tr>
     </tbody>
   </table>
