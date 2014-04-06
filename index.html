@@ -118,9 +118,9 @@
   </div>
   
   <h1 id="introduction">Introduction</h1>
-  <p>BlockCypher hosts full-nodes of the main and test Bitcoin block chains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">webhooks</a>.
+  <p>BlockCypher hosts full-nodes of the Main and Test Bitcoin block chains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">webhooks</a>.
 	<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
-  <p>Most resources exist under a given blockchain. For example, the URLs to Bitcoin Main and Test are:</p>
+  <p>Most resources exist under a given block chain. For example, the URLs to Bitcoin Main and Test are:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main
 https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 
@@ -129,7 +129,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 
   <p>The samples in this documentation are in Javascript (browser or node.js) or can be accessed using the command line. Complete examples can be found in BlockCypher's <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we use <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a> to illustrate. 
 	
-	<p>For example, this shows the number of transactions in the latest block (see the Blockchain API section for more information):</p>
+	<p>For example, this shows the number of transactions in the latest block (see the <a href="#blockchain-api">Blockchain API</a> section for more information):</p>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
 267</code></pre>
 
