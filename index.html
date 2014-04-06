@@ -105,10 +105,19 @@
 </head>
 <body>
   <div class="content-table">
-    <div class="top"><a href="#blockchain-api">Blockchain API</a></div>
+	<div class="top"><a href="#introduction">Introduction</a></div>
+	<div class="sub1"><a href="#rate_limits">Rate Limits</a></div>
+	<div class="top"><a href="#blockchain-api">Blockchain API</a></div>
+	<div class="sub1"><a href="#chains">Chains</a></div>
+	<div class="sub1"><a href="#blocks">Blocks</a></div>
+	<div class="sub1"><a href="#transactions">Transactions</a></div>
+	<div class="top"><a href="#websocket_webhook">WebSockets and WebHooks</a></div>
+	<div class="sub1"><a href="#websockets">WebSockets</a></div>
+	<div class="sub1"><a href="#webhooks">WebHooks</a></div>
+	<div class="sub1"><a href="#address_api">Address API</a></div>
   </div>
   
-  <h1>Introduction</h1>
+  <h1 id="introduction">Introduction</h1>
   <p>BlockCypher hosts full-nodes of the main and test Bitcoin block chains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">webhooks</a>.
 	<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
   <p>Most resources exist under a given blockchain. For example, the URLs to Bitcoin Main and Test are:</p>
@@ -124,7 +133,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
 267</code></pre>
 
-  <h2>Rate Limits</h2>
+  <h2 id="rate_limits">Rate Limits</h2>
   <p>During our beta, all services are free. BlockCypher APIs can be used up to these rate limits: 
 	<ul>
 	<li>Classic requests, up to 5 requests/sec and 600 requests/hr</il>
@@ -156,8 +165,8 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     </tr>
     </tbody>
   </table>
-  <p><h2>Chains</h2></pr>
-  <p>Currently, we support the main and test Bitcoin block chains. Depending on market demands, we'll add additional blockchains and altcoins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
+  <p><h2 id="chains">Chains</h2></pr>
+  <p>Currently, we support the main and test Bitcoin block chains. Depending on market demands, we'll add additional block chains and altcoins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
   <p>A request to a given chain returns the following properties:</p>
   <table>
     <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
@@ -186,7 +195,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     </tbody>
   </table>
 
-  <p><h2>Blocks</h2></p>
+  <p><h2 id="blocks">Blocks</h2></p>
   <p>Blocks are located under a chain's URL. The most interesting properties of blocks are:</p>
 
   <table>
@@ -264,7 +273,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <pre data-src="samples/10-latest-blocks.js"></pre>
   <button class="tryme" id="10-latest-blocks">Try me!</button>
 
-  <p><h2>Transactions</h2></p>
+  <p><h2 id="transactions">Transactions</h2></p>
   <p>Transactions can be confirmed into a block, in a pool of non-confirmed transactions, or orphaned. Confirmed transactions transfer a certain amount of bitcoin from previous <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a> (referenced by inputs and controlled by a set of addresses) to a set of target <a href="https://en.bitcoin.it/wiki/Address">addresses</a>.</p>
   <p>The main properties in a transaction are:</p>
 
@@ -385,7 +394,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   </table>
 
 <p>  &nbsp; </p>
-  <p><h1>WebSocket and WebHook</h1></p>
+  <p><h1 id="websocket_webhook">WebSockets and WebHooks</h1></p>
   <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
   <p>We support both WebSockets and WebHooks:</p>
   <ul>
@@ -394,7 +403,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   </ul>
   <p>Check our <a href="https://github.com/blockcypher/documentation/tree/master/samples/nodejs-webhook.js">sample code</a> to create a WebHook and start a web server to receive callbacks using node.js.</p>
 
-  <p><h2>WebSockets</h2></p>
+  <p><h2 id="websockets">WebSockets</h2></p>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
   <pre><code class="language-javascript">new WebSocket("ws://api.blockcypher.com/v1/btc/main/socket");</code></pre>
   <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, a JSON document describing the event you're interested in will be sent. The document will have the following format:</p>
@@ -402,7 +411,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   "filter": "event=new-block",
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
-  <p>The token is optional and is the value we provide you (see <a href="#rate-limits">rate limits</a>). The filter is an expression associating keys with values. Currently supported keys are:</p>
+  <p>The token is optional and is the value we provide you (see <a href="#rate_limits">rate limits</a>). The filter is an expression associating keys with values. Currently supported keys are:</p>
   <table>
     <thead><tr><th>Key</th><th>Example filter</th><th>Description</th></tr></thead>
     <tbody>
@@ -423,7 +432,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <p>Depending on your filter expression, the message content will be either a transaction or a block.</p>
   <p>Filters can also combine key/value pairs using the & operator. For example, to receive only new pool transactions for a given address: event=new-pool-tx&addr={myaddress}.</p>
 
-  <p><h2>WebHooks</h2></p>
+  <p><h2 id="webhooks">WebHooks</h2></p>
   <p>WebHooks have the same interaction format but with two key differences:</p>
   <ul>
     <li>The JSON document describing the event subscription should be sent using a POST request to https://api.blockcypher.com/v1/btc/main/hooks and include an additional property containing the URL to be called.</li>
@@ -444,7 +453,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <button class="tryme" id="browser-websocket">Try me!</button>
 
 <p>  &nbsp; </p>
-  <p><h1>Address API</h1></p>
+  <p><h1 id="address_api">Address API</h1></p>
 
 <p><a href="https://en.bitcoin.it/wiki/Address">Address</a> are identifiers used to send and receive payments. The Address API gives you the total inputs, current balance, and transactions made for any address.</p> 
 	
