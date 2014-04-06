@@ -113,7 +113,7 @@
 	<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
   <p>Most resources exist under a given blockchain. For example, the URLs to Bitcoin Main and Test are:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main</code>
-  <p><code class="language-http">https://api.blockcypher.com/v1/btc/test3</code></p></pre>
+  <code class="language-http">https://api.blockcypher.com/v1/btc/test3</code></pre>
 
   <p>Opening the URL to Bitcoin Main will produce the following JSON document. It will show the current chain height, hashes and URLs of the last 2 blocks which are extracted in <i>real-time</i> from our API.</p>
   <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
@@ -476,8 +476,11 @@
     </tr>
     </tbody>
   </table>
+
 <p>For example, to find the balance on a given address:</p>
-  <pre class="language-javascript" data-src="https://api.blockcypher.com/v1/btc/main/addrs/1EHAQaypq12KcaUZbJpE4qWDNrefFHN3ub"></pre>
+  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/addrs/1EHAQaypq12KcaUZbJpE4qWDNrefFHN3ub</code> 
+	<code class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main/addrs/1EHAQaypq12KcaUZbJpE4qWDNrefFHN3ub"></code></pre>
+	
 
 
 
