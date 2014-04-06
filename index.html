@@ -112,8 +112,8 @@
   <p>BlockCypher hosts full-nodes of the main and test Bitcoin block chains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">webhooks</a>.
 	<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
   <p>Most resources exist under a given blockchain. For example, the URLs to Bitcoin Main and Test are:</p>
-  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main</code>
-  <br><code class="language-http">https://api.blockcypher.com/v1/btc/test3</code></br></pre>
+  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main
+https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 
   <p>Opening the URL to Bitcoin Main will produce the following JSON document. It will show the current chain height, hashes and URLs of the last 2 blocks which are extracted in <i>real-time</i> from our API.</p>
   <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
@@ -478,9 +478,25 @@
   </table>
 
 <p>For example, to find the balance on a given address:</p>
-  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/addrs/1EHAQaypq12KcaUZbJpE4qWDNrefFHN3ub</code> 
-  <br><pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main/addrs/1EHAQaypq12KcaUZbJpE4qWDNrefFHN3ub"></br></pre>
-
+  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/addrs/1EHAQaypq12KcaUZbJpE4qWDNrefFHN3ub</code>
+<code class="language-javascript">{
+  "total": 25125030000,
+  "balance": 12550020000,
+  "txrefs": [
+    {
+      "txref": "c292d3d41fcdb5b04be1fa921fcd135a04d2fa1e38c049c32a707bc041dee31a",
+      "index": 0
+    },
+    {
+      "txref": "ca010db3b9edb0645a8bb878e513839cef260549b6761a294b733b6e30dba338",
+      "index": 0
+    },
+    {
+      "txref": "35eb4a46a13e7cdc96057206ebc7557410adc1071cd534e023477186626e79ff",
+      "index": 0
+    }
+  ]
+} </code></pre>
 
 	
   <script src="site/js/prism.js"></script>
