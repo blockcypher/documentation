@@ -97,17 +97,20 @@
     }
     div.content-table {
       position: fixed;
-      background-color: #eee;
+      background-color: #f5f2f0;
       top: 20px;
       right: 20px;
       width: 180px;
-      padding: 15px;
-      border: 1px solid #555;
+      padding: 15px 15px 20px 15px;
+      border: 1px solid #cac2c0;
       font-size: 14px;
       font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
     }
     div.content-table a {
       text-decoration: none;
+    }
+    div.content-table a:visited {
+      color: rgb(0, 0, 238);
     }
     div.content-table .top {
       margin-top: 5px;
@@ -418,7 +421,6 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> - used typically in client applications when a web server is not already running: e.g., a web page displaying the most recent transactions or a wallet app updating its UI when a transaction has been confirmed. Websockets are less reliable in longer interactions (over several hours) because they require a connection to stay open.</li> 
     <li><a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a> - the most reliable way to get notified but requires running a web server to receive the calls. We automatically retry HTTP requests 3 times.</li>
   </ul>
-  <p>Check our <a href="https://github.com/blockcypher/documentation/tree/master/samples/nodejs-webhook.js">sample code</a> to create a WebHook and start a web server to receive callbacks using node.js.</p>
 
   <p><h2 id="websockets">WebSockets</h2></p>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
