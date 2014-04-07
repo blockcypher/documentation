@@ -262,6 +262,38 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
       <td>URL to get the same block information with the next 20 transactions.</td>
     </tr>
   </table>
+<p>Here's a sample return document for a given block:</p>
+  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/blocks/294322</code>
+<code class="language-javascript">{
+  	"hash": "0000000000000000189bba3564a63772107b5673c940c16f12662b3e8546b412",
+	  "height": 294322,
+	  "chain": "BTC.main",
+	  "total": 1146783914,
+	  "fees": 130999,
+	  "ver": 2,
+	  "time": "2014-04-05T07:49:18Z",
+	  "received": "2014-04-05T07:49:30.981Z",
+	  "bits": 419486617,
+	  "nonce": 1225187768,
+	  "n_tx": 10,
+	  "prev_block": "0000000000000000ced0958bd27720b71d32c5847e40660aaca39f33c298abb0",
+	  "mrkl_root": "359d624d37aee1efa5662b7f5dbc390e996d561afc8148e8d716cf6ad765a952",
+	  "txids": [
+	    "32b3b86e40d996b1f281e24e8d4af2ceacbf874c4038369cc21baa807409b277",
+	    "1579f716359ba1a207f70248135f5e5fadf539be1dcf5300613aedcb6577d287",
+	    "dd1f183348eb41eaaa9ecf8012f9cca3ecbae41a6349f0cc4bfd2b1a497fa3d0",
+	    "749d12ccd180968b82aef4c271ca4effdf981d9b5d12523264457c9d4e6fa78e",
+	    "c4fe2ee16b8e3067d3d95caf7944011f4959781288b807df8bf853b7f80ed97c",
+	    "5a2114675265522d2b7ce8a7874cfa7a22ccc3fb6566a8599d6432c6805b1b5f",
+	    "077d851c8240671de80caa8be9f5285201c08a70edc5a45a9cd35fe7eaebf5e1",
+	    "6202cc55fbd9130e065c9294a5b2e061c26f3d2c8df56c32da605d9f183103f9",
+	    "ad3e7aa1c33f1d3e1c105d94f7b1542808da07bbe66b9621b050104a85dbf650",
+	    "36cc61016b9d1bd69768666f287db1edaa9b292fb442f152af7099305677230e"
+	  ],
+	  "prev_block_url": "http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000ced0958bd27720b71d32c5847e40660aaca39f33c298abb0",
+	  "tx_url": "http://api.blockcypher.com/v1/btc/main/txs/"
+	}</code></pre>
+
 
   <h4><i>Example</i></h4>
   <p>In this example, we retrieve the last 10 block from the Bitcoin block chain and render a summary page. We start with the chain property to get the URL of the latest block. We then use the prev_block_url to load the previous, hence traversing the block chain back block by block.</p>
@@ -401,6 +433,46 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     </tr>
     </tbody>
   </table>
+<p>Here's a sample return document for a given transaction:</p>
+  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/txs/dd1f183348eb41eaaa9ecf8012f9cca3ecbae41a6349f0cc4bfd2b1a497fa3d0</code>
+<code class="language-javascript">{
+	  "block_hash": "0000000000000000189bba3564a63772107b5673c940c16f12662b3e8546b412",
+	  "block_height": 294322,
+	  "hash": "dd1f183348eb41eaaa9ecf8012f9cca3ecbae41a6349f0cc4bfd2b1a497fa3d0",
+	  "addresses": [
+	    "143iXmvrg66fCDFNQjahJMHa8P4o8TcMV2",
+	    "1LTU7N1Rz8JwgteomqCzaKFMaqzML4nMgZ"
+	  ],
+	  "total": 14840000,
+	  "fees": 10000,
+	  "received": "2014-04-05T07:49:30.983Z",
+	  "ver": 1,
+	  "lock_time": 0,
+	  "vin_sz": 1,
+	  "vout_sz": 1,
+	  "confirmed": 103,
+	  "inputs": [
+	    {
+	      "prev_hash": "3fba439465ac18150070f1b06edbf30b59e25ca10cd773a1f6214366cace0553",
+	      "output_index": 0,
+	      "script": "49304602210099eeb8166c9edd8ee0c1cb79398bf1642b2289a9156aec583568520415c4...",
+	      "addresses": [
+	        "143iXmvrg66fCDFNQjahJMHa8P4o8TcMV2"
+	      ],
+	      "script_type": "pay-to-pubkey-hash"
+	    }
+	  ],
+	  "outputs": [
+	    {
+	      "value": 14830000,
+	      "script": "76a914d56bd5bdffebbc1a8dc08fe535b34641ef74112288ac",
+	      "addresses": [
+	        "1LTU7N1Rz8JwgteomqCzaKFMaqzML4nMgZ"
+	      ],
+	      "script_type": "pay-to-pubkey-hash"
+	    }
+	  ]
+	}</code></pre>
 
 <p>  &nbsp; </p>
   <p><h1 id="websocket_webhook">WebSockets and WebHooks</h1></p>
@@ -456,7 +528,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 }</code></pre>
 
   <i><h4>Example</i></h4>
-  <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
+  <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page:</p>
 
   <pre data-src="samples/browser-websocket.js"></pre>
   <button class="tryme" id="browser-websocket">Try me!</button>
@@ -489,32 +561,54 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
       <td>Balance on the specified address, in satoshi.</td>
     </tr>
     <tr>
-      <td>txrefs</td><td>["c292d...e31a", "ca010d...a338", "35eb4...e79ff"]</td>
-      <td>All transactions for the specified address.</td>
+      <td>txrefs</td><td>[...]</td>
+      <td>All transactions inputs and outputs for the specified address.</td>
+    </tr>
+	<tr>
+      <td>txref</td><td>0d7ac056a...</td>
+      <td>One of the transaction hashes for the specified address.</td>
+    </tr>
+    <tr>	
+      <td>inputIndex</td><td>1</td>
+      <td>Index of the input in the transaction. It's a negative number for an output.</td>
+    </tr>
+    <tr>
+      <td>outputIndex</td><td>-1</td>
+      <td>Index of the output in the transaction. It's a negative number for an input.</td>
+    </tr>
+    <tr>
+      <td>amount</td><td>28318177</td>
+      <td>The amount transferred by the particular input or output.</td>
+    </tr>
+	<tr>
+      <td>spent</td><td>true</td>
+      <td>Is 'true' if the output was spent.</td>
     </tr>
     </tbody>
   </table>
 
-<p>For example, to find the balance on a given address:</p>
-  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/addrs/1EHAQaypq12KcaUZbJpE4qWDNrefFHN3ub</code>
-<code class="language-javascript">{
-  "total": 25125030000,
-  "balance": 12550020000,
-  "txrefs": [
-    {
-      "txref": "c292d3d41fcdb5b04be1fa921fcd135a04d2fa1e38c049c32a707bc041dee31a",
-      "index": 0
-    },
-    {
-      "txref": "ca010db3b9edb0645a8bb878e513839cef260549b6761a294b733b6e30dba338",
-      "index": 0
-    },
-    {
-      "txref": "35eb4a46a13e7cdc96057206ebc7557410adc1071cd534e023477186626e79ff",
-      "index": 0
-    }
-  ]
-} </code></pre>
+<p>Here's a sample return document for a given address:</p>
+  <pre><code class="language-http">http://api.blockcypher.com/v1/btc/main/addrs/1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</code>
+<code class="language-javascript">
+	  "total": 283181777,
+	  "balance": 0,
+	  "txrefs": [
+	    {
+	      "txref": "0d7ac056a96ffc200f53f2a64291a967e5f696c43997f877ef42cb871bb07231",
+	      "inputIndex": 1,
+	      "outputIndex": -1,
+	      "amount": 283181777,
+	      "spent": false
+	    },
+	    {
+	      "txref": "baee4a85bcc1109fd4133602e6900e13b1b084c617ee75d25418ee3f3e84dcea",
+	      "inputIndex": -1,
+	      "outputIndex": 0,
+	      "amount": 283181777,
+	      "spent": true
+	    }
+	  ]
+}</code></pre>
 
 	
   <script src="site/js/prism.js"></script>
