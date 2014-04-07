@@ -3,6 +3,9 @@
 <head>
   <link rel="stylesheet" href="site/css/prism.css"/>
   <style media="screen" type="text/css">
+    body {
+      width: 920px;
+    }
     p, ul, ol {
       font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
       font-size: 16px;
@@ -94,12 +97,20 @@
     }
     div.content-table {
       position: fixed;
-      background-color: #eee;
+      background-color: #f5f2f0;
       top: 20px;
       right: 20px;
-      width: 200px;
-      padding: 15px;
-      border: 1px solid #555;
+      width: 180px;
+      padding: 15px 15px 20px 15px;
+      border: 1px solid #cac2c0;
+      font-size: 14px;
+      font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
+    }
+    div.content-table a {
+      text-decoration: none;
+    }
+    div.content-table a:visited {
+      color: rgb(0, 0, 238);
     }
     div.content-table .top {
       margin-top: 5px;
@@ -114,16 +125,16 @@
 </head>
 <body>
   <div class="content-table">
-	<div class="top"><a href="#introduction">Introduction</a></div>
-	<div class="sub1"><a href="#rate_limits">Rate Limits</a></div>
-	<div class="top"><a href="#blockchain-api">Blockchain API</a></div>
-	<div class="sub1"><a href="#chains">Chains</a></div>
-	<div class="sub1"><a href="#blocks">Blocks</a></div>
-	<div class="sub1"><a href="#transactions">Transactions</a></div>
-	<div class="top"><a href="#websocket_webhook">WebSockets and WebHooks</a></div>
-	<div class="sub1"><a href="#websockets">WebSockets</a></div>
-	<div class="sub1"><a href="#webhooks">WebHooks</a></div>
-	<div class="top"><a href="#address_api">Address API</a></div>
+    <div class="top"><a href="#introduction">Introduction</a></div>
+    <div class="sub1"><a href="#rate_limits">Rate Limits</a></div>
+    <div class="top"><a href="#blockchain-api">Blockchain API</a></div>
+    <div class="sub1"><a href="#chains">Chains</a></div>
+    <div class="sub1"><a href="#blocks">Blocks</a></div>
+    <div class="sub1"><a href="#transactions">Transactions</a></div>
+    <div class="top"><a href="#websocket_webhook">WebSockets and WebHooks</a></div>
+    <div class="sub1"><a href="#websockets">WebSockets</a></div>
+    <div class="sub1"><a href="#webhooks">WebHooks</a></div>
+    <div class="top"><a href="#address_api">Address API</a></div>
   </div>
   
   <h1 id="introduction">Introduction</h1>
@@ -482,11 +493,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> - used typically in client applications when a web server is not already running: e.g., a web page displaying the most recent transactions or a wallet app updating its UI when a transaction has been confirmed. Websockets are less reliable in longer interactions (over several hours) because they require a connection to stay open.</li> 
     <li><a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a> - the most reliable way to get notified but requires running a web server to receive the calls. We automatically retry HTTP requests 3 times.</li>
   </ul>
-  <p>Check our <a href="https://github.com/blockcypher/documentation/tree/master/samples/nodejs-webhook.js">sample code</a> to create a WebHook and start a web server to receive callbacks using node.js.</p>
 
   <p><h2 id="websockets">WebSockets</h2></p>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
-  <pre><code class="language-javascript">new WebSocket("ws://api.blockcypher.com/v1/btc/main/socket");</code></pre>
+  <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
   <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, a JSON document describing the event you're interested in will be sent. The document will have the following format:</p>
   <pre><code class="language-javascript">{
   "filter": "event=new-block",
@@ -513,6 +523,12 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <p>Depending on your filter expression, the message content will be either a transaction or a block.</p>
   <p>Filters can also combine key/value pairs using the & operator. For example, to receive only new pool transactions for a given address: event=new-pool-tx&addr={myaddress}.</p>
 
+  <i><h4>Example</i></h4>
+  <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
+
+  <pre data-src="samples/browser-websocket.js"></pre>
+  <button class="tryme" id="browser-websocket">Try me!</button>
+
   <p><h2 id="webhooks">WebHooks</h2></p>
   <p>WebHooks have the same interaction format but with two key differences:</p>
   <ul>
@@ -526,12 +542,16 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   "url": "https://my.domain.com/callbacks/new-block"
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
+<<<<<<< HEAD
 
   <i><h4>Example</i></h4>
   <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page:</p>
 
   <pre data-src="samples/browser-websocket.js"></pre>
   <button class="tryme" id="browser-websocket">Try me!</button>
+=======
+  <p>For an example of using WebHooks written in node.js, refer to our <a href="https://github.com/blockcypher/documentation/blob/gh-pages/samples/nodejs-webhook.js">sample</a>.</p>
+>>>>>>> 397cb532f6e5d4536bbf03272d5c989a21ae6f87
 
 <p>  &nbsp; </p>
   <p><h1 id="address_api">Address API</h1></p>
