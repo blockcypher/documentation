@@ -407,6 +407,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
       <td>Index in the previous transaction of the output being spent. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
     </tr>
     <tr>
+      <td>output_value</td><td>1</td>
+      <td>Value of the output being spent. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
+    </tr>
+    <tr>
       <td>script_type</td><td>pay-to-pubkey-hash</td>
       <td>Script type in the transaction output being spent.</td>
     </tr>
@@ -417,6 +421,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     <tr>
       <td>script</td><td>76a914...ac</td>
       <td>Raw hexadecimal encoding of the script.</td>
+    </tr>
+    <tr>
+      <td>script</td><td>76a914...ac</td>
+      <td>Raw hexadecimal encoding of the spent output script.</td>
     </tr>
     </tbody>
   </table>
