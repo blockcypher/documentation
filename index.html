@@ -516,7 +516,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     <tbody>
     <tr>
       <td>event</td><td>event=new-orphan-tx</td>
-      <td>Type of event to receive. Supported event types at this time are: new-block, new-pool-tx and new-orphan-tx.</td>
+      <td>Type of event to receive. Supported event types at this time are: new-block, new-pool-tx, new-orphan-tx and new-block-tx.</td>
     </tr>
     <tr>
       <td>hash</td><td>hash=346a5...b77e5 (abbreviated)</td>
@@ -581,10 +581,14 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
       <td>Balance on the specified address, in satoshi.</td>
     </tr>
     <tr>
+      <td>tx_url</td><td>https://api.blockcypher.com/v1/btc/main/txs/</td>
+      <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
+    </tr>
+    <tr>
       <td>txrefs</td><td>[...]</td>
       <td>All transactions inputs and outputs for the specified address.</td>
     </tr>
-	<tr>
+	  <tr>
       <td>txref</td><td>0d7ac056a...</td>
       <td>One of the transaction hashes for the specified address.</td>
     </tr>
