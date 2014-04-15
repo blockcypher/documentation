@@ -4,7 +4,8 @@
   <link rel="stylesheet" href="site/css/prism.css"/>
   <style media="screen" type="text/css">
     body {
-      width: 920px;
+      margin: auto;
+      width: 940px;
     }
     p, ul, ol {
       font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
@@ -16,6 +17,29 @@
     }
     code {
       font-size: 12px;
+    }
+    div.top-menu {
+      text-align: right;
+      font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      padding: 10px 5px 5px 5px;
+      border-bottom: 1px solid #222;
+    }
+    div.top-menu a {
+      text-decoration: none;
+      color: #555;
+    }
+    div.top-menu a:visited {
+      color: #555;
+    }
+    div.logo-title {
+      margin: 40px 0 20px 10px;
+      font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
+      font-size: 42px;
+      color: rgb(42, 83, 153);
+    }
+    div.logo-title img {
+      vertical-align: middle;
     }
     table {
       border-collapse: collapse;
@@ -98,7 +122,7 @@
     div.content-table {
       position: fixed;
       background-color: #f5f2f0;
-      top: 20px;
+      top: 50px;
       right: 20px;
       width: 180px;
       padding: 15px 15px 20px 15px;
@@ -124,6 +148,13 @@
   </style>
 </head>
 <body>
+  <div class="top-menu">
+    <a href="http://www.blockcypher.com">&lt;&lt; Back</a>
+  </div>
+  <div class="logo-title">
+    <a href="http://www.blockcypher.com"><img src="site/img/logo-small.png"/></a>
+    <span>Documentation</span>
+  </div>
   <div class="content-table">
     <div class="top"><a href="#introduction">Introduction</a></div>
     <div class="sub1"><a href="#rate_limits">Rate Limits</a></div>
