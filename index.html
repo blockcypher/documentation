@@ -163,12 +163,14 @@
     <div class="sub1"><a href="#blocks">Blocks</a></div>
     <div class="sub1"><a href="#transactions">Transactions</a></div>
     <div class="top"><a href="#creating_transactions">Creating Transactions</a></div>
+    <div class="sub1"><a href="#transaction_skeleton">Transaction Skeleton</a></div>
+    <div class="sub1"><a href="#signing_sending">Signing and Sending</a></div>
     <div class="top"><a href="#websocket_webhook">WebSockets & WebHooks</a></div>
     <div class="sub1"><a href="#websockets">WebSockets</a></div>
     <div class="sub1"><a href="#webhooks">WebHooks</a></div>
     <div class="top"><a href="#address_api">Address API</a></div>
-    <div class="sub1"><a href="#address_gen">Address Generation</div>
-    <div class="sub1"><a href="#address_details">Address Details</div>
+    <div class="sub1"><a href="#address_gen">Address Generation</a></div>
+    <div class="sub1"><a href="#address_details">Address Details</a></div>
   </div>
   
   <h1 id="introduction">Introduction</h1>
@@ -552,7 +554,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     </tbody>
   </table>
 
-  <p><h2 id="skeleton">Transaction Skeleton</h2></p>
+  <p><h2 id="transaction_skeleton">Transaction Skeleton</h2></p>
   <p>A full transaction starts from a partially filled transaction. We require at least one input with at least one address as well as at least one output with an address and value (in satoshis). For example:</p>
   <pre><code class="language-javascript">{
   "inputs": [
@@ -583,6 +585,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     <tr>
       <td>(signatures)</td><td>["bcd2c363a2...", "dc621478..."]</td>
       <td>Array of hexadecimal-encoded signatures you should provide in return.</td>
+    </tr>
+    <tr>
+      <td>(pubkeys)</td><td>["02c8d29d...", "02c8d29d..."]</td>
+      <td>The public key to use with each generated input (generally, repeat the public key corresponding to the provided input address).</td>
     </tr>
     </tbody>
   </table>
@@ -665,11 +671,11 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   ]
 }</code></pre>
 
-  <p><h2 id="signing">Signing and Sending</h2></p>
+  <p><h2 id="signing_sending">Signing and Sending</h2></p>
   <p>Use your private key(s) to sign each of the data strings provided (decoding them to byte arrays and using ECDSA signing) and return the signatures as hex-encoded strings in a <em>signatures</em> array property inserted in the previous document.</p>
 
   <pre><code class="language-javascript">{
-  tx: { ... },
+  "tx": { ... },
   "tosign": [
     "04779733bba8085dd86c21d86c8f9e786a1124751c42061d4c539229a07c4464",
     "0396ea6f1bf7493e738339bd720267e7281144b222343ffe4167e00792c62ff2"
@@ -677,10 +683,26 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   "signatures": [
     "3045022100e91585519a9b637e122558644b67d6e9de618f906943aaeb00c95d3e172a64030220141fec5b48fa7cf4424bacb396004ff599dd8bf55f93770ddd93cd92457577bc",
     "304502207df92c19101048de8a8a4fcb2cfb62ac937dfc6cf34c7fc8465336bfcc24eaad0221009fe6557e49943d9ab82190cb9826b3a336f491f8e2966c3dbdc7a09f501eddc8"
+  ],
+  "pubkeys": [
+    "02c8d29d8c8afb4725d25a1ec496aeddc36fa9eb6f0e014bfc21742fc3d78cb438",
+    "02c8d29d8c8afb4725d25a1ec496aeddc36fa9eb6f0e014bfc21742fc3d78cb438"
   ]
 }</code></pre>
 
-  <p>Coming soon: example in Javascript.</p>
+  <p>In addition, for each input, the public key matching the input address need to be provided. This is because the input address can't be calculated from the address. In general, just repeat the public key for the address you provided in the transaction skeleton input.</p>
+  <p>As an example, here is a short snippet showing how to sign the transaction in Javascript using the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">bitcoinjs</a> library:</p>
+
+  <pre><code class="language-javascript">
+var key     = Bitcoin.ECKey.fromHex(source.private);
+var pubkeys = [];
+var signatures = newtx.tosign.map(function(tosign) {
+  pubkeys.push(source.public);
+  return key.sign(tosign).concat(1);
+});
+newtx.signatures  = signatures;
+newtx.pubkeys     = pubkeys;
+</pre></code>
 
   <p>Once signatures are inserted, just POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send). The same document will be returned again, including the finalized transaction. If no errors are returned, your transaction has been issued successfully and is being broadcasted across the network.</p>
 
@@ -835,7 +857,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     </tbody>
   </table>
 
-<p>Here's a sample return document for a given address:</p>
+  <p>Here's a sample return document for a given address:</p>
   <pre><code class="language-http">http://api.blockcypher.com/v1/btc/main/addrs/1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</code>
 <code class="language-javascript">
 	  "total": 283181777,
@@ -858,8 +880,8 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 	  ]
 }</code></pre>
 
-	
   <script src="site/js/prism.js"></script>
+  <script src="samples/bitcoinjs-min.js"></script>
   <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
   <script>
     $('button.tryme').click(function(e) {
