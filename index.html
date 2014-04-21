@@ -162,10 +162,13 @@
     <div class="sub1"><a href="#chains">Chains</a></div>
     <div class="sub1"><a href="#blocks">Blocks</a></div>
     <div class="sub1"><a href="#transactions">Transactions</a></div>
+    <div class="top"><a href="#creating_transactions">Creating Transactions</a></div>
     <div class="top"><a href="#websocket_webhook">WebSockets & WebHooks</a></div>
     <div class="sub1"><a href="#websockets">WebSockets</a></div>
     <div class="sub1"><a href="#webhooks">WebHooks</a></div>
     <div class="top"><a href="#address_api">Address API</a></div>
+    <div class="sub1"><a href="#address_gen">Address Generation</div>
+    <div class="sub1"><a href="#address_details">Address Details</div>
   </div>
   
   <h1 id="introduction">Introduction</h1>
@@ -196,7 +199,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 <h1 id="blockchain-api">Blockchain API</h1>
   <p>The Blockchain API allows you to access raw data from the block chain's <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
 
-  <p>Three main resources make up the Blockchain API (all under https://api.blockcypher.com):</p>
+  <p>Three main resources make up the Blockchain API (all GETs under https://api.blockcypher.com):</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
     <tbody>
@@ -524,7 +527,164 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 	  ]
 	}</code></pre>
 
-<p>  &nbsp; </p>
+  <p> &nbsp; </p>
+  <p><h1 id="creating_transactions">Creating Transactions</h1></p>
+  <p>For security reasons we do not keep your private keys, you're the only one who can sign transactions. As a result, sending a transaction is a 3 steps process:</p>
+  <ol>
+    <li>We build the unsigned transaction as well as the data to sign from basic information: at the simplest only an input address, an output address and the value transferred.</li>
+    <li>You sign the transaction data.</li>
+    <li>We finish building the transaction, broadcast it over the peer-to-peer network and send it back to you.</li>
+  </ol>
+
+  <p>This is done using 2 simple POST requests:</p>
+  <table>
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>New</td><td>/v1/{coin}/{chain}/txs/new</td><td>/v1/btc/main/txs/new</a><td>POST</td></td>
+      <td>Takes a transaction specification and returns a partially built transaction with the data to sign.</td>
+    </tr>
+    <tr>
+      <td>Send</td><td>/v1/{coin}/{chain}/txs/send</td>
+      <td>/v1/btc/main/txs/send</td><td>POST</td>
+      <td>Takes the previously partially built transaction, signed data and public keys. Returns the complete transaction and sends it over the network.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p><h2 id="skeleton">Transaction Skeleton</h2></p>
+  <p>A full transaction starts from a partially filled transaction. We require at least one input with at least one address as well as at least one output with an address and value (in satoshis). For example:</p>
+  <pre><code class="language-javascript">{
+  "inputs": [
+    {"addresses": ["181w71oR7nTEsKducLBTUJkdbTvLDQzymL"]}
+  ],
+  "outputs": [
+    {"addresses": ["1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"], "value": 4000000000}
+  ]
+}
+</code></pre>
+
+  <p>We build the full set of inputs using unspent transactions from the input address and fill up a temporary transaction (unsigned yet).</p>
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>errors</td><td>[{"error": ""Address 1DEP... with balance 4271116 does not have enough funds to transfer 500000000."}]</td>
+      <td>Array of errors encountered while generating the transaction. Should be missing if generation is successful.</td>
+    </tr>
+    <tr>
+      <td>tx</td><td>tx: {...}</td>
+      <td>Temporary transaction, fully filled up except for the input scripts (require signature).</td>
+    </tr>
+    <tr>
+      <td>tosign</td><td>["04779733bb...", "0396ea6f1b..."]</td>
+      <td>Array of hexadecimal-encoded data to sign, one for each generated input.</td>
+    </tr>
+    <tr>
+      <td>(signatures)</td><td>["bcd2c363a2...", "dc621478..."]</td>
+      <td>Array of hexadecimal-encoded signatures you should provide in return.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>Note that low <a href="https://en.bitcoin.it/wiki/Transaction_fees">fees</a> are automatically included, if required, to ensure your transaction will be relayed.</p>
+  <p>As the transaction isn't complete yet, the transaction hash is temporary. The final hash will be calculated and returned with the complete transaction.</p>
+  <p>You may also provide inputs already filled up with with the <em>prev_hash</em> and <em>output_index</em> properties. In this case we will use your inputs as provided and will not attempt to generate them from the address. Fees and change will still be inserted appropriately.</p>
+
+  <i><h4>Example</i></h4>
+  <p>The following example results in the creation of 2 inputs, as 2 previous transactions need to be used to get to the requested amount. It also results in 2 outputs, one for the required transaction and another for the change.</p>
+  <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/txs/new
+> {
+>   "inputs": [
+>     {"addresses": ["1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"]}
+>   ],
+>   "outputs": [
+>     {"addresses": ["1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"], "value": 500000}
+>   ] 
+> }
+{
+  "tx": {
+    "block_height": -1,
+    "hash": "f961dea839fd69653547a0308360de67846a49d3593f7459773e27af8d9f5ec0",
+    "addresses": [
+      "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD",
+      "1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje",
+    ],
+    "total": 661116,
+    "fees": 10000,
+    "received": "2014-04-20T23:52:21.069978821Z",
+    "ver": 1,
+    "lock_time": 0,
+    "vin_sz": 2,
+    "vout_sz": 2,
+    "confirmed": 0,
+    "inputs": [
+      {
+        "prev_hash": "0c83c8321537a7c79dc6214788944ba6cd5ea76f0594453b6251fcf1856f2e4b",
+        "output_index": 0,
+        "script": "",
+        "output_value": 171116,
+        "addresses": [
+          "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      },
+      {
+        "prev_hash": "995a50e05d197be88d4da74160b4bcd2c363ebb1a49f95e572667d580bc70aba",
+        "output_index": 0,
+        "script": "",
+        "output_value": 500000,
+        "addresses": [
+          "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      }
+    ],
+    "outputs": [
+      {
+        "value": 500000,
+        "script": "76a9149c703cb3e9f1a2a154e548b3acafd0054d4835a788ac",
+        "addresses": [
+          "1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      },
+      {
+        "value": 161116,
+        "script": "76a9148629647bd642a2372d846a7660e210c8414f047c88ac",
+        "addresses": [
+          "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      }
+    ]
+  },
+  "tosign": [
+    "04779733bba8085dd86c21d86c8f9e786a1124751c42061d4c539229a07c4464",
+    "0396ea6f1bf7493e738339bd720267e7281144b222343ffe4167e00792c62ff2"
+  ]
+}</code></pre>
+
+  <p><h2 id="signing">Signing and Sending</h2></p>
+  <p>Use your private key(s) to sign each of the data strings provided (decoding them to byte arrays and using ECDSA signing) and return the signatures as hex-encoded strings in a <em>signatures</em> array property inserted in the previous document.</p>
+
+  <pre><code class="language-javascript">{
+  tx: { ... },
+  "tosign": [
+    "04779733bba8085dd86c21d86c8f9e786a1124751c42061d4c539229a07c4464",
+    "0396ea6f1bf7493e738339bd720267e7281144b222343ffe4167e00792c62ff2"
+  ],
+  "signatures": [
+    "3045022100e91585519a9b637e122558644b67d6e9de618f906943aaeb00c95d3e172a64030220141fec5b48fa7cf4424bacb396004ff599dd8bf55f93770ddd93cd92457577bc",
+    "304502207df92c19101048de8a8a4fcb2cfb62ac937dfc6cf34c7fc8465336bfcc24eaad0221009fe6557e49943d9ab82190cb9826b3a336f491f8e2966c3dbdc7a09f501eddc8"
+  ]
+}</code></pre>
+
+  <p>Coming soon: example in Javascript.</p>
+
+  <p>Once signatures are inserted, just POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send). The same document will be returned again, including the finalized transaction. If no errors are returned, your transaction has been issued successfully and is being broadcasted across the network.</p>
+
+  <p> &nbsp; </p>
   <p><h1 id="websocket_webhook">WebSockets and WebHooks</h1></p>
   <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
   <p>We support both WebSockets and WebHooks:</p>
@@ -584,24 +744,57 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 
   <p>For an example of using WebHooks written in node.js, refer to our <a href="https://github.com/blockcypher/documentation/blob/gh-pages/samples/nodejs-webhook.js">sample</a>.</p>
 
-<p>  &nbsp; </p>
+  <p> &nbsp; </p>
   <p><h1 id="address_api">Address API</h1></p>
 
-<p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. The Address API gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address.</p> 
-	
-  <p>The resource for the Address API (under https://api.blockcypher.com):</p>
+  <p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. A collection resource and a detail resource make up the Address API.</p>
   <table>
-    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
-      <td>Address</td><td>/v1/{coin}/{addrs}</td><td><a href="https://api.blockcypher.com/v1/btc/main/addrs/1EHAQaypq12KcaUZbJpE4qWDNrefFHN3ub">/v1/btc/addrs/1EHAQaypq...</a></td>
-      <td>Returns the total inputs, current balance, and transactions for the specified address.</td>
+      <td>Addresses</td><td>/v1/{coin}/{chain}/addrs</td><td>/v1/btc/main/addrs<td>POST</td></td>
+      <td>Returns a newly generated address with the corresponding public and private keys.</td>
+    </tr>
+    <tr>
+      <td>Address</td><td>/v1/{coin}/{chain}/addrs/{hash}</td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD">/v1/btc/main/addrs/1DEP8i...</a></td><td>GET</td>
+      <td>All details about a given address, including transaction information and balance.</td>
     </tr>
     </tbody>
   </table>
+  
+  <p><h2 id="address_gen">Address Generation</h2></p>
 
-<p>A request to a given address returns the following properties:</p>
-<table>
+  <p>The generation API is offered for convenience purpose, for security reasons please always use HTTPS to use this resource. No information is required in the POST request, the following information will be returned:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>address</td><td>181w71oR7nTEsKducLBTUJkdbTvLDQzymL</td><td>Standard address representation.</td>
+    </tr>
+    <tr>
+      <td>public</td><td>028b3b3fc5d437...</td><td>Public key.</td>
+    </tr>
+    <tr>
+      <td>private</td><td>028b3b3fc5d437...</td><td>Private key.</td>
+    </tr>
+  </table>
+
+  <p>To get a newly generated address::</p>
+  <pre><code class="language-http">POST https://api.blockcypher.com/v1/btc/main/addrs</code>
+<code class="language-javascript">{
+  "private": "07f6f3dd1f383a8e2085a031f6f3e5183145f3fa1080a5a7f3f39fee981ddd5b",
+  "public": "039920d51829763242314cb61f6bbd69e8daa71e1909f66cf0daa2adf555db29ed",
+  "address": "181w71oR7nTEsKducLBTUJkdbTvLDQzymL"
+}
+</code></pre>
+
+  <p><h2 id="address_details">Address Details</h2></p>
+  <p>The Address API details gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address.</p> 
+	
+  <p>A request to a given address returns the following properties:</p>
+  <table>
     <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
