@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>BlockCypher | Documentation</title>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="stylesheet" href="/site/css/prism.css"/>
+  <link rel="stylesheet" href="/site/css/site.css"/>
+</head>
+<body>
+  <!--div class="top-menu">
+    <a href="http://www.blockcypher.com">&lt;&lt; Back</a>
+  </div>
+  <div class="logo-title">
+    <a href="http://www.blockcypher.com"><img src="site/img/logo-small.png"/></a>
+    <span>Create Transactions</span>
+  </div-->
+
+  <p>Click the button below to start a transfer from one of our test addresses to a randomly generated one.</p>
+  <button class="tryme" id="browser-websocket">Transfer now!</button>
+
+  <div class="log"></div>
+
+  <p>Note: this sample uses <a href="https://github.com/bitcoinjs/bitcoinjs-lib">bitcoinjs</a> to generate signatures, if you're experiencing some issues please make sure your browser is supported byt hecking the project page.</p>
+
+  <pre id="sample-code" data-src="/samples/create-tx.js"></pre>
+
+  <script src="/site/js/prism.js"></script>
+  <script src="/samples/bitcoinjs-min.js"></script>
+  <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <script>
+    $('button.tryme').click(function(e) {
+        eval($('#sample-code').children().text());
+    });
+  </script>
+</body>
+</html>
