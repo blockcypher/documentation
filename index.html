@@ -706,6 +706,8 @@ newtx.pubkeys     = pubkeys;
 
   <p>Once signatures are inserted, just POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send). The same document will be returned again, including the finalized transaction. If no errors are returned, your transaction has been issued successfully and is being broadcasted across the network.</p>
 
+  <p>See our <a href="">full sample</a> on Github.</p>
+
   <p> &nbsp; </p>
   <p><h1 id="websocket_webhook">WebSockets and WebHooks</h1></p>
   <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>

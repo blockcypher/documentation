@@ -15,7 +15,7 @@ function newTransaction() {
     "inputs": [{"addresses": [source.address]}],
     "outputs": [{"addresses": [dest.address], "value": 25000}]
   }
-  return $.post(rootUrl+"/tx/new");
+  return $.post(rootUrl+"/txs/new");
 }
 
 function signAndSend(newtxjson) {
@@ -34,7 +34,7 @@ function signAndSend(newtxjson) {
 
   newtx.signatures  = signatures;
   newtx.pubkeys     = pubkeys;
-  return $.post(rootUrl+"/addrs", JSON.stringify(newtx));
+  return $.post(rootUrl+"/txs/send", JSON.stringify(newtx));
 }
 
 function print(finaltxjson) {
@@ -43,6 +43,11 @@ function print(finaltxjson) {
     console.log("Errors occured!!/n", newtx.errors.join("/n"));
     return;
   }
+  console.log("Transaction to", dest.address, "sending", finaltx.total/100000000 , "BTC sent.");
 }
 
-$.post(rootUrl+"/addrs").then(parseAddr).then(newTransaction).then(signAndSend).then(print);
+$.post(rootUrl+"/addrs")
+  .then(parseAddr)
+  .then(newTransaction)
+  .then(signAndSend)
+  .then(print);
