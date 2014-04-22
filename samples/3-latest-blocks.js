@@ -5,8 +5,7 @@ function showBlock(block) {
 
 // Gets the JSON data returned by the previous JQuery.get, parse it and returns a
 // new promise to get the next block.
-function printAndGetNext(data) {
-  var block = JSON.parse(data);
+function printAndGetNext(block) {
   showBlock(block);
   return $.get(block.prev_block_url);
 }
@@ -14,8 +13,7 @@ function printAndGetNext(data) {
 // First gets the blockchain data using JQuery.get, parses it and returns a promise to get
 // the latest block. We queue several then() calls right after to get each block one after
 // another and display them.
-$.get("http://api.blockcypher.com/v1/btc/main").then(function(data) {
-  var chain = JSON.parse(data);
+$.get("http://api.blockcypher.com/v1/btc/main").then(function(chain) {
   return $.get(chain.latestUrl);
 }).then(printAndGetNext).then(printAndGetNext).then(printAndGetNext);
 
