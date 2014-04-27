@@ -390,31 +390,31 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 
   <p> &nbsp; </p>
   <p><h1 id="creating_transactions">Creating Transactions</h1></p>
-  <p>For security reasons we do not keep your private keys, you're the only one who can sign transactions. As a result, sending a transaction is a 3 steps process:</p>
+  <p>For security reasons we do not keep any private keys: you are the only one who can sign transactions. Creating a transaction is a 3-step process:</p>
   <ol>
-    <li>We build the unsigned transaction as well as the data to sign from basic information: at the simplest only an input address, an output address and the value transferred.</li>
+    <li>We build the unsigned transaction and the data to sign it from basic information: an input address, an output address, and the value transferred.</li>
     <li>You sign the transaction data.</li>
-    <li>We finish building the transaction, broadcast it over the peer-to-peer network and send it back to you.</li>
+    <li>We finish building the transaction, broadcast it over the peer-to-peer network, and send it back to you.</li>
   </ol>
 
-  <p>This is done using 2 simple POST requests:</p>
+  <p>This is accomplished using two simple POST requests:</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
       <td>New</td><td>/v1/{coin}/{chain}/txs/new</td><td>/v1/btc/main/txs/new</a><td>POST</td></td>
-      <td>Takes a transaction specification and returns a partially built transaction with the data to sign.</td>
+      <td>Takes transaction information and returns a partially built transaction with the data to sign.</td>
     </tr>
     <tr>
       <td>Send</td><td>/v1/{coin}/{chain}/txs/send</td>
       <td>/v1/btc/main/txs/send</td><td>POST</td>
-      <td>Takes the previously partially built transaction, signed data and public keys. Returns the complete transaction and sends it over the network.</td>
+      <td>Takes the partially built transaction, signed data and public keys. Returns the completed transaction and transmits it over the network.</td>
     </tr>
     </tbody>
   </table>
 
   <p><h2 id="transaction_skeleton">Transaction Skeleton</h2></p>
-  <p>A full transaction starts from a partially filled transaction. We require at least one input with at least one address as well as at least one output with an address and value (in satoshis). For example:</p>
+  <p>A partially filled transaction is needed to create a full transaction. We require at least one input with a minimum of one address and at least one output with an address and value (in satoshis). For example:</p>
   <pre><code class="language-javascript">{
   "inputs": [
     {"addresses": ["181w71oR7nTEsKducLBTUJkdbTvLDQzymL"]}
@@ -425,17 +425,17 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 }
 </code></pre>
 
-  <p>We build the full set of inputs using unspent transactions from the input address and fill up a temporary transaction (unsigned yet).</p>
+  <p>We build the full set of inputs using unspent transactions from the input address and fill up a temporary, unsigned transaction.</p>
   <table>
     <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
       <td>errors</td><td>[{"error": ""Address 1DEP... with balance 4271116 does not have enough funds to transfer 500000000."}]</td>
-      <td>Array of errors encountered while generating the transaction. Should be missing if generation is successful.</td>
+      <td>Array of errors encountered while generating the transaction. If the generation is successful, nothing will appear.</td>
     </tr>
     <tr>
       <td>tx</td><td>tx: {...}</td>
-      <td>Temporary transaction, fully filled up except for the input scripts (require signature).</td>
+      <td>Temporary transaction, fully filled up except for the input scripts (requires signature).</td>
     </tr>
     <tr>
       <td>tosign</td><td>["04779733bb...", "0396ea6f1b..."]</td>
@@ -443,21 +443,21 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     </tr>
     <tr>
       <td>(signatures)</td><td>["bcd2c363a2...", "dc621478..."]</td>
-      <td>Array of hexadecimal-encoded signatures you should provide in return.</td>
+      <td>Array of hexadecimal-encoded signatures you need to provide.</td>
     </tr>
     <tr>
       <td>(pubkeys)</td><td>["02c8d29d...", "02c8d29d..."]</td>
-      <td>The public key to use with each generated input (generally, repeat the public key corresponding to the provided input address).</td>
+      <td>The public key for each generated input (in general, repeat the public key corresponding to the provided input address).</td>
     </tr>
     </tbody>
   </table>
 
-  <p>Note that low <a href="https://en.bitcoin.it/wiki/Transaction_fees">fees</a> are automatically included, if required, to ensure your transaction will be relayed.</p>
-  <p>As the transaction isn't complete yet, the transaction hash is temporary. The final hash will be calculated and returned with the complete transaction.</p>
-  <p>You may also provide inputs already filled up with with the <em>prev_hash</em> and <em>output_index</em> properties. In this case we will use your inputs as provided and will not attempt to generate them from the address. Fees and change will still be inserted appropriately.</p>
+  <p>Note that low <a href="https://en.bitcoin.it/wiki/Transaction_fees">transaction fees</a> are automatically included as required to ensure your transaction will be relayed.</p>
+  <p>Since the transaction isn't complete yet, the transaction hash is temporary. The final hash will be calculated and returned with the completed transaction.</p>
+  <p>You may also provide inputs filled from the <em>prev_hash</em> and <em>output_index</em> properties. In this case, we use your inputs as provided and will not attempt to generate them from the address. Fees and change will still be inserted appropriately.</p>
 
   <i><h4>Example</i></h4>
-  <p>The following example results in the creation of 2 inputs, as 2 previous transactions need to be used to get to the requested amount. It also results in 2 outputs, one for the required transaction and another for the change.</p>
+  <p>The following example will create 2 inputs because 2 previous transactions must be used for the requested amount. It also creates 2 outputs, one for the required transaction and another for the change.</p>
   <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/txs/new
 > {
 >   "inputs": [
@@ -531,7 +531,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 }</code></pre>
 
   <p><h2 id="signing_sending">Signing and Sending</h2></p>
-  <p>Use your private key(s) to sign each of the data strings provided (decoding them to byte arrays and using ECDSA signing) and return the signatures as hex-encoded strings in a <em>signatures</em> array property inserted in the previous document.</p>
+  <p>Use your private key(s) to sign each of the data strings provided (decode them to byte arrays and use ECDSA signing) and return the signatures as hex-encoded strings in a <em>signatures</em> array property inserted in the previous document.</p>
 
   <pre><code class="language-javascript">{
   "tx": { ... },
@@ -540,8 +540,8 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     "0396ea6f1bf7493e738339bd720267e7281144b222343ffe4167e00792c62ff2"
   ],
   "signatures": [
-    "3045022100e91585519a9b637e122558644b67d6e9de618f906943aaeb00c95d3e172a64030220141fec5b48fa7cf4424bacb396004ff599dd8bf55f93770ddd93cd92457577bc",
-    "304502207df92c19101048de8a8a4fcb2cfb62ac937dfc6cf34c7fc8465336bfcc24eaad0221009fe6557e49943d9ab82190cb9826b3a336f491f8e2966c3dbdc7a09f501eddc8"
+    "3045022100e91585519a9b637e122558644b67d6e9de618f906943aaeb00c95d3...",
+    "304502207df92c19101048de8a8a4fcb2cfb62ac937dfc6cf34c7fc8465336bfc..."
   ],
   "pubkeys": [
     "02c8d29d8c8afb4725d25a1ec496aeddc36fa9eb6f0e014bfc21742fc3d78cb438",
@@ -549,9 +549,8 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   ]
 }</code></pre>
 
-  <p>In addition, for each input, the public key matching the input address need to be provided. This is because the input address can't be calculated from the address. In general, just repeat the public key for the address you provided in the transaction skeleton input.</p>
-  <p>As an example, here is a short snippet showing how to sign the transaction in Javascript using the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">bitcoinjs</a> library:</p>
-
+  <p>Additionally, for each input the public key matching the input address must be provided because the input address cannot be calculated from the address. In general, repeat the public key for the address provided in the transaction skeleton input.</p>
+  <p>Here's an example showing how to sign the transaction in Javascript using the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">bitcoinjs</a> library:</p>
   <pre><code class="language-javascript">
 var key     = Bitcoin.ECKey.fromHex(source.private);
 var pubkeys = [];
@@ -563,10 +562,9 @@ newtx.signatures  = signatures;
 newtx.pubkeys     = pubkeys;
 </pre></code>
 
-  <p>Once signatures are inserted, just POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send). The same document will be returned again, including the finalized transaction. If no errors are returned, your transaction has been issued successfully and is being broadcasted across the network.</p>
+  <p>Once signatures are inserted, POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send). The same document will be returned with the finalized transaction. If no errors are returned, your transaction was successfully issued and broadcasted across the network.</p>
 
   <p>See our <a href="">full sample</a> on Github.</p>
-
   <p> &nbsp; </p>
   <p><h1 id="websocket_webhook">WebSockets and WebHooks</h1></p>
   <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
