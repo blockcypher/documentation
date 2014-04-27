@@ -51,10 +51,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <h2 id="rate_limits">Rate Limits</h2>
   <p>During our beta, all services are free. BlockCypher APIs can be used up to these rate limits: 
 	<ul>
-	<li>Classic requests, up to 5 requests/sec and 600 requests/hr</il>
+	  <li>Classic requests, up to 5 requests/sec and 600 requests/hr</il>
   	<li>Webhooks and websockets, up to 600 requests/hr</li>
 	</ul>
-<p>Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed those limits.</p>
+  <p>If you exceed a limit, an HTTP status code 429 will be returned. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed those limits, we'll email you one within minutes.</p>
  
 <p>&nbsp;</p>
 <h1 id="blockchain-api">Blockchain API</h1>
@@ -418,6 +418,8 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     </tbody>
   </table>
 
+  <p>When a transaction has been successfully sent (using the Send or Push endpoints), an HTTP status of 201 is returned.</p>
+
   <p><h2 id="transaction_skeleton">Transaction Skeleton</h2></p>
   <p>A partially filled transaction is needed to create a full transaction. We require at least one input with a minimum of one address and at least one output with an address and value (in satoshis). For example:</p>
   <pre><code class="language-javascript">{
@@ -557,19 +559,19 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <p>Additionally, for each input the public key matching the input address must be provided because the input address cannot be calculated from the address. In general, repeat the public key for the address provided in the transaction skeleton input.</p>
   <p>Here's an example showing how to sign the transaction in Javascript using the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">bitcoinjs</a> library:</p>
   <pre><code class="language-javascript">
-var key     = Bitcoin.ECKey.fromHex(source.private);
-var pubkeys = [];
-var signatures = newtx.tosign.map(function(tosign) {
-  pubkeys.push(source.public);
-  return key.sign(tosign).concat(1);
-});
-newtx.signatures  = signatures;
-newtx.pubkeys     = pubkeys;
+  var key     = Bitcoin.ECKey.fromHex(source.private);
+  var pubkeys = [];
+  var signatures = newtx.tosign.map(function(tosign) {
+    pubkeys.push(source.public);
+    return bytesToHex(key.sign(hexToBytes(tosign)));
+  });
+  newtx.signatures  = signatures;
+  newtx.pubkeys     = pubkeys;
 </pre></code>
 
   <p>Once signatures are inserted, POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send). The same document will be returned with the finalized transaction. If no errors are returned, your transaction was successfully issued and broadcasted across the network.</p>
 
-  <p>See our <a href="">full sample</a> on Github.</p>
+  <p>See our <a href="https://github.com/blockcypher/documentation/blob/master/samples">create-tx full sample</a> on Github.</p>
   <p> &nbsp; </p>
   <p><h1 id="websocket_webhook">WebSockets and WebHooks</h1></p>
   <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
