@@ -9,11 +9,13 @@ var source = {
 }
 var dest = null;
 
+// 0. We get a newly generated address
 function logAddr(addr) {
   dest = addr;
   log("Generated new address " + dest.address)
 }
 
+// 1. Post our simple transaction information to get back the fully built transaction.
 function newTransaction() {
   var newtx = {
     "inputs": [{"addresses": [source.address]}],
@@ -22,6 +24,8 @@ function newTransaction() {
   return $.post(rootUrl+"/txs/new", JSON.stringify(newtx));
 }
 
+// 2. Sign the hexadecimal strings returned with the fully built transaction and include
+//    the source public address.
 function signAndSend(newtx) {
   if (newtx.errors && newtx.errors.length) {
     log("Errors occured!!/n" + newtx.errors.join("/n"));
@@ -40,6 +44,7 @@ function signAndSend(newtx) {
   return $.post(rootUrl+"/txs/send", JSON.stringify(newtx));
 }
 
+// 3. Open a websocket to wait for confirmation the transaction has been accepted in a block.
 function waitForConfirmation(finaltx) {
   if (finaltx.errors && finaltx.errors.length) {
     log("Errors occured!!/n" + newtx.errors.join("/n"));
@@ -63,6 +68,7 @@ function log(msg) {
   $("div.log").append("<div>" + msg + "</div>")
 }
 
+// Chaining
 $.post(rootUrl+"/addrs")
   .then(logAddr)
   .then(newTransaction)
