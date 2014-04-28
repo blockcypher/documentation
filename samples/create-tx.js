@@ -47,7 +47,7 @@ function waitForConfirmation(finaltx) {
   log("Transaction " + finaltx.tx.hash + " to " + dest.address + " of " +
         finaltx.tx.outputs[0].value/100000000 + " BTC sent.");
 
-  var ws = new WebSocket("ws://socket.blockcypher.com/v1/btc/main");
+  var ws = new WebSocket("ws://socket.blockcypher.com/v1/btc/test3");
   ws.onmessage = function (event) { log("Transaction confirmed."); ws.close(); }
   ws.onopen = function(event) {
     ws.send(JSON.stringify({filter: "event=new-block-tx&hash="+finaltx.tx.hash}));
