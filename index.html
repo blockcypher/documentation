@@ -140,7 +140,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
       <td>Recorded time at which the block was built. (Note: miners rarely have an accurate clock time).</td>
     </tr>
     <tr>
-      <td>received</td><td>2014-03-30T18:52:36.539Z</td>
+      <td>received_time</td><td>2014-03-30T18:52:36.539Z</td>
       <td>Time our BlockCypher servers received the block. Our servers' time is continuously adjusted and accurate.</td>
     </tr>
     <tr>
@@ -685,12 +685,20 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <table>
     <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
-    <tr>
+    <!-- tr>
       <td>total</td><td>25125030000</td><td> Total inputs on the specified address, in satoshi. <strong>Coming soon.</strong></td>
-    </tr>
+    </tr -->
     <tr>
       <td>balance</td><td>12550020000</td>
       <td>Balance on the specified address, in satoshi.</td>
+    </tr>
+    <tr>
+      <td>unconfirmed_balance</td><td>-100000000</td>
+      <td>Balance of unconfirmed transactions for this address, in satoshi. Can be negative (if unconfirmed transactions are just spending.)</td>
+    </tr>
+    <tr>
+      <td>final_balance</td><td>124500020000</td>
+      <td>Final balance including unconfirmed transactions for this address, in satoshi.</td>
     </tr>
     <tr>
       <td>tx_url</td><td>https://api.blockcypher.com/v1/btc/main/txs/</td>
@@ -698,11 +706,30 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     </tr>
     <tr>
       <td>txrefs</td><td>[...]</td>
-      <td>All transactions inputs and outputs for the specified address.</td>
+      <td>All transaction inputs and outputs for the specified address.</td>
+    </tr>
+    <tr>
+      <td>unconfirmed_txrefs</td><td>[...]</td>
+      <td>All unconfirmed transaction inputs and outputs for the specified address.</td>
+    </tr>
+  </table>
+
+  <p>The arrays of transaction inputs or outputs reference in <em>txrefs</em> and <em>unconfirmed_txrefs</em> have the following properties:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+	  <tr>
+      <td>tx_hash</td><td>0d7ac056a...</td>
+      <td>One of the transaction hashes for the specified address.</td>
     </tr>
 	  <tr>
-      <td>txref</td><td>0d7ac056a...</td>
-      <td>One of the transaction hashes for the specified address.</td>
+      <td>block_height</td><td>292781</td>
+      <td>Height of the block for the transaction.</td>
+    </tr>
+	  <tr>
+      <td>confirmations</td><td>1092</td>
+      <td>Number of confirmations for the transaction.</td>
     </tr>
     <tr>	
       <td>inputIndex</td><td>1</td>
@@ -713,10 +740,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
       <td>Index of the output in the transaction. It's a negative number for an input.</td>
     </tr>
     <tr>
-      <td>amount</td><td>28318177</td>
-      <td>The amount transferred by the particular input or output.</td>
+      <td>value</td><td>28318177</td>
+      <td>The value transferred by the particular input or output.</td>
     </tr>
-	<tr>
+	  <tr>
       <td>spent</td><td>true</td>
       <td>Is 'true' if the output was spent.</td>
     </tr>
