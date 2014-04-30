@@ -646,7 +646,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     <tr>
       <td>Address</td><td>/v1/{coin}/{chain}/addrs/{hash}</td>
       <td><a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD">/v1/btc/main/addrs/1DEP8i...</a></td><td>GET</td>
-      <td>All details about a given address, including transaction information and balance.</td>
+      <td>All details about a given address, including transaction information and balance. Use the unspentOnly URL parameter to get only unspent outputs.</td>
     </tr>
     </tbody>
   </table>
@@ -679,7 +679,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 </code></pre>
 
   <p><h2 id="address_details">Address Details</h2></p>
-  <p>The Address API details gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address.</p> 
+  <p>The Address API details gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address. To get only the unspent transactions, append <em>?unspentOnly=true</em> to the address URL.</p>
 	
   <p>A request to a given address returns the following properties:</p>
   <table>
