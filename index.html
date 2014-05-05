@@ -432,7 +432,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 }
 </code></pre>
 
-  <p>We build the full set of inputs using unspent transactions from the input address and fill up a temporary, unsigned transaction.</p>
+  <p>We build the full set of inputs using unspent transactions from the input address and fill up a temporary, unsigned transaction. Passing a negative value (like -1) will automatically generate a <em>sweep</em>, transferring the entire balance of the input address (minus portential fees).</p>
   <table>
     <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
