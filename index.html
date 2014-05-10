@@ -689,6 +689,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
       <td>total</td><td>25125030000</td><td> Total inputs on the specified address, in satoshi. <strong>Coming soon.</strong></td>
     </tr -->
     <tr>
+      <td>address</td><td>1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</td>
+      <td>The requested address.</td>
+    </tr>
+    <tr>
       <td>balance</td><td>12550020000</td>
       <td>Balance on the specified address, in satoshi.</td>
     </tr>
@@ -732,11 +736,11 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
       <td>Number of confirmations for the transaction.</td>
     </tr>
     <tr>	
-      <td>inputIndex</td><td>1</td>
+      <td>tx_input_n</td><td>1</td>
       <td>Index of the input in the transaction. It's a negative number for an output.</td>
     </tr>
     <tr>
-      <td>outputIndex</td><td>-1</td>
+      <td>tx_output_n</td><td>-1</td>
       <td>Index of the output in the transaction. It's a negative number for an input.</td>
     </tr>
     <tr>
@@ -752,25 +756,33 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 
   <p>Here's a sample return document for a given address:</p>
   <pre><code class="language-http">http://api.blockcypher.com/v1/btc/main/addrs/1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</code>
-<code class="language-javascript">
-	  "total": 283181777,
-	  "balance": 0,
-	  "txrefs": [
-	    {
-	      "txref": "0d7ac056a96ffc200f53f2a64291a967e5f696c43997f877ef42cb871bb07231",
-	      "inputIndex": 1,
-	      "outputIndex": -1,
-	      "amount": 283181777,
-	      "spent": false
-	    },
-	    {
-	      "txref": "baee4a85bcc1109fd4133602e6900e13b1b084c617ee75d25418ee3f3e84dcea",
-	      "inputIndex": -1,
-	      "outputIndex": 0,
-	      "amount": 283181777,
-	      "spent": true
-	    }
-	  ]
+<code class="language-javascript">{
+  "address": "1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7",
+  "balance": 0,
+  "unconfirmed_balance": 0,
+  "final_balance": 0,
+  "txrefs": [
+    {
+      "tx_hash": "0d7ac056a96ffc200f53f2a64291a967e5f696c43997f877ef42cb871bb07231",
+      "block_height": 278670,
+      "tx_input_n": 1,
+      "tx_output_n": -1,
+      "value": 283181777,
+      "spent": false,
+      "confirmations": 21405
+    },
+    {
+      "tx_hash": "baee4a85bcc1109fd4133602e6900e13b1b084c617ee75d25418ee3f3e84dcea",
+      "block_height": 278564,
+      "tx_input_n": -1,
+      "tx_output_n": 0,
+      "value": 283181777,
+      "spent": true,
+      "confirmations": 21511
+    }
+  ],
+  "unconfirmed_txrefs": [],
+  "tx_url": "https://api.blockcypher.com/v1/btc/main/txs/"
 }</code></pre>
 
   <script src="site/js/prism.js"></script>
