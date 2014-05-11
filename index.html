@@ -345,6 +345,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
       <td>script</td><td>76a914...ac</td>
       <td>Raw hexadecimal encoding of the script.</td>
     </tr>
+	  <tr>
+      <td>spent_by</td><td>b4735a06...</td>
+      <td>Hash of the transaction that spent this output, if it was spent.</td>
+    </tr>
     </tbody>
   </table>
 <p>Here's a sample return document for a given transaction:</p>
@@ -380,6 +384,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 	    {
 	      "value": 14830000,
 	      "script": "76a914d56bd5bdffebbc1a8dc08fe535b34641ef74112288ac",
+        "spent_by": "c113d5a71ecfce73a480f8c1bd827e338ae808fbca7c3daf966fdfe1ca615a59",
 	      "addresses": [
 	        "1LTU7N1Rz8JwgteomqCzaKFMaqzML4nMgZ"
 	      ],
