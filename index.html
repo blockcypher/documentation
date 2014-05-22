@@ -635,7 +635,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
 
+
   <p>For an example of using WebHooks written in node.js, refer to our <a href="https://github.com/blockcypher/documentation/blob/gh-pages/samples/nodejs-webhook.js">sample</a>.</p>
+
+  <p>If calling the URL configured in a WebHook fails, it will be retried 3 times. If a WebHook fails to deliver 10 distinct events, the WebHook will be disabled.</p>
 
   <p> &nbsp; </p>
   <p><h1 id="address_api">Address API</h1></p>
