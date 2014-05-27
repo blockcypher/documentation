@@ -589,6 +589,13 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> - used typically in client applications when a web server is not already running: e.g., a web page displaying the most recent transactions or a wallet app updating its UI when a transaction has been confirmed. Websockets are less reliable in longer interactions (over several hours) because they require a connection to stay open.</li> 
     <li><a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a> - the most reliable way to get notified but requires running a web server to receive the calls. We automatically retry HTTP requests 3 times.</li>
   </ul>
+  <p>Both WebSockets and WebHooks can forward the following events:</p>
+  <ul>
+    <li><em>new-pool-tx</em>: Triggered for every new transaction before it goes into a block, so for every unconfirmed transactions. The payload is the unconfirmed <a href="#transactions">transaction</a>.</li>
+    <li><em>new-block</em>: Triggered for every new block added to the main chain. The payload is the <a href="#blocks">block</a>.</li>
+    <li><em>new-block-tx</em>: Triggered for every new transaction making it into a new block on the main chain, so for every first transaction confirmation. Equivalent to listening to the above and fetching the transaction for each transaction in the block. The payload is the confirmed <a href="#transactions">transaction</a>.</li>
+    <li><em>tx-confirmation</em>: Simplifies listening to all transactions on a given address with every subsequent confirmation up to a provided threshold (maximum 10, default 6). For example, to get notified for every new transaction and up to 3 confirmations on a given address, use the filter: "addr=...&event=tx-confirmation:3"</li>
+  </ul>
 
   <p><h2 id="websockets">WebSockets</h2></p>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
@@ -631,7 +638,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     <li>The JSON document describing the event subscription should be sent using a POST request to https://api.blockcypher.com/v1/btc/main/hooks and include an additional property containing the URL to be called.</li>
     <li>The transaction or block associated with the event you subscribed to will be POSTed to the provided URL. The POST request will also include a X-EventType HTTP header specifying the type of event which triggered the request.</li>
   </ul>
-  <p>To create a new WebHook:</p>
+  <p>See <a href="websocket_webhook">above</a> for all the different type of events you can listen to with a WebHook. To create a new WebHook:</p>
   <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/hooks
 {
   "filter": "event=new-block",
@@ -639,6 +646,9 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
 
+  <p>A simple way to test a WebHook is to use curl and <a href="http://requestb.in/">requestb.in</a>. First go to <a href="http://requestb.in/">requestb.in</a> and create a new bin. Then use curl to create a BlockCypher WebHook that will POST to your bin. For example to get every new block:</p>
+
+  <pre><code class="language-bash">$ curl -H "Content-Type: application/json" -d '{"filter":"event=new-block", "url": "http://requestb.in/YOUR_BIN"}' https://api.blockcypher.com/v1/btc/main/hooks</code></pre>
 
   <p>For an example of using WebHooks written in node.js, refer to our <a href="https://github.com/blockcypher/documentation/blob/gh-pages/samples/nodejs-webhook.js">sample</a>.</p>
 
