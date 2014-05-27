@@ -25,6 +25,7 @@
     <div class="sub1"><a href="#transaction_skeleton">Transaction Skeleton</a></div>
     <div class="sub1"><a href="#signing_sending">Signing and Sending</a></div>
     <div class="top"><a href="#websocket_webhook">WebSockets & WebHooks</a></div>
+    <div class="sub1"><a href="#events">Events</a></div>
     <div class="sub1"><a href="#websockets">WebSockets</a></div>
     <div class="sub1"><a href="#webhooks">WebHooks</a></div>
     <div class="top"><a href="#address_api">Address API</a></div>
@@ -583,6 +584,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <p>See our <a href="/samples/create-tx.html">full sample</a> to issue a transaction on testnet from your browser.</p>
   <p> &nbsp; </p>
   <p><h1 id="websocket_webhook">WebSockets and WebHooks</h1></p>
+  <p><h2 id="events">Events</h2></p>
   <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
   <p>We support both WebSockets and WebHooks:</p>
   <ul>
@@ -597,10 +599,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     <li><em>tx-confirmation</em>: Simplifies listening to all transactions on a given address with every subsequent confirmation up to a provided threshold (maximum 10, default 6). For example, to get notified for every new transaction and up to 3 confirmations on a given address, use the filter: "addr=...&event=tx-confirmation:3"</li>
   </ul>
 
-  <p><h2 id="websockets">WebSockets</h2></p>
-  <p>Opening a WebSocket to listen to our feeds is easy:</p>
-  <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
-  <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, a JSON document describing the event you're interested in will be sent. The document will have the following format:</p>
+  <p>To subscribe to an event, send a document with the following format:</p>
   <pre><code class="language-javascript">{
   "filter": "event=new-block",
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
@@ -625,6 +624,11 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   </table>
   <p>Depending on your filter expression, the message content will be either a transaction or a block.</p>
   <p>Filters can also combine key/value pairs using the & operator. For example, to receive only new pool transactions for a given address: event=new-pool-tx&addr={myaddress}.</p>
+
+  <p><h2 id="websockets">WebSockets</h2></p>
+  <p>Opening a WebSocket to listen to our feeds is easy:</p>
+  <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
+  <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, the JSON document describing the event you're interested in should be sent.</p>
 
   <i><h4>Example</i></h4>
   <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
