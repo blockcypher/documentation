@@ -150,3 +150,21 @@ div.log {
 div.log:empty {
   display: none;
 }
+
+table.status {
+  border: 0;
+}
+table.status td {
+  border: 0;
+  vertical-align: top;
+}
+table.status .nopad {
+  padding: 0;
+}
+table.status .middle {
+  vertical-align: middle;
+}
+
+div.graph {
+  margin: 20px 0;
+}
