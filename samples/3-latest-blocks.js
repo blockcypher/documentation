@@ -14,6 +14,6 @@ function printAndGetNext(block) {
 // the latest block. We queue several then() calls right after to get each block one after
 // another and display them.
 $.get("http://api.blockcypher.com/v1/btc/main").then(function(chain) {
-  return $.get(chain.latestUrl);
+  return $.get(chain.latest_url);
 }).then(printAndGetNext).then(printAndGetNext).then(printAndGetNext);
 

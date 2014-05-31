@@ -46,7 +46,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <p>The samples in this documentation are in Javascript (browser or node.js) or can be accessed using the command line. Complete examples can be found in BlockCypher's <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we use <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a> to illustrate. 
 	
 	<p>For example, this shows the number of transactions in the latest block (see the <a href="#blockchain-api">Blockchain API</a> section for more information):</p>
-  <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json n_tx
+  <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latest_url | xargs curl -s | json n_tx
 267</code></pre>
 
   <h2 id="rate_limits">Rate Limits</h2>
@@ -99,12 +99,12 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
       <td>Hash of the second to last block in the chain.</td>
     </tr>
     <tr>
-      <td>latestUrl</td>
+      <td>latest_url</td>
       <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666...">.../v1/btc/main/blocks/0000...974f</a></td>
       <td>URL to retrieve information on the latest block in the chain.</td>
     </tr>
     <tr>
-      <td>previousUrl</td>
+      <td>previous_url</td>
       <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64ee...">.../v1/btc/main/blocks/0000...1d66</a></td>
       <td>URL to retrieve information on the second to last block in the chain.</td>
     </tr>
@@ -205,10 +205,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <h4><i>Example</i></h4>
   <p>In this example, we retrieve the last 10 block from the Bitcoin block chain and render a summary page. We start with the chain property to get the URL of the latest block. We then use the prev_block_url to load the previous, hence traversing the block chain back block by block.</p>
   <p>From the command line, we retrieve the latest block using the following:</p>
-  <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s</code></pre>
+  <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latest_url | xargs curl -s</code></pre>
 
-  <p>Here we use the json command to extract the latestUrl property from the chain and pass it to curl using xargs (invokes a command passing the stdin parameters). This can be chained further to go one block back:</p>
-  <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latestUrl | xargs curl -s | json prev_block_url | xargs curl -s</code></pre>
+  <p>Here we use the json command to extract the latest_url property from the chain and pass it to curl using xargs (invokes a command passing the stdin parameters). This can be chained further to go one block back:</p>
+  <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latest_url | xargs curl -s | json prev_block_url | xargs curl -s</code></pre>
 
   <p>We can continue chaining calls, but it quickly gets very long. Here's a short Javascript program which can be run in the browser to do the same thing using JQuery:</p>
   

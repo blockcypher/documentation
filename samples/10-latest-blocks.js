@@ -13,7 +13,7 @@ function printAndGetNext(block) {
 
 // Gets the blockchain data and parse it, returning a promise to get the latest block
 var initiate = $.get("http://api.blockcypher.com/v1/btc/main").then(function(chain) {
-  return $.get(chain.latestUrl);
+  return $.get(chain.latest_url);
 });
 
 // We continue by looping on the promise returned above and chaining 10 calls to print

@@ -22,6 +22,7 @@ server.listen(51413);
 console.log("Server is listening");
 
 // Prepare the request to create the webhook
+// CHANGE TO YOUR IP ADDRESS FOR TESTING and make sure it's reachable from the outside
 var data = JSON.stringify({url: "http://173.228.17.216:51413", filter: "event=new-pool-tx"});
 
 var options = {
