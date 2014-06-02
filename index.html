@@ -34,11 +34,13 @@
   </div>
   
   <h1 id="introduction">Introduction</h1>
-  <p>BlockCypher hosts full-nodes of the Main and Test Bitcoin block chains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">websockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">webhooks</a>.
+  <p>BlockCypher runs the Main and Test Bitcoin and Litecoin block chains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a>.
 	<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
-  <p>Most resources exist under a given block chain. For example, the URLs to Bitcoin Main and Test are:</p>
+  <p>Most resources exist under a given block chain. For example, the URLs to Bitcoin and Litecoin's Main and Test are:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main
-https://api.blockcypher.com/v1/btc/test3</code></br></pre>
+https://api.blockcypher.com/v1/btc/test3
+https://api.blockcypher.com/v1/ltc/main
+https://api.blockcypher.com/v1/ltc/test</code></br></pre>
 
   <p>Opening the URL to Bitcoin Main will produce the following JSON document. It will show the current chain height, hashes and URLs of the last 2 blocks which are extracted in <i>real-time</i> from our API.</p>
   <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
@@ -50,12 +52,12 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
 267</code></pre>
 
   <h2 id="rate_limits">Rate Limits</h2>
-  <p>During our beta, all services are free. BlockCypher APIs can be used up to these rate limits: 
+  <p>BlockCypher APIs can be used up to these rate limits: 
 	<ul>
 	  <li>Classic requests, up to 5 requests/sec and 600 requests/hr</il>
-  	<li>Webhooks and websockets, up to 600 requests/hr</li>
+  	<li>WebHooks and WebSockets, up to 600 requests/hr</li>
 	</ul>
-  <p>If you exceed a limit, an HTTP status code 429 will be returned. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed those limits, we'll email you one within minutes.</p>
+  <p>If you exceed a limit, an HTTP status code 429 will be returned. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed those limits, we'll email you one within minutes. Our future pricing plan will be tiered based on usage and volume. We will have a free tier and an extended free plan for our early users. </p>
  
 <p>&nbsp;</p>
 <h1 id="blockchain-api">Blockchain API</h1>
@@ -82,7 +84,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     </tbody>
   </table>
   <p><h2 id="chains">Chains</h2></pr>
-  <p>Currently, we support the main and test Bitcoin block chains. Depending on market demands, we'll add additional block chains and altcoins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
+  <p>Currently, we support the main and test Bitcoin and Litecoin block chains. Depending on market demands, we'll add additional block chains and alt coins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
   <p>A request to a given chain returns the following properties:</p>
   <table>
     <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
@@ -138,11 +140,11 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
     </tr>
     <tr>
       <td>time</td><td>2014-03-30T18:52:44Z</td>
-      <td>Recorded time at which the block was built. (Note: miners rarely have an accurate clock time).</td>
+      <td>Recorded time at which the block was built. (Note: miners rarely post accurate clock times).</td>
     </tr>
     <tr>
       <td>received_time</td><td>2014-03-30T18:52:36.539Z</td>
-      <td>Time our BlockCypher servers received the block. Our servers' time is continuously adjusted and accurate.</td>
+      <td>The time BlockCypher's servers receive the block. Our servers' time is continuously adjusted and accurate.</td>
     </tr>
     <tr>
       <td>n_tx</td><td>579</td>
@@ -593,10 +595,10 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   </ul>
   <p>Both WebSockets and WebHooks can forward the following events:</p>
   <ul>
-    <li><em>new-pool-tx</em>: Triggered for every new transaction before it goes into a block, so for every unconfirmed transactions. The payload is the unconfirmed <a href="#transactions">transaction</a>.</li>
+    <li><em>new-pool-tx</em>: Triggered for every new transaction before it goes into a block; basically, for every unconfirmed transactions. The payload is the unconfirmed <a href="#transactions">transaction</a>.</li>
     <li><em>new-block</em>: Triggered for every new block added to the main chain. The payload is the <a href="#blocks">block</a>.</li>
-    <li><em>new-block-tx</em>: Triggered for every new transaction making it into a new block on the main chain, so for every first transaction confirmation. Equivalent to listening to the above and fetching the transaction for each transaction in the block. The payload is the confirmed <a href="#transactions">transaction</a>.</li>
-    <li><em>tx-confirmation</em>: Simplifies listening to all transactions on a given address with every subsequent confirmation up to a provided threshold (maximum 10, default 6). For example, to get notified for every new transaction and up to 3 confirmations on a given address, use the filter: "addr=...&event=tx-confirmation:3"</li>
+    <li><em>new-block-tx</em>: Triggered for every new transaction making it into a new block on the main chain; basically, for every first transaction confirmation. This is equivalent to listening to the above events and fetching each transaction in the block. The payload is the confirmed <a href="#transactions">transaction</a>.</li>
+    <li><em>tx-confirmation</em>: Simplifies listening to confirmations on all transactions on a given address up to a provided threshold (maximum 10, default 6). For example, to get notified for up to 3 confirmations on a given address, use the filter: "addr=...&event=tx-confirmation:3"</li>
   </ul>
 
   <p>To subscribe to an event, send a document with the following format:</p>
@@ -628,7 +630,7 @@ https://api.blockcypher.com/v1/btc/test3</code></br></pre>
   <p><h2 id="websockets">WebSockets</h2></p>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
   <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
-  <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, the JSON document describing the event you're interested in should be sent.</p>
+  <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, the JSON document describing the event of interest should be sent.</p>
 
   <i><h4>Example</i></h4>
   <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
