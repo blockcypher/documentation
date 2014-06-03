@@ -660,6 +660,24 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
 
   <p>If calling the URL configured in a WebHook fails, it will be retried 3 times. If a WebHook fails to deliver 10 distinct events, the WebHook will be disabled.</p>
 
+  <table>
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>Create</td><td>/v1/{coin}/{chain}/hooks</td><td>/v1/btc/main/hooks<td>POST</td></td>
+      <td>Creates a new webhook, returned its information along with its id.</td>
+    </tr>
+    <tr>
+      <td>List</td><td>/v1/{coin}/{chain}/hooks?token={token}</td><td>/v1/btc/main/hooks?token=14df7860-eb44-11e3-ac10-0800200c9a66<td>GET</td></td>
+      <td>Returns an array of webhooks associated with the provided token.</td>
+    </tr>
+    <tr>
+      <td>Delete</td><td>/v1/{coin}/{chain}/hooks/{id}</td><td>/v1/btc/main/hooks/399d0923-e920-48ee-8928-2051cbfbc369<td>DELETE</td></td>
+      <td>Deletes a webhook using its id.</td>
+    </tr>
+    </tbody>
+  </table>
+
   <p> &nbsp; </p>
   <p><h1 id="address_api">Address API</h1></p>
 
