@@ -402,7 +402,12 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
 
   <p> &nbsp; </p>
   <p><h1 id="creating_transactions">Creating Transactions</h1></p>
-  <p>For security reasons we do not keep any private keys: you are the only one who can sign transactions. Creating a transaction is a 3-step process:</p>
+  <p>For security reasons we do not keep any private keys: you are the only one who can sign transactions. There are 2 ways to send a transaction using our API:</p>
+  <ul>
+    <li>Build the transaction yourself (possibly using a 3rd party library) and push the raw hex-encoded string. We will broadcast to the network and track it for you.</li>
+    <li>Build the transaction simply from the 2 addresses and the amount using our API.</li>
+  </ul>
+  <p>Creating a transaction from scratch using our API is a 3-step process:</p>
   <ol>
     <li>We build the unsigned transaction and the data to sign it from basic information: an input address, an output address, and the value transferred.</li>
     <li>You sign the transaction data.</li>
