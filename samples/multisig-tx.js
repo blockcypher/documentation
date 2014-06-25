@@ -110,7 +110,7 @@ function log(msg) {
 // Chaining
 $.when($.post(rootUrl+"/addrs?a"), $.post(rootUrl+"/addrs?b"), $.post(rootUrl+"/addrs?c"))
   .then(logAddrs)
-  // funding transaction
+  // funding transaction to multisig address
   .then(newFundingTransaction)
   .then(signAndSend)
   .then(waitForConfirmation)
@@ -120,4 +120,5 @@ $.when($.post(rootUrl+"/addrs?a"), $.post(rootUrl+"/addrs?b"), $.post(rootUrl+"/
   // transfer signing with key #1
   .then(newTwoOfThreeTransaction)
   .then(signForAddressAndSend(1))
+  // final confirmation
   .then(waitForConfirmation);
