@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>BlockCypher | Documentation</title>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="stylesheet" href="/site/css/prism.css"/>
+  <link rel="stylesheet" href="/site/css/site.css"/>
+</head>
+<body>
+  <div class="top-menu">
+    <a href="http://dev.blockcypher.com">&lt;&lt; Back</a>
+  </div>
+  <div class="logo-title">
+    <a href="http://www.blockcypher.com"><img src="/site/img/logo-small.png"/></a>
+    <span>Create Multisig Transactions</span>
+  </div>
+
+  <p>This sample demonstrate transferring value from a classic bitcoin address to 2-of-3 multisig address and then spending from that address by providing 2 of the signatures.</p>
+  <button class="tryme" id="browser-websocket">Transfer now!</button>
+
+  <div class="log"></div>
+
+  <p>Note: this sample uses bitcoinjs to generate signatures in your browser. If you're experiencing issues please make sure your browser is supported by checking the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">project page</a>.</p>
+
+  <pre id="sample-code" data-src="/samples/multisig-tx.js"></pre>
+
+  <script src="/site/js/prism.js"></script>
+  <script src="/samples/bitcoinjs-min.js"></script>
+  <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <script>
+    $('button.tryme').click(function(e) {
+        eval($('#sample-code').children().text());
+    });
+  </script>
+</body>
+</html>
