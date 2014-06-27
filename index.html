@@ -626,7 +626,7 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
   }]
 }</code></pre>
   </li>
-  <li><a href="#signing_sending">Sign the returned hex string</a> and post the whole result to txs/send. We correlate each call based on the pubkeys/destination/amount and will send the transaction automatically once we have enough signatures.</li>
+  <li><a href="#signing_sending">Sign the returned hex string</a> and post it with the transaction to txs/send. We correlate each call based on the pubkeys/destination/amount and will send the transaction automatically once we have enough signatures.</li>
 </ol>
 	
 <p>Alternatively, instead of having each party call our API, you may also share the hex string to sign and provide the required signatures all at once. Note that in all cases, the order in which the public keys are provided matters and should be consistent, as required for Bitcoin P2SH transactions. Remaining funds (change) will be sent back to the multisig address.</p>
