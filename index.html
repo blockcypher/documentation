@@ -24,6 +24,7 @@
     <div class="top"><a href="#creating_transactions">Creating Transactions</a></div>
     <div class="sub1"><a href="#transaction_skeleton">Transaction Skeleton</a></div>
     <div class="sub1"><a href="#signing_sending">Signing and Sending</a></div>
+	<div class="sub1"><a href="#multisig">Multisig <b><font color="red">(NEW!) </font></b></a></div>
     <div class="top"><a href="#websocket_webhook">WebSockets & WebHooks</a></div>
     <div class="sub1"><a href="#events">Events</a></div>
     <div class="sub1"><a href="#websockets">WebSockets</a></div>
@@ -404,17 +405,17 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
   <p><h1 id="creating_transactions">Creating Transactions</h1></p>
   <p>For security reasons we do not keep any private keys: you are the only one who can sign transactions. There are 2 ways to send a transaction using our API:</p>
   <ul>
-    <li>Build the transaction yourself (possibly using a 3rd party library) and push the raw hex-encoded string. We will broadcast to the network and track it for you.</li>
-    <li>Build the transaction simply from the 2 addresses and the amount using our API.</li>
+    <li>Build the transaction yourself (using a 3rd party library) and push the raw hex-encoded string. We will broadcast to the network and track it for you.</li>
+    <li>Create the transaction with our API, the 2 addresses and the amount.</li>
   </ul>
-  <p>Creating a transaction from scratch using our API is a 3-step process:</p>
+  <p>Using our API, creating a transaction from scratch is a 3-step process:</p>
   <ol>
     <li>We build the unsigned transaction and the data to sign it from basic information: an input address, an output address, and the value transferred.</li>
     <li>You sign the transaction data.</li>
     <li>We finish building the transaction, broadcast it over the peer-to-peer network, and send it back to you.</li>
   </ol>
 
-  <p>This is accomplished using two simple POST requests, with a 3rd one allowing you to push raw hexadecimal transactions:</p>
+  <p>This is accomplished with two simple POST requests and a third one which allows you to push raw hexadecimal transactions:</p>
   <table>
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
     <tbody>
@@ -449,7 +450,7 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
 }
 </code></pre>
 
-  <p>We build the full set of inputs using unspent transactions from the input address and fill up a temporary, unsigned transaction. Passing a negative value (like -1) will automatically generate a <em>sweep</em>, transferring the entire balance of the input address (minus portential fees).</p>
+  <p>We build the full set of inputs using unspent transactions from the input address and fill up a temporary, unsigned transaction. Passing a negative value (like -1) will automatically generate a <em>sweep</em>, transferring the entire balance of the input address (minus potential fees).</p>
   <table>
     <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
@@ -477,7 +478,7 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
   </table>
 
   <p>Note that low <a href="https://en.bitcoin.it/wiki/Transaction_fees">transaction fees</a> are automatically included as required to ensure your transaction will be relayed.</p>
-  <p>Since the transaction isn't complete yet, the transaction hash is temporary. The final hash will be calculated and returned with the completed transaction.</p>
+  <p>Since the transaction is not yet complete yet, the transaction hash is a temporary one. The final hash will be calculated and returned with the completed transaction.</p>
   <p>You may also provide inputs filled from the <em>prev_hash</em> and <em>output_index</em> properties. In this case, we use your inputs as provided and will not attempt to generate them from the address. Fees and change will still be inserted appropriately.</p>
 
   <i><h4>Example</i></h4>
@@ -555,7 +556,7 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
 }</code></pre>
 
   <p><h2 id="signing_sending">Signing and Sending</h2></p>
-  <p>Use your private key(s) to sign each of the data strings provided (decode them to byte arrays and use ECDSA signing) and return the signatures as hex-encoded strings in a <em>signatures</em> array property inserted in the previous document.</p>
+  <p>Use your private key(s) to sign each of the data strings provided (decode them to byte arrays and use ECDSA). Return the signatures as hex-encoded strings in a <em>signatures</em> array property inserted in the previous document.</p>
 
   <pre><code class="language-javascript">{
   "tx": { ... },
@@ -589,7 +590,40 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
   <p>Once signatures are inserted, POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send). The same document will be returned with the finalized transaction. If no errors are returned, your transaction was successfully issued and broadcasted across the network.</p>
 
   <p>See our <a href="/samples/create-tx.html">full sample</a> to issue a transaction on testnet from your browser.</p>
-  <p> &nbsp; </p>
+
+<p><h2 id="multisig">Multisig Transactions</h2></p>  
+
+<p>Our multiple signature transaction API (2 out of 3 signatures required to process the transaction) works similarly to the classic transaction API with a few differences: the multisig address needs to be sent a value with the transaction, there's a script type, and public keys need to be provided instead of addresses. For example:</p>
+	
+<pre><code class="language-javascript">{
+    "inputs": [{"addresses": [sourceAddr]}],
+    "outputs": [{
+      "addresses"   : [pubkey1, pubkey2, pubkey3],
+      "script_type" : "multisig-2-of-3",
+      "value"       : 250000,
+    }]
+  }
+</code></pre>
+
+<p>In order to spend from a multisig transaction, build another transaction by repeating the steps for each required signature. For example:</p>
+
+<pre><code class="language-javascript">{
+    "inputs": [{
+      "addresses"   : [pubkey1, pubkey2, pubkey3],
+      "script_type" : "multisig-2-of-3"
+    }],
+    "outputs": [{
+      "addresses" : [destAddr],
+      "value"     : 15000
+    }]
+  }
+</code></pre>
+
+<p>We correlate each call based on the pubkeys/destination/amount and send automatically once we have enough signatures. You may also share the hex string to sign yourself and provide the required signatures all at once.</p>
+	
+<p>See our <a href="/samples/multisig-tx.html">full sample</a> to see how to issue a 2 out of 3 signature required multisig transaction.</p>
+	
+<p> &nbsp; </p>
   <p><h1 id="websocket_webhook">WebSockets and WebHooks</h1></p>
   <p><h2 id="events">Events</h2></p>
   <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
