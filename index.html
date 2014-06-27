@@ -593,8 +593,14 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
 
 <p><h2 id="multisig">Multisig Transactions</h2></p>  
 
-<p>Our multiple signature transaction API (2 out of 3 signatures required to process the transaction) works similarly to the classic transaction API with a few differences: the multisig address needs to be sent a value with the transaction, there's a script type, and public keys need to be provided instead of addresses. For example:</p>
-	
+<p>Our multiple signature transaction API works similarly to our classic <a href="#creating_transactions">transaction API</a> with a few differences:</p>
+<ol>
+  <li>A script type of multisig-N-of-M must be set (with N and M replaced by actual numbers, like multisig-2-of-3).</li>
+  <li>Public keys must be provided instead of addresses for the multisig inputs or outputs.</li>
+</ol>
+<p>For a whole multisig interaction to happen, first the multisig address has to be sent some money using a first transaction using N public keys for output. Then that transaction can be spent by another that will be repeatedly issued for each M required signature. The whole interaction can be broken down as follows:</p>
+<ol>
+  <li>Call the <a href="#transaction_skeleton">txs/new</a> endpoint to create a funding transaction. For a 2-of-3 transaction:
 <pre><code class="language-javascript">{
     "inputs": [{"addresses": [sourceAddr]}],
     "outputs": [{
@@ -602,11 +608,12 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
       "script_type" : "multisig-2-of-3",
       "value"       : 250000,
     }]
-  }
-</code></pre>
-
-<p>In order to spend from a multisig transaction, build another transaction by repeating the steps for each required signature. For example:</p>
-
+  }</code></pre>
+  </li>
+  <li><a href="#signing_sending">Sign the returned hex string</a> and post the whole result to txs/send. The multisig address is now funded.</li>
+  <li>To spend from it, each party (so 3 in a 3-of-4 multisig for example) need to send a signed multisig transaction.</li>
+  <ol>
+    <li>Call the txs/new endpoint to create the spending transaction. For example:
 <pre><code class="language-javascript">{
     "inputs": [{
       "addresses"   : [pubkey1, pubkey2, pubkey3],
@@ -614,14 +621,17 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
     }],
     "outputs": [{
       "addresses" : [destAddr],
-      "value"     : 15000
+      "value"     : 250000
     }]
-  }
-</code></pre>
-
-<p>We correlate each call based on the pubkeys/destination/amount and send automatically once we have enough signatures. You may also share the hex string to sign yourself and provide the required signatures all at once.</p>
+  }</code></pre>
+    </li>
+    <li><a href="#signing_sending">Sign the returned hex string</a> and post the whole result to txs/send. We correlate each call based on the pubkeys/destination/amount and will send the transaction automatically once we have enough signatures.</li>
+  </ol>
+</ol>
 	
-<p>See our <a href="/samples/multisig-tx.html">full sample</a> to see how to issue a 2 out of 3 signature required multisig transaction.</p>
+<p>Instead of having each party call our API, you may also just share the hex string to sign and provide the required signatures all at once. Note that in all cases, the order in which the public keys are provided matter and should be consistent. This is due to how Bitcoin P2SH transactions work. Change will be sent back to the multisig address.</p>
+	
+<p>See our <a href="/samples/multisig-tx.html">full Javascript sample</a> to see how to issue a 2 out of 3 signatures multisig transaction.</p>
 	
 <p> &nbsp; </p>
   <p><h1 id="websocket_webhook">WebSockets and WebHooks</h1></p>
