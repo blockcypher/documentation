@@ -611,22 +611,22 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
   }</code></pre>
   </li>
   <li><a href="#signing_sending">Sign the returned hex string</a> and post the whole result to txs/send. The multisig address is now funded.</li>
-  <li>To spend from it, each party (so 3 in a 3-of-4 multisig for example) need to send a signed multisig transaction.</li>
-  <ol>
-    <li>Call the txs/new endpoint to create the spending transaction. For example:
+</ol>
+<p>To spend the previous transaction, each party (so 3 in a 3-of-4 multisig for example) need to send a new signed multisig transaction, specifying the public keys and script_type for input and the receiving address as output:</p>
+<ol>
+  <li>Call the txs/new endpoint to create the spending transaction. For example:
 <pre><code class="language-javascript">{
-    "inputs": [{
-      "addresses"   : [pubkey1, pubkey2, pubkey3],
-      "script_type" : "multisig-2-of-3"
-    }],
-    "outputs": [{
-      "addresses" : [destAddr],
-      "value"     : 250000
-    }]
-  }</code></pre>
-    </li>
-    <li><a href="#signing_sending">Sign the returned hex string</a> and post the whole result to txs/send. We correlate each call based on the pubkeys/destination/amount and will send the transaction automatically once we have enough signatures.</li>
-  </ol>
+  "inputs": [{
+    "addresses"   : [pubkey1, pubkey2, pubkey3],
+    "script_type" : "multisig-2-of-3"
+  }],
+  "outputs": [{
+    "addresses" : [destAddr],
+    "value"     : 150000
+  }]
+}</code></pre>
+  </li>
+  <li><a href="#signing_sending">Sign the returned hex string</a> and post the whole result to txs/send. We correlate each call based on the pubkeys/destination/amount and will send the transaction automatically once we have enough signatures.</li>
 </ol>
 	
 <p>Instead of having each party call our API, you may also just share the hex string to sign and provide the required signatures all at once. Note that in all cases, the order in which the public keys are provided matter and should be consistent. This is due to how Bitcoin P2SH transactions work. Change will be sent back to the multisig address.</p>
