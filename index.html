@@ -612,7 +612,7 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
   </li>
   <li><a href="#signing_sending">Sign the returned hex string</a> and post it with the transaction to txs/send. The multisig address is now funded.</li>
 </ol>
-<p>To spend the previous transaction, each party (so 3 in a 3-of-4 multisig for example) need to send a new signed multisig transaction, specifying the public keys and script_type for input and the receiving address as output:</p>
+<p>To spend the previous transaction, each party (e.g., 3 in a 3-of-4 multisig) needs to send a new signed multisig transaction, specifying the public keys and script_type for input and the receiving address as output:</p>
 <ol>
   <li>Call the txs/new endpoint to create the spending transaction. For example:
 <pre><code class="language-javascript">{
@@ -629,7 +629,7 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
   <li><a href="#signing_sending">Sign the returned hex string</a> and post the whole result to txs/send. We correlate each call based on the pubkeys/destination/amount and will send the transaction automatically once we have enough signatures.</li>
 </ol>
 	
-<p>Instead of having each party call our API, you may also just share the hex string to sign and provide the required signatures all at once. Note that in all cases, the order in which the public keys are provided matter and should be consistent. This is due to how Bitcoin P2SH transactions work. Change will be sent back to the multisig address.</p>
+<p>Alternatively, instead of having each party call our API, you may also share the hex string to sign and provide the required signatures all at once. Note that in all cases, the order in which the public keys are provided matters and should be consistent, as required for Bitcoin P2SH transactions. Remaining funds (change) will be sent back to the multisig address.</p>
 	
 <p>See our <a href="/samples/multisig-tx.html">full Javascript sample</a> to see how to issue a 2 out of 3 signatures multisig transaction.</p>
 	
