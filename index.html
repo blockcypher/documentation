@@ -594,10 +594,10 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
 <p><h2 id="multisig">Multisig Transactions</h2></p>  
 
 <p>Our multiple signature transaction API works similarly to our classic <a href="#creating_transactions">transaction API</a> with a few differences:</p>
-<ol>
+<ul>
   <li>A script type of multisig-N-of-M must be set (with N and M replaced by actual numbers, like multisig-2-of-3).</li>
   <li>Public keys must be provided instead of addresses for the multisig inputs or outputs.</li>
-</ol>
+</ul>
 <p>For a whole multisig interaction to happen, first the multisig address has to be sent some money using a first transaction using N public keys for output. Then that transaction can be spent by another that will be repeatedly issued for each M required signature. The whole interaction can be broken down as follows:</p>
 <ol>
   <li>Call the <a href="#transaction_skeleton">txs/new</a> endpoint to create a funding transaction. For a 2-of-3 transaction:
