@@ -598,7 +598,7 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
   <li>A script type of multisig-N-of-M must be set (with N and M replaced by actual numbers, like multisig-2-of-3).</li>
   <li>Public keys must be provided instead of addresses for the multisig inputs or outputs.</li>
 </ul>
-<p>For a whole multisig interaction to happen, first the multisig address has to be sent some money using a first transaction using N public keys for output. Then that transaction can be spent by another that will be repeatedly issued for each M required signature. The whole interaction can be broken down as follows:</p>
+<p>For a multisig interaction to happen, first the multisig address has to be sent some money using a transaction that includes N public keys in its output. Then that transaction can be spent by another by repeatedly issuing the required M number of signature. The interaction can be broken down as follows:</p>
 <ol>
   <li>Call the <a href="#transaction_skeleton">txs/new</a> endpoint to create a funding transaction. For a 2-of-3 transaction:
 <pre><code class="language-javascript">{
@@ -610,7 +610,7 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
     }]
   }</code></pre>
   </li>
-  <li><a href="#signing_sending">Sign the returned hex string</a> and post the whole result to txs/send. The multisig address is now funded.</li>
+  <li><a href="#signing_sending">Sign the returned hex string</a> and post it with the transaction to txs/send. The multisig address is now funded.</li>
 </ol>
 <p>To spend the previous transaction, each party (so 3 in a 3-of-4 multisig for example) need to send a new signed multisig transaction, specifying the public keys and script_type for input and the receiving address as output:</p>
 <ol>
