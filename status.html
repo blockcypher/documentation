@@ -106,7 +106,7 @@
   <script>
     var rootUrl = "http://api.blockcypher.com/v1"
     function setAll() {
-      ["btc", "ltc"].forEach(function(c) {
+      ["btc", "ltc", "uro"].forEach(function(c) {
         ["main", "test"].forEach(function(f) {
           if (c == "btc" && f == "test") f = "test3";
           if (c == "uro" && f == "test") return;
