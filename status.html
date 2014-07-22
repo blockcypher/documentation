@@ -73,17 +73,24 @@
               </table>
             </td>
           </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td class="middle"><img src="site/img/uro-logo.png" width="96"/></td>
+      <td>
+        <table>
           <tr>
-            <td><strong>TEST</strong></td>
+            <td><strong>MAIN</strong></td>
             <td class="nopad">
               <table class="status">
-                <tr><td>Height</td><td id="lt_height"></td></tr>
-                <tr><td>Last Block</td><td id="lt_hash"></td></tr>
-                <tr><td>Last Update</td><td id="lt_time"></td></tr>
-                <tr><td>Connected Peers</td><td id="lt_peer_count"></td></tr>
-                <tr><td>Unconfirmed Transactions</td><td id="lt_unconfirmed_count"></td></tr>
-                <tr><td>Last Fork Height</td><td id="lt_last_fork_height"></td></tr>
-                <tr><td>Last Fork Block</td><td id="lt_last_fork_hash"></td></tr>
+                <tr><td>Height</td><td id="um_height"></td></tr>
+                <tr><td>Last Block</td><td id="um_hash"></td></tr>
+                <tr><td>Last Update</td><td id="um_time"></td></tr>
+                <tr><td>Connected Peers</td><td id="um_peer_count"></td></tr>
+                <tr><td>Unconfirmed Transactions</td><td id="um_unconfirmed_count"></td></tr>
+                <tr><td>Last Fork Height</td><td id="um_last_fork_height"></td></tr>
+                <tr><td>Last Fork Block</td><td id="um_last_fork_hash"></td></tr>
               </table>
             </td>
           </tr>
@@ -102,6 +109,7 @@
       ["btc", "ltc"].forEach(function(c) {
         ["main", "test"].forEach(function(f) {
           if (c == "btc" && f == "test") f = "test3";
+          if (c == "uro" && f == "test") return;
 
           $.get(rootUrl+"/"+c+"/"+f).then(function(chain) {
             for (prop in chain) {
