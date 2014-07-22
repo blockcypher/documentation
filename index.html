@@ -38,11 +38,12 @@
   <h1 id="introduction">Introduction</h1>
   <p>BlockCypher runs the Main and Test Bitcoin and Litecoin block chains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a>.
 	<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
-  <p>Most resources exist under a given block chain. For example, the URLs to Bitcoin and Litecoin's Main and Test are:</p>
+  <p>Most resources exist under a given block chain. The URLs to Bitcoin, Litecoin and Uro chains are:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main
 https://api.blockcypher.com/v1/btc/test3
 https://api.blockcypher.com/v1/ltc/main
-https://api.blockcypher.com/v1/ltc/test</code></br></pre>
+https://api.blockcypher.com/v1/ltc/test
+https://api.blockcypher.com/v1/uro/main</code></br></pre>
 
   <p>Opening the URL to Bitcoin Main will produce the following JSON document. It will show the current chain height, hashes and URLs of the last 2 blocks which are extracted in <i>real-time</i> from our API.</p>
   <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
@@ -615,7 +616,7 @@ https://api.blockcypher.com/v1/ltc/test</code></br></pre>
   ]
 }</code></pre>
 
-  <p>The most common issue is that there are no unspent outputs to build the transaction from. By default, spending unconfirmed transactions isn't enabled, so you may not be able to issue a 2nd transaction until the first has been confirmed. To enable spending from unconfirmed transactions, in the partially filled transaction provided to the new endpoint add "confirmations: -1".</p>
+  <p>The most common issue is the absence of confirmed unspent outputs to build the transaction from. By default, spending unconfirmed transactions isn't enabled, so you may not be able to issue a 2nd transaction until the first has been confirmed. To enable spending from unconfirmed transactions, in the partially filled transaction provided to the new endpoint add "confirmations: -1".</p>
 
 <p><h2 id="multisig">Multisig Transactions</h2></p>  
 
