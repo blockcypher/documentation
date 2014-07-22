@@ -700,6 +700,10 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
       <td>addr</td><td>addr=1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC</td>
       <td>Only transactions associated with the given address will be sent.</td>
     </tr>
+    <tr>
+      <td>script</td><td>script=pay-to-script-hash</td>
+      <td>Only transactions with an output script of the provided type will be sent. The recognized types of scripts are: pay-to-pubkey-hash, pay-to-multi-pubkey-hash, pay-to-pubkey, pay-to-script-hash, null-data (sometimes called OP_RETURN), empty or unknown.</td>
+    </tr>
     </tbody>
   </table>
   <p>Depending on your filter expression, the message content will be either a transaction or a block.</p>
