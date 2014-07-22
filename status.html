@@ -38,20 +38,6 @@
               </table>
             </td>
           </tr>
-          <tr>
-            <td><strong>TEST3</strong></td>
-            <td class="nopad">
-              <table class="status">
-                <tr><td>Height</td><td id="bt_height"></td></tr>
-                <tr><td>Last Block</td><td id="bt_hash"></td></tr>
-                <tr><td>Last Update</td><td id="bt_time"></td></tr>
-                <tr><td>Connected Peers</td><td id="bt_peer_count"></td></tr>
-                <tr><td>Unconfirmed Transactions</td><td id="bt_unconfirmed_count"></td></tr>
-                <tr><td>Last Fork Height</td><td id="bt_last_fork_height"></td></tr>
-                <tr><td>Last Fork Block</td><td id="bt_last_fork_hash"></td></tr>
-              </table>
-            </td>
-          </tr>
         </table>
       </td>
     </tr>
@@ -77,7 +63,7 @@
       </td>
     </tr>
     <tr>
-      <td class="middle"><img src="site/img/uro-logo.png" width="96"/></td>
+      <td class="middle"><img src="site/img/uro-logo.png" width="106"/></td>
       <td>
         <table>
           <tr>
@@ -106,24 +92,20 @@
   <script>
     var rootUrl = "http://api.blockcypher.com/v1"
     function setAll() {
+      var f = "main";
       ["btc", "ltc", "uro"].forEach(function(c) {
-        ["main", "test"].forEach(function(f) {
-          if (c == "btc" && f == "test") f = "test3";
-          if (c == "uro" && f == "test") return;
-
-          $.get(rootUrl+"/"+c+"/"+f).then(function(chain) {
-            for (prop in chain) {
-              var prefix = "#"+c[0]+f[0]+"_"
-              if (prop.slice(-4) == "hash" || prop.slice(-6) == "height") {
-                $(prefix+prop).html('<a target="_blank" href="'+
-                    rootUrl+"/"+c+"/"+f+"/blocks/"+chain[prop]+'">'+chain[prop]+"</a>");
-              } else if (prop.slice(-4) == "time") {
-                $(prefix+prop).text(new Date(chain[prop]));
-              } else {
-                $(prefix+prop).text(chain[prop]);
-              }
+        $.get(rootUrl+"/"+c+"/"+f).then(function(chain) {
+          for (prop in chain) {
+            var prefix = "#"+c[0]+f[0]+"_"
+            if (prop.slice(-4) == "hash" || prop.slice(-6) == "height") {
+              $(prefix+prop).html('<a target="_blank" href="'+
+                  rootUrl+"/"+c+"/"+f+"/blocks/"+chain[prop]+'">'+chain[prop]+"</a>");
+            } else if (prop.slice(-4) == "time") {
+              $(prefix+prop).text(new Date(chain[prop]));
+            } else {
+              $(prefix+prop).text(chain[prop]);
             }
-          })
+          }
         })
       })
     }
