@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>BlockCypher | Documentation</title>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="stylesheet" href="site/css/prism.css"/>
+  <link rel="stylesheet" href="site/css/site.css"/>
+</head>
+<body>
+  <div class="top-menu">
+    <a href="http://www.blockcypher.com">&lt;&lt; Back</a>
+  </div>
+  <div class="logo-title">
+    <a href="http://www.blockcypher.com"><img src="site/img/logo-small.png"/></a>
+    <span>Reference Documentation</span>
+  </div>
+  <div class="content-table">
+    <div class="top"><a href="#introduction">Introduction</a></div>
+    <div class="sub1"><a href="#rate_limits">Rate Limits</a></div>
+    <div class="top"><a href="#blockchain-api">Blockchain API</a></div>
+    <div class="sub1"><a href="#chains">Chains</a></div>
+    <div class="sub1"><a href="#blocks">Blocks</a></div>
+    <div class="sub1"><a href="#transactions">Transactions</a></div>
+    <div class="top"><a href="#creating_transactions">Creating Transactions</a></div>
+    <div class="sub1"><a href="#transaction_skeleton">Transaction Skeleton</a></div>
+    <div class="sub1"><a href="#signing_sending">Signing and Sending</a></div>
+    <div class="sub1"><a href="#error_handling">Error Handling</a></div>
+	<div class="sub1"><a href="#multisig">Multisig <b><font color="red">(NEW!) </font></b></a></div>
+    <div class="top"><a href="#websocket_webhook">WebSockets & WebHooks</a></div>
+    <div class="sub1"><a href="#events">Events</a></div>
+    <div class="sub1"><a href="#websockets">WebSockets</a></div>
+    <div class="sub1"><a href="#webhooks">WebHooks</a></div>
+    <div class="top"><a href="#address_api">Address API</a></div>
+    <div class="sub1"><a href="#address_gen">Address Generation</a></div>
+    <div class="sub1"><a href="#address_details">Address Details</a></div>
+  </div>
+  
+  <h1 id="introduction">Introduction</h1>
+  <p>BlockCypher runs the Main and Test Bitcoin and Litecoin block chains as well as the Uro block chain. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a>.
+	<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
+  <p>Most resources exist under a given block chain. The URLs to Bitcoin, Litecoin and Uro chains are:</p>
+  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main
+https://api.blockcypher.com/v1/btc/test3
+https://api.blockcypher.com/v1/ltc/main
+https://api.blockcypher.com/v1/ltc/test
+https://api.blockcypher.com/v1/uro/main</code></br></pre>
+
+  <p>Opening the URL to Bitcoin Main will produce the following JSON document. It will show the current chain height, hashes and URLs of the last 2 blocks which are extracted in <i>real-time</i> from our API.</p>
+  <pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
+
+  <p>The samples in this documentation are in Javascript (browser or node.js) or can be accessed using the command line. Complete examples can be found in BlockCypher's <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we use <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a> to illustrate. 
+	
+	<p>For example, this shows the number of transactions in the latest block (see the <a href="#blockchain-api">Blockchain API</a> section for more information):</p>
+  <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latest_url | xargs curl -s | json n_tx
+267</code></pre>
+
+  <h2 id="rate_limits">Rate Limits</h2>
+  <p>BlockCypher APIs can be used up to these rate limits: 
+	<ul>
+	  <li>Classic requests, up to 5 requests/sec and 600 requests/hr</il>
+  	<li>WebHooks and WebSockets, up to 600 requests/hr</li>
+	</ul>
+  <p>If you exceed a limit, an HTTP status code 429 will be returned. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed those limits, we'll email you one within minutes. Our future pricing plan will be tiered based on usage and volume. We will have a free tier and an extended free plan for our early users. </p>
+ 
+<p>&nbsp;</p>
+<h1 id="blockchain-api">Blockchain API</h1>
+  <p>The Blockchain API allows you to access raw data from the block chain's <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
+
+  <p>Three main resources make up the Blockchain API (all GETs under https://api.blockcypher.com):</p>
+  <table>
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>Chain</td><td>/v1/{coin}/{chain}</td><td><a href="https://api.blockcypher.com/v1/btc/main">/v1/btc/main</a></td>
+      <td>Returns the current state of the specified block chain, including height and the two latest blocks.</td>
+    </tr>
+    <tr>
+      <td>Block</td><td>/v1/{coin}/{chain}/blocks/{hash|height}</td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/blocks/293000</a></td>
+      <td>All details about a given block, including transaction hashes. Can be retrieved either by block height or block hash.</td>
+    </tr>
+    <tr>
+      <td>Transaction</td><td>/v1/{coin}/{chain}/txs/{hash}</td>
+      <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/txs/f854aeba...</a></td>
+      <td>All details about a given transaction, including involved addresses, inputs and outputs.</td>
+    </tr>
+    </tbody>
+  </table>
+  <p><h2 id="chains">Chains</h2></pr>
+  <p>Currently, we support the main and test Bitcoin and Litecoin block chains. Depending on market demands, we'll add additional block chains and alt coins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
+  <p>A request to a given chain returns the following properties:</p>
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>name</td><td>BTC.main</td><td>Chain name</td>
+    </tr>
+    <tr>
+      <td>latest</td><td>0000...974f</td>
+      <td>Hash of the latest block in the chain.</td>
+    </tr>
+    <tr>
+      <td>previous</td><td>0000...1d66</td>
+      <td>Hash of the second to last block in the chain.</td>
+    </tr>
+    <tr>
+      <td>latest_url</td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666...">.../v1/btc/main/blocks/0000...974f</a></td>
+      <td>URL to retrieve information on the latest block in the chain.</td>
+    </tr>
+    <tr>
+      <td>previous_url</td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64ee...">.../v1/btc/main/blocks/0000...1d66</a></td>
+      <td>URL to retrieve information on the second to last block in the chain.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p><h2 id="blocks">Blocks</h2></p>
+  <p>Blocks are located under a chain's URL. The most interesting properties of blocks are:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>hash</td><td>0000...35fa</td><td>Block hash. Can be used as a unique identifier.</td>
+    </tr>
+    <tr>
+      <td>height</td><td>293268</td>
+      <td>The height of the block is the distance from the root of the chain, the genesis block at height = 0.</td>
+    </tr>
+    <tr>
+      <td>chain</td><td>BTC.main</td>
+      <td>The name of the chain the block is from.</td>
+    </tr>
+    <tr>
+      <td>total</td><td>448188159094</td>
+      <td>The total amount in <a href="https://en.bitcoin.it/wiki/Units">satoshis</a> transacted in this block. Divide by 10^8 to obtain the number of bitcoins.</td>
+    </tr>
+    <tr>
+      <td>fees</td><td>13383533</td>
+      <td>Amount of fees, in satoshis, collected by miners on this block.</td>
+    </tr>
+    <tr>
+      <td>time</td><td>2014-03-30T18:52:44Z</td>
+      <td>Recorded time at which the block was built. (Note: miners rarely post accurate clock times).</td>
+    </tr>
+    <tr>
+      <td>received_time</td><td>2014-03-30T18:52:36.539Z</td>
+      <td>The time BlockCypher's servers receive the block. Our servers' time is continuously adjusted and accurate.</td>
+    </tr>
+    <tr>
+      <td>n_tx</td><td>579</td>
+      <td>Number of transactions in this block.</td>
+    </tr>
+    <tr>
+      <td>prev_block</td><td>0000...35fa</td>
+      <td>Hash of the block previous to this one.</td>
+    </tr>
+    <tr>
+      <td>prev_block_url</td><td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa">.../v1/btc/main/blocks/0000...35fa</a></td>
+      <td>URL for the previous block's details.</td>
+    </tr>
+    <tr>
+      <td>tx_url</td><td>https://api.blockcypher.com/v1/btc/main/txs/</td>
+      <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
+    </tr>
+    <tr>
+      <td>txids</td><td>["96d8...4f6ab", "3b2c...12bb", "7fa2...90d1", ...]</td>
+      <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions. To obtain more, use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
+    </tr>
+    <tr>
+      <td>next_txids</td><td>.../v1/btc/main/blocks/0000...7b72?txstart=20&limit=20</td>
+      <td>URL to get the same block information with the next 20 transactions.</td>
+    </tr>
+  </table>
+<p>Here's a sample return document for a given block:</p>
+  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/blocks/294322</code>
+<code class="language-javascript">{
+  	"hash": "0000000000000000189bba3564a63772107b5673c940c16f12662b3e8546b412",
+	  "height": 294322,
+	  "chain": "BTC.main",
+	  "total": 1146783914,
+	  "fees": 130999,
+	  "ver": 2,
+	  "time": "2014-04-05T07:49:18Z",
+	  "received": "2014-04-05T07:49:30.981Z",
+	  "bits": 419486617,
+	  "nonce": 1225187768,
+	  "n_tx": 10,
+	  "prev_block": "0000000000000000ced0958bd27720b71d32c5847e40660aaca39f33c298abb0",
+	  "mrkl_root": "359d624d37aee1efa5662b7f5dbc390e996d561afc8148e8d716cf6ad765a952",
+	  "txids": [
+	    "32b3b86e40d996b1f281e24e8d4af2ceacbf874c4038369cc21baa807409b277",
+	    "1579f716359ba1a207f70248135f5e5fadf539be1dcf5300613aedcb6577d287",
+	    "dd1f183348eb41eaaa9ecf8012f9cca3ecbae41a6349f0cc4bfd2b1a497fa3d0",
+	    "749d12ccd180968b82aef4c271ca4effdf981d9b5d12523264457c9d4e6fa78e",
+	    "c4fe2ee16b8e3067d3d95caf7944011f4959781288b807df8bf853b7f80ed97c",
+	    "5a2114675265522d2b7ce8a7874cfa7a22ccc3fb6566a8599d6432c6805b1b5f",
+	    "077d851c8240671de80caa8be9f5285201c08a70edc5a45a9cd35fe7eaebf5e1",
+	    "6202cc55fbd9130e065c9294a5b2e061c26f3d2c8df56c32da605d9f183103f9",
+	    "ad3e7aa1c33f1d3e1c105d94f7b1542808da07bbe66b9621b050104a85dbf650",
+	    "36cc61016b9d1bd69768666f287db1edaa9b292fb442f152af7099305677230e"
+	  ],
+	  "prev_block_url": "http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000ced0958bd27720b71d32c5847e40...",
+	  "tx_url": "http://api.blockcypher.com/v1/btc/main/txs/"
+	}</code></pre>
+
+  <p><h2 id="transactions">Transactions</h2></p>
+  <p>Transactions can be confirmed into a block, in a pool of non-confirmed transactions, or orphaned. Confirmed transactions transfer a certain amount of bitcoin from previous <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a> (referenced by inputs and controlled by a set of addresses) to a set of target <a href="https://en.bitcoin.it/wiki/Address">addresses</a>.</p>
+  <p>The main properties in a transaction are:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>block_hash</td><td>0000...35fa</td>
+      <td>Hash of the block the transaction is in. Only exists for confirmed transactions.</td>
+    </tr>
+    <tr>
+      <td>block_height</td><td>293331</td>
+      <td>Height of the block the transaction is in. Only exists for confirmed transactions.</td>
+    </tr>
+    <tr>
+      <td>hash</td><td>9a20...9e84</td>
+      <td>Hash of the transaction. While hashes are reasonably unique, using them as identifiers may be <a href="https://en.bitcoin.it/wiki/Transaction_Malleability">unsafe.</a></td>
+    </tr>
+    <tr>
+      <td>addresses</td><td>["1EJFhJDvS2ncpPotz6Lb3mGGchHfr3zgXv", "1N32Ts6eA2YHrcUjwZnzmPsLUnThZ6bDbb"]</td>
+      <td>Array of Bitcoin addresses involved in the transaction.</td> </tr>
+    </tr>
+    <tr>
+      <td>total</td><td>22180950000</td>
+      <td>Total amount exchanged in this transaction, in satoshis.</td>
+    </tr>
+    <tr>
+      <td>fees</td><td>10000</td>
+      <td>Fees collected by miners in the transaction, in satoshis.</td>
+    </tr>
+    <tr>
+      <td>received</td><td>2014-03-31T04:23:44.833536145Z</td>
+      <td>When the transaction was received by BlockCypher servers.</td>
+    </tr>
+    <tr>
+      <td>confirmations</td><td>5</td>
+      <td>Number of subsequent blocks, including the block the transaction is in. Unconfirmed transactions have 0 for confirmation.</td>
+    </tr>
+    <tr>
+      <td>confirmed</td><td>5</td>
+      <td>Date at which the transaction was included in a block, in ISO format.</td>
+    </tr>
+    <tr>
+      <td>vin_sz</td><td>1</td>
+      <td>Total number of inputs</td>
+    </tr>
+    <tr>
+      <td>vout_sz</td><td>2</td>
+      <td>Total number of outputs</td>
+    </tr>
+    <tr>
+      <td>inputs</td><td>(see below)</td>
+      <td>Array of inputs, limited to 20. Use paging to get more inputs (see section on blocks).</td>
+    </tr>
+    <tr>
+      <td>outputs</td><td>(see below)</td>
+      <td>Array of outputs, limited to 20. Use paging to get more outputs (see section on blocks).</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>Inputs and outputs rely on scripts. When executed, they define if the transaction is valid and what type of transaction it is. We recognize 6 types of transaction scripts:</p>
+  <ol>
+    <li>Pay-to-pubkey-hash (most common transaction transferring to a public key hash)</li>
+    <li>Pay-to-multi-pubkey-hash (multi-signatures transaction)</li>
+    <li>Pay-to-pubkey (used for mining transactions)</li>
+    <li>Pay-to-script-hash (used for transactions relying on arbitrary scripts, rarely used)</li>
+    <li>Empty (no script present, mostly used for the input of a mining transaction)</li>
+    <li>Unknown (non-standard script)</li>
+  </ol>
+
+  <p>Transaction inputs have the following properties:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>prev_hash</td><td>0000...35fa</td>
+      <td>Hash of the transaction for which an output is being spent by this input. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
+    </tr>
+    <tr>
+      <td>output_index</td><td>1</td>
+      <td>Index in the previous transaction of the output being spent. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
+    </tr>
+    <tr>
+      <td>output_value</td><td>1</td>
+      <td>Value of the output being spent. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
+    </tr>
+    <tr>
+      <td>script_type</td><td>pay-to-pubkey-hash</td>
+      <td>Script type in the transaction output being spent.</td>
+    </tr>
+    <tr>
+      <td>addresses</td><td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
+      <td>Addresses referenced in the transaction output being spent.</td>
+    </tr>
+    <tr>
+      <td>script</td><td>76a914...ac</td>
+      <td>Raw hexadecimal encoding of the script.</td>
+    </tr>
+    <tr>
+      <td>script</td><td>76a914...ac</td>
+      <td>Raw hexadecimal encoding of the spent output script.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>Transaction outputs have the following properties:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>value</td><td>2508682714</td>
+      <td>Value transferred by the transaction output, in satoshi.</td>
+    </tr>
+    <tr>
+      <td>script_type</td><td>pay-to-pubkey-hash</td>
+      <td>Script type for this output.</td>
+    </tr>
+    <tr>
+      <td>addresses</td><td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
+      <td>Addresses where the value is being transfered to.</td>
+    </tr>
+    <tr>
+      <td>script</td><td>76a914...ac</td>
+      <td>Raw hexadecimal encoding of the script.</td>
+    </tr>
+	  <tr>
+      <td>spent_by</td><td>b4735a06...</td>
+      <td>Hash of the transaction that spent this output, if it was spent.</td>
+    </tr>
+    </tbody>
+  </table>
+<p>Here's a sample return document for a given transaction:</p>
+  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/txs/dd1f183348eb41eaaa9ecf8012f9cca3ecbae41a6349f0cc4bfd2b1a497fa3d0</code>
+<code class="language-javascript">{
+	  "block_hash": "0000000000000000189bba3564a63772107b5673c940c16f12662b3e8546b412",
+	  "block_height": 294322,
+	  "hash": "dd1f183348eb41eaaa9ecf8012f9cca3ecbae41a6349f0cc4bfd2b1a497fa3d0",
+	  "addresses": [
+	    "143iXmvrg66fCDFNQjahJMHa8P4o8TcMV2",
+	    "1LTU7N1Rz8JwgteomqCzaKFMaqzML4nMgZ"
+	  ],
+	  "total": 14840000,
+	  "fees": 10000,
+	  "received": "2014-04-05T07:49:30.983Z",
+	  "ver": 1,
+	  "lock_time": 0,
+	  "vin_sz": 1,
+	  "vout_sz": 1,
+	  "confirmed": 103,
+	  "inputs": [
+	    {
+	      "prev_hash": "3fba439465ac18150070f1b06edbf30b59e25ca10cd773a1f6214366cace0553",
+	      "output_index": 0,
+	      "script": "49304602210099eeb8166c9edd8ee0c1cb79398bf1642b2289a9156aec583568520415c4...",
+	      "addresses": [
+	        "143iXmvrg66fCDFNQjahJMHa8P4o8TcMV2"
+	      ],
+	      "script_type": "pay-to-pubkey-hash"
+	    }
+	  ],
+	  "outputs": [
+	    {
+	      "value": 14830000,
+	      "script": "76a914d56bd5bdffebbc1a8dc08fe535b34641ef74112288ac",
+        "spent_by": "c113d5a71ecfce73a480f8c1bd827e338ae808fbca7c3daf966fdfe1ca615a59",
+	      "addresses": [
+	        "1LTU7N1Rz8JwgteomqCzaKFMaqzML4nMgZ"
+	      ],
+	      "script_type": "pay-to-pubkey-hash"
+	    }
+	  ]
+	}</code></pre>
+
+  <p> &nbsp; </p>
+  <p><h1 id="creating_transactions">Creating Transactions</h1></p>
+  <p>For security reasons we do not keep any private keys: you are the only one who can sign transactions. There are 2 ways to send a transaction using our API:</p>
+  <ul>
+    <li>Build the transaction yourself (using a 3rd party library) and push the raw hex-encoded string. We will broadcast to the network and track it for you.</li>
+    <li>Create the transaction with our API, the 2 addresses and the amount.</li>
+  </ul>
+  <p>Using our API, creating a transaction from scratch is a 3-step process:</p>
+  <ol>
+    <li>We build the unsigned transaction and the data to sign it from basic information: an input address, an output address, and the value transferred.</li>
+    <li>You sign the transaction data.</li>
+    <li>We finish building the transaction, broadcast it over the peer-to-peer network, and send it back to you.</li>
+  </ol>
+
+  <p>This is accomplished with two simple POST requests and a third one which allows you to push raw hexadecimal transactions:</p>
+  <table>
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>New</td><td>/v1/{coin}/{chain}/txs/new</td><td>/v1/btc/main/txs/new</a><td>POST</td></td>
+      <td>Takes transaction information and returns a partially built transaction with the data to sign.</td>
+    </tr>
+    <tr>
+      <td>Send</td><td>/v1/{coin}/{chain}/txs/send</td>
+      <td>/v1/btc/main/txs/send</td><td>POST</td>
+      <td>Takes the partially built transaction, signed data and public keys. Returns the completed transaction and transmits it over the network.</td>
+    </tr>
+    <tr>
+      <td>Push</td><td>/v1/{coin}/{chain}/txs/push</td>
+      <td>/v1/btc/main/txs/push</td><td>POST</td>
+      <td>If you're already building your own signed transaction, allows you to validate them and transmit them over the network. Takes the transaction's hex-encoded string.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>When a transaction has been successfully sent (using the Send or Push endpoints), an HTTP status of 201 is returned.</p>
+
+  <p><h2 id="transaction_skeleton">Transaction Skeleton</h2></p>
+  <p>A partially filled transaction is needed to create a full transaction. We require at least one input with a minimum of one address and at least one output with an address and value (in satoshis). For example:</p>
+  <pre><code class="language-javascript">{
+  "inputs": [
+    {"addresses": ["181w71oR7nTEsKducLBTUJkdbTvLDQzymL"]}
+  ],
+  "outputs": [
+    {"addresses": ["1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"], "value": 4000000000}
+  ]
+}
+</code></pre>
+
+  <p>We build the full set of inputs using unspent transactions from the input address and fill up a temporary, unsigned transaction. Passing a negative value (like -1) will automatically generate a <em>sweep</em>, transferring the entire balance of the input address (minus potential fees).</p>
+  <p>By default, spending from unconfirmed transactions isn't enabled. So you may have to wait for a transaction to be confirmed before being able to issue another. To enable spending from unconfirmed transactions provide a "confirmations" property of value -1.</p>
+
+  <pre><code class="language-javascript">{
+  "confirmations": -1,
+  "inputs": [
+    {"addresses": ["181w71oR7nTEsKducLBTUJkdbTvLDQzymL"]}
+  ],
+  "outputs": [
+    {"addresses": ["1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"], "value": 4000000000}
+  ]
+}
+</code></pre>
+
+  <p>The document returned by a call to new uses the following format:</p>
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>errors</td><td>[{"error": ""Address 1DEP... with balance 4271116 does not have enough funds to transfer 500000000."}]</td>
+      <td>Array of errors encountered while generating the transaction. If the generation is successful, nothing will appear.</td>
+    </tr>
+    <tr>
+      <td>tx</td><td>tx: {...}</td>
+      <td>Temporary transaction, fully filled up except for the input scripts (requires signature).</td>
+    </tr>
+    <tr>
+      <td>tosign</td><td>["04779733bb...", "0396ea6f1b..."]</td>
+      <td>Array of hexadecimal-encoded data to sign, one for each generated input.</td>
+    </tr>
+    <tr>
+      <td>(signatures)</td><td>["bcd2c363a2...", "dc621478..."]</td>
+      <td>Array of hexadecimal-encoded signatures you need to provide.</td>
+    </tr>
+    <tr>
+      <td>(pubkeys)</td><td>["02c8d29d...", "02c8d29d..."]</td>
+      <td>The public key for each generated input (in general, repeat the public key corresponding to the provided input address).</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>Note that low <a href="https://en.bitcoin.it/wiki/Transaction_fees">transaction fees</a> are automatically included as required to ensure your transaction will be relayed.</p>
+  <p>Since the transaction is not yet complete yet, the transaction hash is a temporary one. The final hash will be calculated and returned with the completed transaction.</p>
+  <p>You may also provide inputs filled from the <em>prev_hash</em> and <em>output_index</em> properties. In this case, we use your inputs as provided and will not attempt to generate them from the address. Fees and change will still be inserted appropriately.</p>
+
+  <i><h4>Example</i></h4>
+  <p>The following example will create 2 inputs because 2 previous transactions must be used for the requested amount. It also creates 2 outputs, one for the required transaction and another for the change.</p>
+  <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/txs/new
+> {
+>   "inputs": [
+>     {"addresses": ["1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"]}
+>   ],
+>   "outputs": [
+>     {"addresses": ["1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"], "value": 500000}
+>   ] 
+> }
+{
+  "tx": {
+    "block_height": -1,
+    "hash": "f961dea839fd69653547a0308360de67846a49d3593f7459773e27af8d9f5ec0",
+    "addresses": [
+      "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD",
+      "1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje",
+    ],
+    "total": 661116,
+    "fees": 10000,
+    "received": "2014-04-20T23:52:21.069978821Z",
+    "ver": 1,
+    "lock_time": 0,
+    "vin_sz": 2,
+    "vout_sz": 2,
+    "confirmed": 0,
+    "inputs": [
+      {
+        "prev_hash": "0c83c8321537a7c79dc6214788944ba6cd5ea76f0594453b6251fcf1856f2e4b",
+        "output_index": 0,
+        "script": "",
+        "output_value": 171116,
+        "addresses": [
+          "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      },
+      {
+        "prev_hash": "995a50e05d197be88d4da74160b4bcd2c363ebb1a49f95e572667d580bc70aba",
+        "output_index": 0,
+        "script": "",
+        "output_value": 500000,
+        "addresses": [
+          "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      }
+    ],
+    "outputs": [
+      {
+        "value": 500000,
+        "script": "76a9149c703cb3e9f1a2a154e548b3acafd0054d4835a788ac",
+        "addresses": [
+          "1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      },
+      {
+        "value": 161116,
+        "script": "76a9148629647bd642a2372d846a7660e210c8414f047c88ac",
+        "addresses": [
+          "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      }
+    ]
+  },
+  "tosign": [
+    "04779733bba8085dd86c21d86c8f9e786a1124751c42061d4c539229a07c4464",
+    "0396ea6f1bf7493e738339bd720267e7281144b222343ffe4167e00792c62ff2"
+  ]
+}</code></pre>
+
+  <p><h2 id="signing_sending">Signing and Sending</h2></p>
+  <p>Use your private key(s) to sign each of the data strings provided (decode them to byte arrays and use ECDSA). Return the signatures as hex-encoded strings in a <em>signatures</em> array property inserted in the previous document.</p>
+
+  <pre><code class="language-javascript">{
+  "tx": { ... },
+  "tosign": [
+    "04779733bba8085dd86c21d86c8f9e786a1124751c42061d4c539229a07c4464",
+    "0396ea6f1bf7493e738339bd720267e7281144b222343ffe4167e00792c62ff2"
+  ],
+  "signatures": [
+    "3045022100e91585519a9b637e122558644b67d6e9de618f906943aaeb00c95d3...",
+    "304502207df92c19101048de8a8a4fcb2cfb62ac937dfc6cf34c7fc8465336bfc..."
+  ],
+  "pubkeys": [
+    "02c8d29d8c8afb4725d25a1ec496aeddc36fa9eb6f0e014bfc21742fc3d78cb438",
+    "02c8d29d8c8afb4725d25a1ec496aeddc36fa9eb6f0e014bfc21742fc3d78cb438"
+  ]
+}</code></pre>
+
+  <p>Additionally, for each input the public key matching the input address must be provided because the input address cannot be calculated from the address. In general, repeat the public key for the address provided in the transaction skeleton input.</p>
+  <p>Here's an example showing how to sign the transaction in Javascript using the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">bitcoinjs</a> library:</p>
+  <pre><code class="language-javascript">
+  var key     = Bitcoin.ECKey.fromHex(source.private);
+  var pubkeys = [];
+  var signatures = newtx.tosign.map(function(tosign) {
+    pubkeys.push(source.public);
+    return bytesToHex(key.sign(hexToBytes(tosign)));
+  });
+  newtx.signatures  = signatures;
+  newtx.pubkeys     = pubkeys;
+</pre></code>
+
+  <p>Once signatures are inserted, POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send). The same document will be returned with the finalized transaction. If no errors are returned, your transaction was successfully issued and broadcasted across the network.</p>
+
+  <p>See our <a href="/samples/create-tx.html">full sample</a> to issue a transaction on testnet from your browser.</p>
+
+  <p><h2 id="error_handling">Error Handling</h2></p>
+  <p>When something is wrong with the provided transaction, the server will reply with a 400 HTTP error code. It will also return a JSON document that includes the transaction and an <i>errors</i> section listing the different issues that were encountered. If you're experiencing any difficulty, please check the returned errors.</p>
+  <pre><code class="language-javascript">{
+  "tx": { ... },
+  "errors": [
+    {"error": "..."}
+  ]
+}</code></pre>
+
+  <p>The most common issue is the absence of confirmed unspent outputs to build the transaction from. By default, spending unconfirmed transactions isn't enabled, so you may not be able to issue a 2nd transaction until the first has been confirmed. To enable spending from unconfirmed transactions, in the partially filled transaction provided to the new endpoint add "confirmations: -1".</p>
+
+<p><h2 id="multisig">Multisig Transactions</h2></p>  
+
+<p>Our multiple signature transaction API works similarly to our classic <a href="#creating_transactions">transaction API</a> with a few differences:</p>
+<ul>
+  <li>A script type of multisig-N-of-M must be set (with N and M replaced by actual numbers, like multisig-2-of-3).</li>
+  <li>Public keys must be provided instead of addresses for the multisig inputs or outputs.</li>
+</ul>
+<p>For a multisig interaction to happen, first the multisig address has to be sent some money using a transaction that includes N public keys in its output. Then that transaction can be spent by another by repeatedly issuing the required M number of signature. The interaction can be broken down as follows:</p>
+<ol>
+  <li>Call the <a href="#transaction_skeleton">txs/new</a> endpoint to create a funding transaction. For a 2-of-3 transaction:
+<pre><code class="language-javascript">{
+    "inputs": [{"addresses": [sourceAddr]}],
+    "outputs": [{
+      "addresses"   : [pubkey1, pubkey2, pubkey3],
+      "script_type" : "multisig-2-of-3",
+      "value"       : 250000,
+    }]
+  }</code></pre>
+  </li>
+  <li><a href="#signing_sending">Sign the returned hex string</a> and post it with the transaction to txs/send. The multisig address is now funded.</li>
+</ol>
+<p>To spend the previous transaction, each party (e.g., 3 in a 3-of-4 multisig) needs to send a new signed multisig transaction, specifying the public keys and script_type for input and the receiving address as output:</p>
+<ol>
+  <li>Call the txs/new endpoint to create the spending transaction. For example:
+<pre><code class="language-javascript">{
+  "inputs": [{
+    "addresses"   : [pubkey1, pubkey2, pubkey3],
+    "script_type" : "multisig-2-of-3"
+  }],
+  "outputs": [{
+    "addresses" : [destAddr],
+    "value"     : 150000
+  }]
+}</code></pre>
+  </li>
+  <li><a href="#signing_sending">Sign the returned hex string</a> and post it with the transaction to txs/send. We correlate each call based on the pubkeys/destination/amount and will send the transaction automatically once we have enough signatures.</li>
+</ol>
+	
+<p>Alternatively, instead of having each party call our API, you may also share the hex string to sign and provide the required signatures all at once. Note that in all cases, the order in which the public keys are provided matters and should be consistent, as required for Bitcoin P2SH transactions. Remaining funds (change) will be sent back to the multisig address.</p>
+	
+<p>See our <a href="/samples/multisig-tx.html">full Javascript sample</a> for how to issue a 2 out of 3 multisig transaction.</p>
+
+<p>Note: if you're using a blockexplorer to check a transaction, be aware that blockchain.info does not support pay-to-script transactions and will not show the transaction until it's confirmed.</p>
+	
+<p> &nbsp; </p>
+  <p><h1 id="websocket_webhook">WebSockets and WebHooks</h1></p>
+  <p><h2 id="events">Events</h2></p>
+  <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
+  <p>We support both WebSockets and WebHooks:</p>
+  <ul>
+    <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> - used typically in client applications when a web server is not already running: e.g., a web page displaying the most recent transactions or a wallet app updating its UI when a transaction has been confirmed. Websockets are less reliable in longer interactions (over several hours) because they require a connection to stay open.</li> 
+    <li><a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a> - the most reliable way to get notified but requires running a web server to receive the calls. We automatically retry HTTP requests 3 times.</li>
+  </ul>
+  <p>Both WebSockets and WebHooks can forward the following events:</p>
+  <ul>
+    <li><em>new-pool-tx</em>: Triggered for every new transaction before it goes into a block; basically, for every unconfirmed transactions. The payload is the unconfirmed <a href="#transactions">transaction</a>.</li>
+    <li><em>new-block</em>: Triggered for every new block added to the main chain. The payload is the <a href="#blocks">block</a>.</li>
+    <li><em>new-block-tx</em>: Triggered for every new transaction making it into a new block on the main chain; basically, for every first transaction confirmation. This is equivalent to listening to the above events and fetching each transaction in the block. The payload is the confirmed <a href="#transactions">transaction</a>.</li>
+    <li><em>tx-confirmation</em>: Simplifies listening to confirmations on all transactions on a given address up to a provided threshold (maximum 10, default 6). For example, to get notified for up to 3 confirmations on a given address, use the filter: "addr=...&event=tx-confirmation:3"</li>
+  </ul>
+
+  <p>To subscribe to an event, send a document with the following format:</p>
+  <pre><code class="language-javascript">{
+  "filter": "event=new-block",
+  "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+}</code></pre>
+  <p>The token is optional and is the value we provide you (see <a href="#rate_limits">rate limits</a>). The filter is an expression associating keys with values. Currently supported keys are:</p>
+  <table>
+    <thead><tr><th>Key</th><th>Example filter</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>event</td><td>event=new-orphan-tx</td>
+      <td>Type of event to receive. Supported event types at this time are: new-block, new-pool-tx, new-orphan-tx and new-block-tx.</td>
+    </tr>
+    <tr>
+      <td>hash</td><td>hash=346a5...b77e5 (abbreviated)</td>
+      <td>Only objects with a matching hash will be sent. The hash can either be for a block or a transaction.</td>
+    </tr>
+    <tr>
+      <td>addr</td><td>addr=1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC</td>
+      <td>Only transactions associated with the given address will be sent.</td>
+    </tr>
+    <tr>
+      <td>script</td><td>script=pay-to-script-hash</td>
+      <td>Only transactions with an output script of the provided type will be sent. The recognized types of scripts are: pay-to-pubkey-hash, pay-to-multi-pubkey-hash, pay-to-pubkey, pay-to-script-hash, null-data (sometimes called OP_RETURN), empty or unknown.</td>
+    </tr>
+    </tbody>
+  </table>
+  <p>Depending on your filter expression, the message content will be either a transaction or a block.</p>
+  <p>Filters can also combine key/value pairs using the & operator. For example, to receive only new pool transactions for a given address: event=new-pool-tx&addr={myaddress}.</p>
+
+  <p><h2 id="websockets">WebSockets</h2></p>
+  <p>Opening a WebSocket to listen to our feeds is easy:</p>
+  <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
+  <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, the JSON document describing the event of interest should be sent.</p>
+
+  <i><h4>Example</i></h4>
+  <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
+
+  <pre data-src="samples/browser-websocket.js"></pre>
+  <button class="tryme" id="browser-websocket">Try me!</button>
+
+  <p><h2 id="webhooks">WebHooks</h2></p>
+  <p>WebHooks have the same interaction format but with two key differences:</p>
+  <ul>
+    <li>The JSON document describing the event subscription should be sent using a POST request to https://api.blockcypher.com/v1/btc/main/hooks and include an additional property containing the URL to be called.</li>
+    <li>The transaction or block associated with the event you subscribed to will be POSTed to the provided URL. The POST request will also include a X-EventType HTTP header specifying the type of event which triggered the request.</li>
+  </ul>
+  <p>See <a href="#events">above</a> for all the different type of events you can listen to with a WebHook. To create a new WebHook:</p>
+  <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/hooks
+{
+  "filter": "event=new-block",
+  "url": "https://my.domain.com/callbacks/new-block"
+  "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+}</code></pre>
+
+  <p>A simple way to test a WebHook is to use curl and <a href="http://requestb.in/">requestb.in</a>. First go to <a href="http://requestb.in/">requestb.in</a> and create a new bin. Then use curl to create a BlockCypher WebHook that will POST to your bin. For example to get every new block:</p>
+
+  <pre><code class="language-bash">$ curl -H "Content-Type: application/json" -d '{"filter":"event=new-block", "url": "http://requestb.in/YOUR_BIN"}' https://api.blockcypher.com/v1/btc/main/hooks</code></pre>
+
+  <p>For an example of using WebHooks written in node.js, refer to our <a href="https://github.com/blockcypher/documentation/blob/gh-pages/samples/nodejs-webhook.js">sample</a>.</p>
+
+  <p>If calling the URL configured in a WebHook fails, it will be retried 3 times. If a WebHook fails to deliver 10 distinct events, the WebHook will be disabled.</p>
+
+  <table>
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>Create</td><td>/v1/{coin}/{chain}/hooks</td><td>/v1/btc/main/hooks<td>POST</td></td>
+      <td>Creates a new webhook, returned its information along with its id.</td>
+    </tr>
+    <tr>
+      <td>List</td><td>/v1/{coin}/{chain}/hooks?token={token}</td><td>/v1/btc/main/hooks?token=14df7860-eb44-11e3-ac10-0800200c9a66<td>GET</td></td>
+      <td>Returns an array of webhooks associated with the provided token.</td>
+    </tr>
+    <tr>
+      <td>Delete</td><td>/v1/{coin}/{chain}/hooks/{id}</td><td>/v1/btc/main/hooks/399d0923-e920-48ee-8928-2051cbfbc369<td>DELETE</td></td>
+      <td>Deletes a webhook using its id.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p> &nbsp; </p>
+  <p><h1 id="address_api">Address API</h1></p>
+
+  <p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. A collection resource and a detail resource make up the Address API.</p>
+  <table>
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>Addresses</td><td>/v1/{coin}/{chain}/addrs</td><td>/v1/btc/main/addrs<td>POST</td></td>
+      <td>Returns a newly generated address with the corresponding public and private keys.</td>
+    </tr>
+    <tr>
+      <td>Address</td><td>/v1/{coin}/{chain}/addrs/{hash}</td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD">/v1/btc/main/addrs/1DEP8i...</a></td><td>GET</td>
+      <td>All details about a given address, including transaction information and balance. Use the unspentOnly URL parameter to get only unspent outputs.</td>
+    </tr>
+    </tbody>
+  </table>
+  
+  <p><h2 id="address_gen">Address Generation</h2></p>
+
+  <p>The generation API is offered for convenience purpose, for security reasons please always use HTTPS to use this resource. No information is required in the POST request, the following information will be returned:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>address</td><td>181w71oR7nTEsKducLBTUJkdbTvLDQzymL</td><td>Standard address representation.</td>
+    </tr>
+    <tr>
+      <td>public</td><td>028b3b3fc5d437...</td><td>Public key.</td>
+    </tr>
+    <tr>
+      <td>private</td><td>028b3b3fc5d437...</td><td>Private key.</td>
+    </tr>
+  </table>
+
+  <p>To get a newly generated address::</p>
+  <pre><code class="language-http">POST https://api.blockcypher.com/v1/btc/main/addrs</code>
+<code class="language-javascript">{
+  "private": "07f6f3dd1f383a8e2085a031f6f3e5183145f3fa1080a5a7f3f39fee981ddd5b",
+  "public": "039920d51829763242314cb61f6bbd69e8daa71e1909f66cf0daa2adf555db29ed",
+  "address": "181w71oR7nTEsKducLBTUJkdbTvLDQzymL"
+}
+</code></pre>
+
+  <p><h2 id="address_details">Address Details</h2></p>
+  <p>The Address API details gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address. To get only the unspent transactions, append <em>?unspentOnly=true</em> to the address URL.</p>
+	
+  <p>A request to a given address returns the following properties:</p>
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <!-- tr>
+      <td>total</td><td>25125030000</td><td> Total inputs on the specified address, in satoshi. <strong>Coming soon.</strong></td>
+    </tr -->
+    <tr>
+      <td>address</td><td>1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</td>
+      <td>The requested address.</td>
+    </tr>
+    <tr>
+      <td>balance</td><td>12550020000</td>
+      <td>Balance on the specified address, in satoshi.</td>
+    </tr>
+    <tr>
+      <td>unconfirmed_balance</td><td>-100000000</td>
+      <td>Balance of unconfirmed transactions for this address, in satoshi. Can be negative (if unconfirmed transactions are just spending.)</td>
+    </tr>
+    <tr>
+      <td>final_balance</td><td>124500020000</td>
+      <td>Final balance including unconfirmed transactions for this address, in satoshi.</td>
+    </tr>
+    <tr>
+      <td>tx_url</td><td>https://api.blockcypher.com/v1/btc/main/txs/</td>
+      <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
+    </tr>
+    <tr>
+      <td>txrefs</td><td>[...]</td>
+      <td>All transaction inputs and outputs for the specified address.</td>
+    </tr>
+    <tr>
+      <td>unconfirmed_txrefs</td><td>[...]</td>
+      <td>All unconfirmed transaction inputs and outputs for the specified address.</td>
+    </tr>
+  </table>
+
+  <p>The arrays of transaction inputs or outputs reference in <em>txrefs</em> and <em>unconfirmed_txrefs</em> have the following properties:</p>
+
+  <table>
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+	  <tr>
+      <td>tx_hash</td><td>0d7ac056a...</td>
+      <td>One of the transaction hashes for the specified address.</td>
+    </tr>
+	  <tr>
+      <td>block_height</td><td>292781</td>
+      <td>Height of the block for the transaction.</td>
+    </tr>
+	  <tr>
+      <td>confirmations</td><td>1092</td>
+      <td>Number of confirmations for the transaction.</td>
+    </tr>
+    <tr>	
+      <td>tx_input_n</td><td>1</td>
+      <td>Index of the input in the transaction. It's a negative number for an output.</td>
+    </tr>
+    <tr>
+      <td>tx_output_n</td><td>-1</td>
+      <td>Index of the output in the transaction. It's a negative number for an input.</td>
+    </tr>
+    <tr>
+      <td>value</td><td>28318177</td>
+      <td>The value transferred by the particular input or output.</td>
+    </tr>
+	  <tr>
+      <td>spent</td><td>true</td>
+      <td>Is 'true' if the output was spent.</td>
+    </tr>
+	  <tr>
+      <td>spent_by</td><td>b4735a06...</td>
+      <td>Hash of the transaction that spent this output, if it was spent.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>Here's a sample return document for a given address:</p>
+  <pre><code class="language-http">http://api.blockcypher.com/v1/btc/main/addrs/1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</code>
+<code class="language-javascript">{
+  "address": "1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7",
+  "balance": 0,
+  "unconfirmed_balance": 0,
+  "final_balance": 0,
+  "txrefs": [
+    {
+      "tx_hash": "0d7ac056a96ffc200f53f2a64291a967e5f696c43997f877ef42cb871bb07231",
+      "block_height": 278670,
+      "tx_input_n": 1,
+      "tx_output_n": -1,
+      "value": 283181777,
+      "spent": false,
+      "confirmations": 21405
+    },
+    {
+      "tx_hash": "baee4a85bcc1109fd4133602e6900e13b1b084c617ee75d25418ee3f3e84dcea",
+      "block_height": 278564,
+      "tx_input_n": -1,
+      "tx_output_n": 0,
+      "value": 283181777,
+      "spent": true,
+      "confirmations": 21511
+    }
+  ],
+  "unconfirmed_txrefs": [],
+  "tx_url": "https://api.blockcypher.com/v1/btc/main/txs/"
+}</code></pre>
+  
+  <p></p>
+  <p style="text-align: center;"><small>© 2014 BlockCypher</small></p>
+
+  <script src="site/js/prism.js"></script>
+  <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <script>
+    $('button.tryme').click(function(e) {
+      eval($(this).prev().children().text());
+    });
+  </script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-50839214-1', 'blockcypher.com');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>
