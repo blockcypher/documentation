@@ -675,41 +675,41 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
   </ul>
   <p>Both WebSockets and WebHooks can forward the following events:</p>
   <ul>
-    <li><em>new-pool-tx</em>: Triggered for every new transaction before it goes into a block; basically, for every unconfirmed transactions. The payload is the unconfirmed <a href="#transactions">transaction</a>.</li>
+    <li><em>unconfirmed-tx</em>: Triggered for every new transaction before it goes into a block; basically, for every unconfirmed transactions. The payload is the unconfirmed <a href="#transactions">transaction</a>.</li>
     <li><em>new-block</em>: Triggered for every new block added to the main chain. The payload is the <a href="#blocks">block</a>.</li>
-    <li><em>new-block-tx</em>: Triggered for every new transaction making it into a new block on the main chain; basically, for every first transaction confirmation. This is equivalent to listening to the above events and fetching each transaction in the block. The payload is the confirmed <a href="#transactions">transaction</a>.</li>
+    <li><em>confirmed-tx</em>: Triggered for every new transaction making it into a new block on the main chain; basically, for every first transaction confirmation. This is equivalent to listening to the above events and fetching each transaction in the block. The payload is the confirmed <a href="#transactions">transaction</a>.</li>
     <li><em>tx-confirmation</em>: Simplifies listening to confirmations on all transactions on a given address up to a provided threshold (maximum 10, default 6). For example, to get notified for up to 3 confirmations on a given address, use the filter: "addr=...&event=tx-confirmation:3"</li>
   </ul>
 
   <p>To subscribe to an event, send a document with the following format:</p>
   <pre><code class="language-javascript">{
-  "filter": "event=new-block",
-  "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+  "event": "unconfirmed-tx",
+  "address": "15qx9ug952GWGTNn7Uiv6vode4RcGrRemh",
+  "token": "b972c4c0-180f-11e4-8c21-0800200c9a66"
 }</code></pre>
-  <p>The token is optional and is the value we provide you (see <a href="#rate_limits">rate limits</a>). The filter is an expression associating keys with values. Currently supported keys are:</p>
+  <p>The token is optional and is the value we provide you (see <a href="#rate_limits">rate limits</a>). Currently supported properties are:</p>
   <table>
     <thead><tr><th>Key</th><th>Example filter</th><th>Description</th></tr></thead>
     <tbody>
     <tr>
-      <td>event</td><td>event=new-orphan-tx</td>
+      <td>event</td><td>"event": "new-orphan-tx"</td>
       <td>Type of event to receive. Supported event types at this time are: new-block, new-pool-tx, new-orphan-tx and new-block-tx.</td>
     </tr>
     <tr>
-      <td>hash</td><td>hash=346a5...b77e5 (abbreviated)</td>
+      <td>hash</td><td>"hash": "346a5...b77e5" (abbreviated)</td>
       <td>Only objects with a matching hash will be sent. The hash can either be for a block or a transaction.</td>
     </tr>
     <tr>
-      <td>addr</td><td>addr=1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC</td>
+      <td>addr</td><td>"addr": "1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"</td>
       <td>Only transactions associated with the given address will be sent.</td>
     </tr>
     <tr>
-      <td>script</td><td>script=pay-to-script-hash</td>
+      <td>script</td><td>"script": "pay-to-script-hash"</td>
       <td>Only transactions with an output script of the provided type will be sent. The recognized types of scripts are: pay-to-pubkey-hash, pay-to-multi-pubkey-hash, pay-to-pubkey, pay-to-script-hash, null-data (sometimes called OP_RETURN), empty or unknown.</td>
     </tr>
     </tbody>
   </table>
-  <p>Depending on your filter expression, the message content will be either a transaction or a block.</p>
-  <p>Filters can also combine key/value pairs using the & operator. For example, to receive only new pool transactions for a given address: event=new-pool-tx&addr={myaddress}.</p>
+  <p>Depending on the provided properties, the message content will be either a transaction or a block.</p>
 
   <p><h2 id="websockets">WebSockets</h2></p>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
@@ -777,6 +777,11 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
       <td>Address</td><td>/v1/{coin}/{chain}/addrs/{hash}</td>
       <td><a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD">/v1/btc/main/addrs/1DEP8i...</a></td><td>GET</td>
       <td>All details about a given address, including transaction information and balance. Use the unspentOnly URL parameter to get only unspent outputs.</td>
+    </tr>
+    <tr>
+      <td>Address</td><td>/v1/{coin}/{chain}/addrs/{hash}/balance</td>
+      <td><a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD/balance">/v1/btc/main/addrs/1DEP8i.../balance</a></td><td>GET</td>
+      <td>Only balance and number of transactions for a given address.</td>
     </tr>
     </tbody>
   </table>
