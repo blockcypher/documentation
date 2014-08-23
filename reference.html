@@ -597,6 +597,7 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
 }</code></pre>
 
   <p>The most common issue is the absence of confirmed unspent outputs to build the transaction from. By default, spending unconfirmed transactions isn't enabled, so you may not be able to issue a 2nd transaction until the first has been confirmed. To enable spending from unconfirmed transactions, in the partially filled transaction provided to the new endpoint add "confirmations: -1".</p>
+  <p>The second most common issue is to use uncompressed public keys when compressed public keys were used to generate the address. If the script generated can't be verified, try passing compressed public keys instead.</p>
 
 <p><h2 id="multisig">Multisig Transactions</h2></p>  
 
@@ -870,6 +871,9 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
     </tr>
     </tbody>
   </table>
+
+  <p>To page on the result when there are too many transaction inputs and outputs, use a <i>before</i> URL parameter passing the block height transactions should be older than. Typically, to achieve paging, this will be the block height of the last returned transaction in the txrefs array. For example:</p>
+  <a href="http://api.blockcypher.com/v1/btc/main/addrs/1J38WorKngZLJvA7qMin9g5jqUfTQUBZNE?unspentOnly=true&before=300000">http://api.blockcypher.com/v1/btc/main/addrs/1J38WorKngZLJvA7qMin9g5jqUfTQUBZNE?unspentOnly=true&before=300000</a>
 
   <p>Here's a sample return document for a given address:</p>
   <pre><code class="language-http">http://api.blockcypher.com/v1/btc/main/addrs/1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</code>
