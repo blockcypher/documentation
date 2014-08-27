@@ -407,13 +407,13 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
     <li><b>receive_count</b>: the number of nodes in the bitcoin network we've received that transaction from so far, indicates how many nodes, at the minimum, accepted this transaction.</li>
     <li><b>confidence</b>: the percentage chance (between 0 and 1) that a transaction will make it into a block over time, which accounts for double-spend or transaction loss. Note that it doesn't indicate <em>how fast</em> the confirmation will happen.</li>
   </ul>
-  <p>The confidence is calculated based on elapsed time as well as the receive count and is based on several public research results. These two properties are added to any unconfirmed transactions when retrieved either through the blockchain API or the address API.</p>
+  <p>The confidence is calculated based on elapsed time as well as the receive count and is based on several public research results.</p>
   <p>In addition, 2 other properties indicate when a double-spend has been detected:</p>
   <ul>
     <li><b>double_spend</b>: a boolean indicating whether this tranasction is a double spend.</li>
     <li><b>double_spend_tx</b>: the hash of the other transaction involved in the double spend attempt.</li>
   </ul>
-  <p>To be notified when a double spending attempt occurs, also see our <a href="#events">double spend webhook</a>.</p>
+  <p>These properties are added to any unconfirmed transactions when retrieved either through the blockchain API or the address API. To be notified when a double spending attempt occurs, also see our <a href="#events">double spend webhook</a>.</p>
   <p>Finally, note that these measures are mitigation strategies you can rely on if you need fast transaction confirmations. They're not a bulletproof way to secure unconfirmed transactions and double spending attacks, even extremely unlikely, can still occur. Block chain confirmations ultimately provide the highest level of security.</p>
 
   <p> &nbsp; </p>
