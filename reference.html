@@ -427,7 +427,7 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
   </ul>
   <p>These properties are added to any unconfirmed transactions when retrieved either through the blockchain API or the address API. To be notified when a double spending attempt occurs, also see our <a href="#events">double spend webhook</a>.</p>
 
-<code class="language-javascript">{
+<pre><code class="language-javascript">{
   "block_height": -1,
   "hash": "fb0f7c206fe465a4482424784313361b892ad5492acd8f742fe01d0d9d263e3a",
   "addresses": [
@@ -448,7 +448,7 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
   ...
   "inputs": [...],
   "outputs": [...]
-}</code>
+}</code></pre>
   <p>Finally, note that these measures are mitigation strategies you can rely on if you need fast transaction confirmations. They're not a bulletproof way to secure unconfirmed transactions and double spending attacks, even extremely unlikely, can still occur. Block chain confirmations ultimately provide the highest level of security.</p>
 
   <p> &nbsp; </p>
