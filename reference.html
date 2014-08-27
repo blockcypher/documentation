@@ -21,11 +21,12 @@
     <div class="sub1"><a href="#chains">Chains</a></div>
     <div class="sub1"><a href="#blocks">Blocks</a></div>
     <div class="sub1"><a href="#transactions">Transactions</a></div>
+    <div class="sub1"><a href="#zero-confirmations">0-Confirmations <b><font color="red">(NEW!) </font></b></a></div>
     <div class="top"><a href="#creating_transactions">Creating Transactions</a></div>
     <div class="sub1"><a href="#transaction_skeleton">Transaction Skeleton</a></div>
     <div class="sub1"><a href="#signing_sending">Signing and Sending</a></div>
     <div class="sub1"><a href="#error_handling">Error Handling</a></div>
-	<div class="sub1"><a href="#multisig">Multisig <b><font color="red">(NEW!) </font></b></a></div>
+	<div class="sub1"><a href="#multisig">Multisig</a></div>
     <div class="top"><a href="#websocket_webhook">WebSockets & WebHooks</a></div>
     <div class="sub1"><a href="#events">Events</a></div>
     <div class="sub1"><a href="#websockets">WebSockets</a></div>
@@ -249,6 +250,22 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
       <td>confirmed</td><td>5</td>
       <td>Date at which the transaction was included in a block, in ISO format.</td>
     </tr>
+	  <tr>
+      <td>double_spend</td><td>false</td>
+      <td>Whether the transaction is a double spend (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+    </tr>
+	  <tr>
+      <td>double_of</td><td>a672f0...</td>
+      <td>If the transaction is a double spend, what transaction it's double-spending  (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+    </tr>
+	  <tr>
+      <td>receive_count</td><td>42</td>
+      <td>Unconfirmed transactions only. The number of peers that have sent this transaction to us (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+    </tr>
+	  <tr>
+      <td>confidence</td><td>0.98819</td>
+      <td>Unconfirmed transactions only. Confidence this transaction will be confirmed (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+    </tr>
     <tr>
       <td>vin_sz</td><td>1</td>
       <td>Total number of inputs</td>
@@ -382,6 +399,22 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
 	    }
 	  ]
 	}</code></pre>
+
+  <p> &nbsp; </p>
+  <p><h2 id="zero_confirmations">Zero Confirmations and Double Spending</h2></p>
+  <p>To help you deal with zero-confirmation (aka unconfirmed) transactions and the risk of <a href="https://en.bitcoin.it/wiki/Double-spending">double-spending</a>, we provide 2 additional transaction properties:</p>
+  <ul>
+    <li><b>receive_count</b>: the number of nodes in the bitcoin network we've received that transaction from so far, indicates how many nodes, at the minimum, accepted this transaction.</li>
+    <li><b>confidence</b>: the percentage chance (between 0 and 1) that a transaction will make it into a block over time, which accounts for double-spend or transaction loss. Note that it doesn't indicate <em>how fast</em> the confirmation will happen.</li>
+  </ul>
+  <p>The confidence is calculated based on elapsed time as well as the receive count and is based on several public research results. These two properties are added to any unconfirmed transactions when retrieved either through the blockchain API or the address API.</p>
+  <p>In addition, 2 other properties indicate when a double-spend has been detected:</p>
+  <ul>
+    <li><b>double_spend</b>: a boolean indicating whether this tranasction is a double spend.</li>
+    <li><b>double_spend_tx</b>: the hash of the other transaction involved in the double spend attempt.</li>
+  </ul>
+  <p>To be notified when a double spending attempt occurs, also see our <a href="#events">double spend webhook</a>.</p>
+  <p>Finally, note that these measures are mitigation strategies you can rely on if you need fast transaction confirmations. They're not a bulletproof way to secure unconfirmed transactions and double spending attacks, even extremely unlikely, can still occur. Block chain confirmations ultimately provide the highest level of security.</p>
 
   <p> &nbsp; </p>
   <p><h1 id="creating_transactions">Creating Transactions</h1></p>
@@ -658,6 +691,7 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
     <li><em>new-block</em>: Triggered for every new block added to the main chain. The payload is the <a href="#blocks">block</a>.</li>
     <li><em>confirmed-tx</em>: Triggered for every new transaction making it into a new block on the main chain; basically, for every first transaction confirmation. This is equivalent to listening to the above events and fetching each transaction in the block. The payload is the confirmed <a href="#transactions">transaction</a>.</li>
     <li><em>tx-confirmation</em>: Simplifies listening to confirmations on all transactions on a given address up to a provided threshold (maximum 10, default 6). For example, to get notified for up to 3 confirmations on a given address, use the filter: "addr=...&event=tx-confirmation:3"</li>
+    <li><em>double-spend-tx</em>: Triggered any time a double spend is detected. The payload is the transaction that triggered the even and the hash of the transaction that it's trying to double spend is included in its <em>double_spend_tx</em> property.</li>
   </ul>
 
   <p>To subscribe to an event, send a document with the following format:</p>
@@ -868,6 +902,22 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
 	  <tr>
       <td>spent_by</td><td>b4735a06...</td>
       <td>Hash of the transaction that spent this output, if it was spent.</td>
+    </tr>
+	  <tr>
+      <td>double_spend</td><td>false</td>
+      <td>Whether the transaction is a double spend (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+    </tr>
+	  <tr>
+      <td>double_of</td><td>a672f0...</td>
+      <td>If the transaction is a double spend, what transaction it's double-spending  (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+    </tr>
+	  <tr>
+      <td>receive_count</td><td>42</td>
+      <td>Unconfirmed transactions only. The number of peers that have sent this transaction to us (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+    </tr>
+	  <tr>
+      <td>confidence</td><td>0.98819</td>
+      <td>Unconfirmed transactions only. Confidence this transaction will be confirmed (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
     </tr>
     </tbody>
   </table>
