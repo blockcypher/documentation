@@ -85,6 +85,11 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
       <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/txs/f854aeba...</a></td>
       <td>All details about a given transaction, including involved addresses, inputs and outputs.</td>
     </tr>
+    <tr>
+      <td>Transaction Confidence</td><td>/v1/{coin}/{chain}/txs/{hash}/confidence</td>
+      <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449/confidence">/v1/btc/main/txs/f854aeba.../confidence</a></td>
+      <td>Transaction confidence information (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+    </tr>
     </tbody>
   </table>
   <p><h2 id="chains">Chains</h2></pr>
@@ -239,6 +244,10 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
       <td>Fees collected by miners in the transaction, in satoshis.</td>
     </tr>
     <tr>
+      <td>relayed_by</td><td>50.154.237.192:8333</td>
+      <td>Address of the peer that sent us this transaction.</td>
+    </tr>
+    <tr>
       <td>received</td><td>2014-03-31T04:23:44.833536145Z</td>
       <td>When the transaction was received by BlockCypher servers.</td>
     </tr>
@@ -370,12 +379,15 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
 	  ],
 	  "total": 14840000,
 	  "fees": 10000,
+    "relayed_by": "50.154.237.192:8333",
+	  "confirmed": "2014-04-05T07:52:11.827Z",
 	  "received": "2014-04-05T07:49:30.983Z",
 	  "ver": 1,
 	  "lock_time": 0,
+    "double_spend": false,
 	  "vin_sz": 1,
 	  "vout_sz": 1,
-	  "confirmed": 103,
+	  "confirmations": 103,
 	  "inputs": [
 	    {
 	      "prev_hash": "3fba439465ac18150070f1b06edbf30b59e25ca10cd773a1f6214366cace0553",
@@ -402,7 +414,7 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
 
   <p> &nbsp; </p>
   <p><h2 id="zero_confirmations">Zero Confirmations and Double Spending</h2></p>
-  <p>To help you deal with zero-confirmation (aka unconfirmed) transactions and the risk of <a href="https://en.bitcoin.it/wiki/Double-spending">double-spending</a>, we provide 2 additional transaction properties:</p>
+  <p>To help you deal with zero confirmation (aka unconfirmed) transactions and the risk of <a href="https://en.bitcoin.it/wiki/Double-spending">double spending</a>, we provide 2 additional transaction properties:</p>
   <ul>
     <li><b>receive_count</b>: the number of nodes in the bitcoin network we've received that transaction from so far, indicates how many nodes, at the minimum, accepted this transaction.</li>
     <li><b>confidence</b>: the percentage chance (between 0 and 1) that a transaction will make it into a block over time, which accounts for double-spend or transaction loss. Note that it doesn't indicate <em>how fast</em> the confirmation will happen.</li>
@@ -414,6 +426,29 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
     <li><b>double_spend_tx</b>: the hash of the other transaction involved in the double spend attempt.</li>
   </ul>
   <p>These properties are added to any unconfirmed transactions when retrieved either through the blockchain API or the address API. To be notified when a double spending attempt occurs, also see our <a href="#events">double spend webhook</a>.</p>
+
+<code class="language-javascript">{
+  "block_height": -1,
+  "hash": "fb0f7c206fe465a4482424784313361b892ad5492acd8f742fe01d0d9d263e3a",
+  "addresses": [
+    "1N19eR7QJDcMXvixsUGtbzC6oQuhDEej7F",
+    "1C7GfnxGBQg5sKBEFUiFUuzGtx7w3U9zT9"
+  ],
+  "total": 1350000,
+  "fees": 10000,
+  "relayed_by": "50.154.237.192:8333",
+  "confirmed": "0001-01-01T00:00:00Z",
+  "received": "2014-08-27T20:35:29.661215369Z",
+  "ver": 1,
+  "lock_time": 0,
+  "double_spend": false,
+  "confirmations": 0,
+  "receive_count": 249,
+  "confidence": 0.9966294647709607,
+  ...
+  "inputs": [...],
+  "outputs": [...]
+}</code>
   <p>Finally, note that these measures are mitigation strategies you can rely on if you need fast transaction confirmations. They're not a bulletproof way to secure unconfirmed transactions and double spending attacks, even extremely unlikely, can still occur. Block chain confirmations ultimately provide the highest level of security.</p>
 
   <p> &nbsp; </p>
