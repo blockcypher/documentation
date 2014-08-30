@@ -49,7 +49,12 @@ function waitForConfirmation(finaltx) {
 
   var timer;
   var ws = new WebSocket("ws://socket.blockcypher.com/v1/btc/test3");
-  ws.onmessage = function (event) { log("Transaction confirmed."); ws.close(); clearInterval(timer); }
+  ws.onmessage = function (event) {
+    if (event.data.indexOf("ping") >= 0) return;
+    log("Transaction confirmed.");
+    ws.close();
+    clearInterval(timer);
+  }
   ws.onopen = function(event) {
     ws.send(JSON.stringify({filter: "event=new-block-tx&hash="+finaltx.tx.hash}));
     // we keep pinging on a timer to keep the websocket alive
