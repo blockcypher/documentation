@@ -256,7 +256,7 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
       <td>Number of subsequent blocks, including the block the transaction is in. Unconfirmed transactions have 0 for confirmation.</td>
     </tr>
     <tr>
-      <td>confirmed</td><td>5</td>
+      <td>confirmed</td><td>2014-03-31T04:25:12.93471948Z</td>
       <td>Date at which the transaction was included in a block, in ISO format.</td>
     </tr>
 	  <tr>
@@ -763,6 +763,10 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
   <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
   <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, the JSON document describing the event of interest should be sent.</p>
+  <p>In addition to standard events, websockets accept a <em>ping</em> event. If you send the following, you will receive the same message back with "ping" replaced by "pong":</p>
+  <pre><code class="language-javascript">{
+  "event": "ping"
+}</code></pre>
 
   <i><h4>Example</i></h4>
   <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>

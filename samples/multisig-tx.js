@@ -57,10 +57,16 @@ function waitForConfirmation(finaltx) {
 
   var confirmed = $.Deferred();
   var ws = new WebSocket("ws://socket.blockcypher.com/v1/btc/test3");
+  // We keep pinging on a timer to keep the websocket alive
+  var ping = pinger(ws);
+
   ws.onmessage = function (event) {
-    log("Transaction confirmed.");
-    confirmed.resolve();
-    ws.close();
+    if (JSON.parse(event.data).confirmations > 0) {
+      log("Transaction confirmed.");
+      confirmed.resolve();
+      ping.stop();
+      ws.close();
+    }
   }
   ws.onopen = function(event) {
     ws.send(JSON.stringify({filter: "event=new-block-tx&hash="+finaltx.tx.hash}));
@@ -94,6 +100,15 @@ function signForAddressAndSend(addressNum) {
     });
     return $.post(rootUrl+"/txs/send", JSON.stringify(newtx));
   }
+}
+
+function pinger(ws) {
+  var timer = setInterval(function() {
+    if (ws.readyState == 1) {
+      ws.send(JSON.stringify({event: "ping"}));
+    }
+  }, 5000);
+  return {stop: function() { clearInterval(timer); }};
 }
 
 function checkError(msg) {

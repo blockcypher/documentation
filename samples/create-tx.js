@@ -47,18 +47,20 @@ function waitForConfirmation(finaltx) {
   log("Transaction " + finaltx.tx.hash + " to " + dest.address + " of " +
         finaltx.tx.outputs[0].value/100000000 + " BTC sent.");
 
-  var timer;
   var ws = new WebSocket("ws://socket.blockcypher.com/v1/btc/test3");
+
+  // We keep pinging on a timer to keep the websocket alive
+  var ping = pinger(ws);
+
   ws.onmessage = function (event) {
-    if (event.data.indexOf("ping") >= 0) return;
-    log("Transaction confirmed.");
-    ws.close();
-    clearInterval(timer);
+    if (JSON.parse(event.data).confirmations > 0) {
+      log("Transaction confirmed.");
+      ping.stop();
+      ws.close();
+    }
   }
   ws.onopen = function(event) {
     ws.send(JSON.stringify({filter: "event=new-block-tx&hash="+finaltx.tx.hash}));
-    // we keep pinging on a timer to keep the websocket alive
-    timer = setInterval(function() { ws.send(JSON.stringify({event: "ping"})); }, 5000);
   }
   log("Waiting for confirmation... (may take > 10 min)")
 }
@@ -68,6 +70,15 @@ function checkError(msg) {
     log("Errors occured!!/n" + msg.errors.join("/n"));
     return true;
   }
+}
+
+function pinger(ws) {
+  var timer = setInterval(function() {
+    if (ws.readyState == 1) {
+      ws.send(JSON.stringify({event: "ping"}));
+    }
+  }, 5000);
+  return {stop: function() { clearInterval(timer); }};
 }
 
 function log(msg) {
