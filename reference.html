@@ -261,6 +261,10 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
       <td>confirmed</td><td>2014-03-31T04:25:12.93471948Z</td>
       <td>Date at which the transaction was included in a block, in ISO format.</td>
     </tr>
+    <tr>
+      <td>preference</td><td>high</td>
+      <td>How likely is this transaction to make it to the next block, reflects the preference level miners have to include this transaction. Can be high, medium or low.</td>
+    </tr>
 	  <tr>
       <td>double_spend</td><td>false</td>
       <td>Whether the transaction is a double spend (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
@@ -420,6 +424,7 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
   <ul>
     <li><b>receive_count</b>: the number of nodes in the bitcoin network we've received that transaction from so far, indicates how many nodes, at the minimum, accepted this transaction.</li>
     <li><b>confidence</b>: the percentage chance (between 0 and 1) that a transaction will make it into a block over time, which accounts for double-spend or transaction loss. Note that it doesn't indicate <em>how fast</em> the confirmation will happen.</li>
+    <li><b>preference</b>: level of preference miners will have to include this transaction in their block, a high preference means the transaction is very likely to be confirmed in the next block, a low confidence means it's likely to take several blocks (&gt;6).</li>
   </ul>
   <p>The confidence is calculated based on elapsed time as well as the receive count and is based on several public research results.</p>
   <p>In addition, 2 other properties indicate when a double-spend has been detected:</p>
@@ -935,6 +940,10 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
     <tr>
       <td>value</td><td>28318177</td>
       <td>The value transferred by the particular input or output.</td>
+    </tr>
+    <tr>
+      <td>preference</td><td>high</td>
+      <td>How likely is the transaction to make it to the next block, reflects the preference level miners have to include this transaction. Can be high, medium or low.</td>
     </tr>
 	  <tr>
       <td>spent</td><td>true</td>
