@@ -3,6 +3,8 @@
 <head>
   <title>BlockCypher | Documentation</title>
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="stylesheet" href="/site/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/site/css/bootstrap-theme.min.css" />
   <link rel="stylesheet" href="/site/css/prism.css"/>
   <link rel="stylesheet" href="/site/css/site.css"/>
 </head>
@@ -16,23 +18,54 @@
   </div>
 
   <p>In this example, we retrieve the last 10 block from the Bitcoin block chain and render a summary page. We start with the chain property to get the URL of the latest block. We then use the prev_block_url to load the previous, hence traversing the block chain back block by block.</p>
-  <p>From the command line, we retrieve the latest block using the <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a> commands:</p>
-  <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latest_url | xargs curl -s</code></pre>
 
-  <p>Here we use the json command to extract the latest_url property from the chain and pass it to curl using xargs (invokes a command passing the stdin parameters). This can be chained further to go one block back:</p>
-  <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latest_url | xargs curl -s | json prev_block_url | xargs curl -s</code></pre>
+  <ul class="nav nav-tabs" >
+    <li class="active"><a href="#cURL-1-1" data-toggle="tab">cURL</a></li>
+    <li><a href="#js-1-1" data-toggle="tab">Javascript</a></li>
+    <li><a href="#Java-1-1" data-toggle="tab">Java</a></li>
+    <li><a href="#Ruby-1-1" data-toggle="tab">Ruby</a></li>
+    <li><a href="#Python-1-1" data-toggle="tab">Python</a></li>
+  </ul>
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div class="tab-pane active" id="cURL-1-1">
+      <p>From the command line, we retrieve the latest block using the <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a> commands:</p>
+      <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latest_url | xargs curl -s</code></pre>
 
-  <p>We can continue chaining calls, but it quickly gets very long. Here's a short Javascript program which can be run in the browser to do the same thing using JQuery:</p>
-  
-  <pre data-src="/samples/3-latest-blocks.js"></pre>
-  <button class="tryme">Try me!</button>
+      <p>Here we use the json command to extract the latest_url property from the chain and pass it to curl using xargs (invokes a command passing the stdin parameters). This can be chained further to go one block back:</p>
+      <pre><code class="language-bash">$ curl -s https://api.blockcypher.com/v1/btc/main | json latest_url | xargs curl -s | json prev_block_url | xargs curl -s</code></pre>
 
-  <p>The above JQuery.get calls our APIs and utilizes the URLs returned by every call. We allow cross-origin resource sharing which enables requests from your domain.</p>
-  <p>To improve on the above code, we add more details and a loop to get 10 blocks, instead of 3:</p>
+      <p>We can continue chaining calls, but it quickly gets very long.</p>
+      <br/><br/><br/><br/><br/><hr/>
+    </div>
 
-  <pre data-src="/samples/10-latest-blocks.js"></pre>
-  <button class="tryme" id="10-latest-blocks">Try me!</button>
-  
+    <div class="tab-pane" id="js-1-1">
+      <p>Using JQuery:</p>
+
+      <pre data-src="/samples/3-latest-blocks.js"></pre>
+      <button class="tryme">Try me!</button>
+
+      <p>The above JQuery calls our APIs and utilizes the URLs returned by every call. We allow cross-origin resource sharing which enables requests from your domain.</p>
+      <p>To improve on the above code, we add more details and a loop to get 10 blocks, instead of 3:</p>
+
+      <pre data-src="/samples/10-latest-blocks.js"></pre>
+      <button class="tryme" id="10-latest-blocks">Try me!</button>
+      <hr/>
+    </div>
+
+    <div class="tab-pane" id="Java-1-1">
+      <p>3 Latest blocks:</p>
+      <pre class="language-java" data-src="/samples/3-latest-blocks.java"></pre>
+      <p>10 Latest blocks:</p>
+      <pre class="language-java" data-src="/samples/10-latest-blocks.java"></pre>
+      <hr/>
+    </div>
+
+    <div class="tab-pane" id="Ruby-1-1">Coming Soon...<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><hr/></div>
+
+    <div class="tab-pane" id="Python-1-1">Coming Soon...<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><hr/></div>
+  </div>
+
   <p></p>
   <p style="text-align: center;"><small>© 2014 BlockCypher</small></p>
 
@@ -44,5 +77,6 @@
         eval($(this).prev().children().text());
     });
   </script>
+  <script src="/site/js/bootstrap.min.js"></script>
 </body>
 </html>
