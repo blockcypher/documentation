@@ -3,6 +3,8 @@
 <head>
   <title>BlockCypher | Documentation</title>
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="stylesheet" href="/site/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/site/css/bootstrap-theme.min.css" />
   <link rel="stylesheet" href="/site/css/prism.css"/>
   <link rel="stylesheet" href="/site/css/site.css"/>
 </head>
@@ -20,11 +22,38 @@
 
   <div class="log"></div>
 
-  <p>Note: this sample uses bitcoinjs to generate signatures in your browser. If you're experiencing issues please make sure your browser is supported by checking the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">project page</a>.</p>
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#js-1-1" data-toggle="tab">Javascript</a></li>
+    <li><a href="#Java-1-1" data-toggle="tab">Java</a></li>
+    <li><a href="#Ruby-1-1" data-toggle="tab">Ruby</a></li>
+    <li><a href="#Python-1-1" data-toggle="tab">Python</a></li>
+  </ul>
 
-  <pre id="sample-code" data-src="/samples/multisig-tx.js"></pre>
+  <div class="tab-content">
+    <div class="tab-pane active" id="js-1-1">
+      <p>Note: this sample uses bitcoinjs to generate signatures in your browser. If you're experiencing issues please make sure your browser is supported by checking the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">project page</a>.</p>
+      <pre id="sample-code" data-src="/samples/multisig-tx.js"></pre>
+      <hr/>
+    </div>
 
-  <script src="/site/js/prism.js"></script>
+    <div class="tab-pane" id="Java-1-1">
+      <p>This example is using Websocket to get back the confirmation of thes transactions.</p>
+      <p>You will need the following libraries:</p>
+      <p><code>javax.websocket:javax.websocket-api:1.0</code></p>
+      <p><code>org.glassfish.tyrus:tyrus-client:1.8</code></p>
+      <p><code>org.glassfish.tyrus:tyrus-server:1.8</code></p>
+      <p>This example is available on github: <a href="https://github.com/blockcypher/java-client/blob/master/src/test/java/com/blockcypher/service/MultiSigTest.java">MultiSigTest.java</a></p>
+      <pre class="language-java" data-src="/samples/multisig-tx.java"></pre>
+      <hr/>
+    </div>
+
+    <div class="tab-pane" id="Ruby-1-1">Coming Soon...<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><hr/></div>
+
+    <div class="tab-pane" id="Python-1-1">Coming Soon...<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><hr/></div>
+
+  </div>
+
+    <script src="/site/js/prism.js"></script>
   <script src="/samples/bitcoinjs-min.js"></script>
   <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
   <script>
@@ -32,5 +61,6 @@
         eval($('#sample-code').children().text());
     });
   </script>
+  <script src="/site/js/bootstrap.min.js"></script>
 </body>
 </html>
