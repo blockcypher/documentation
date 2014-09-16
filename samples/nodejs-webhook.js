@@ -26,7 +26,7 @@ console.log("Server is listening");
 
 // Prepare the request to create the webhook, filtering on new pool (unconfirmed) transactions
 // CHANGE TO YOUR IP ADDRESS FOR TESTING and make sure it's reachable from the outside
-var data = JSON.stringify({url: "http://173.228.17.216:51413", filter: "event=new-pool-tx"});
+var data = JSON.stringify({url: "http://173.228.17.216:51413", "event": "new-pool-tx"});
 
 // Set up the request
 var options = {

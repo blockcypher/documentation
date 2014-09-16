@@ -1,0 +1,127 @@
+/*Speed*/
+.slow {
+	-webkit-transition: all 3.0s linear;
+	-moz-transition: all 3.0s linear;
+	-o-transition: all 3.0s linear;
+	transition: all 3.0s linear;
+}
+.medium {
+	-webkit-transition: all 1.0s linear;
+	-moz-transition: all 1.0s linear;
+	-o-transition: all 1.0s linear;
+	transition: all 1.0s linear;
+}
+.fast {
+	-webkit-transition: all 0.5s linear;
+	-moz-transition: all 0.5s linear;
+	-o-transition: all 0.5s linear;
+	transition: all 0.5s linear;
+}
+/*Transtaion*/
+.scaleUp {
+	transform: scale(1.25, 1.25);
+	-ms-transform: scale(1.25, 1.25); /* IE 9 */
+	-webkit-transform: scale(1.25, 1.25); /* Safari and Chrome */
+}
+.scaleDown {
+	transform: scale(0.75, 0.75);
+	-ms-transform: scale(0.75, 0.75); /* IE 9 */
+	-webkit-transform: scale(0.75, 0.75); /* Safari and Chrome */
+}
+.moveDown {
+	transform: translateY(50px);
+	-ms-transform: translateY(50px); /* IE 9 */
+	-webkit-transform: translateY(50px); /* Safari and Chrome */
+}
+.moveUp {
+	transform: translateY(-50px);
+	-ms-transform: translateY(-50px); /* IE 9 */
+	-webkit-transform: translateY(-50px); /* Safari and Chrome */
+}
+.moveRight {
+	transform: translateX(50px);
+	-ms-transform: translateX(50px); /* IE 9 */
+	-webkit-transform: translateX(50px); /* Safari and Chrome */
+}
+.moveLeft {
+	transform: translateX(0px);
+	-ms-transform: translateX(0px); /* IE 9 */
+	-webkit-transform: translateX(0px); /* Safari and Chrome */
+	-ms-transform: scale(1); /* IE 9 */
+	-webkit-transform: scale(1); /* Chrome, Safari, Opera */
+	transform: scale(1);
+	opacity: 1;
+}
+.bg-success .rotate {
+	-webkit-transform: rotateY(0deg); /* Chrome, Safari, Opera */
+	transform: rotateY(0deg); /* Standard syntax */
+}
+.bg-warning .rotate {
+	-webkit-transform: rotateY(0deg); /* Chrome, Safari, Opera */
+	transform: rotateY(0deg); /* Standard syntax */
+}
+.panel-primary .rotate {
+	-webkit-transform: rotateX(0deg); /* Chrome, Safari, Opera */
+	transform: rotateX(0deg); /* Standard syntax */
+}
+.panel-info .rotateOne {
+	-webkit-transform: rotateY(0deg); /* Chrome, Safari, Opera */
+	transform: rotateY(0deg); /* Standard syntax */
+}
+.panel-info .scaleOne {
+	-ms-transform: scale(1); /* IE 9 */
+	-webkit-transform: scale(1); /* Chrome, Safari, Opera */
+	transform: scale(1);
+	opacity: 1;
+}
+.panel-info .scaleTwo {
+	-ms-transform: scale(1); /* IE 9 */
+	-webkit-transform: scale(1); /* Chrome, Safari, Opera */
+	transform: scale(1);
+	opacity: 1;
+}
+.scaleTwo {
+	-ms-transform: scale(1); /* IE 9 */
+	-webkit-transform: scale(1); /* Chrome, Safari, Opera */
+	transform: scale(1);
+	opacity: 1;
+}
+.panel-info .scaleThree {
+	-ms-transform: scale(1); /* IE 9 */
+	-webkit-transform: scale(1); /* Chrome, Safari, Opera */
+	transform: scale(1);
+	opacity: 1;
+}
+.textFadeOut {
+	opacity: 0 !important;
+	-webkit-transition: all 0.5s linear;
+	-moz-transition: all 0.5s linear;
+	-o-transition: all 0.5s linear;
+	transition: all 0.5s linear;
+}
+.textFadeIn {
+	opacity: 1 !important;
+}
+.transparent {
+	opacity: 0.00;
+	-moz-opacity: 0.00;
+	-khtml-opacity: 0.00;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha"(Opacity = 0 );
+ filter: progid:DXImageTransform.Microsoft.Alpha(opacity = 0);
+	filter: alpha(opacity = 0);
+}
+.opaque {
+	opacity: 1.00;
+	-moz-opacity: 1.00;
+	-khtml-opacity: 1.00;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha"(Opacity = 100 );
+ filter: progid:DXImageTransform.Microsoft.Alpha(opacity = 100);
+	filter: alpha(opacity = 100);
+}
+ @media (max-width: 767px) {
+.moveUp {
+	transform: translateY(-20px);
+	-ms-transform: translateY(-20px); /* IE 9 */
+	-webkit-transform: translateY(-20px); /* Safari and Chrome */
+}
+}
