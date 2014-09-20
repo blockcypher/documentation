@@ -801,6 +801,10 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
   </table>
   <p>Depending on the provided properties, the message content will be either a transaction or a block.</p>
 
+  <p>To secure the endpoint at the callback URL you give to us and prevent a potential attacker from calling it, we recommend you append a secret as a URL parameter to that URL. We will call you leaving the URL unchanged, which allows you to test for that parameter. For example:</p>
+  <pre><code>https://mydomain.com/api/callbacks/doublespend?secret=justbetweenus</code></pre>
+  <p>The use of https is also recommended to prevent eavesdropper from potentially capturing the secret.</p>
+
   <h2 id="websockets">WebSockets</h2>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
   <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
@@ -809,6 +813,7 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
   <pre><code class="language-javascript">{
   "event": "ping"
 }</code></pre>
+  <p>A regular ping (i.e. every 20 seconds) allows the websocket to stay connected for a longer period of time.</p>
 
   <h3>Example</h3>
   <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
