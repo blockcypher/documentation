@@ -495,6 +495,118 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
 }</code></pre>
   <p>Finally, note that these measures are mitigation strategies you can rely on if you need fast transaction confirmations. They're not a bulletproof way to secure unconfirmed transactions and double spending attacks, even extremely unlikely, can still occur. Block chain confirmations ultimately provide the highest level of security.</p>
 
+  <h1 id="payments">Payments and Forwarding</h1>
+  <h2 id="payments_summary">Summary</h2>
+  <p>Our payment API is the easiest way to accept payments securely without the need to create accounts for your users. It's also a generic way to automatically transfer value from one address to another. The 2 main use cases are:</p>
+  <ul class="list">
+    <li>Generate payment-specific addresses for which funds will automatically transfer to a main merchant address.</li>
+    <li>Easily fund a multisig address from any wallet by providing a using a classic address that will automatically transfer to the multisig.</li>
+  </ul>
+  <p>Payments are free (other than the required 0.1 mBTC miner fee).</p>
+  <p>To create a new payment forwarding:</p>
+  <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/payments
+{
+  "destination": "15qx9ug952GWGTNn7Uiv6vode4RcGrRemh",
+  "callback_url": "https://my.domain.com/callbacks/new-block"
+  "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+}</code></pre>
+  <p>This will return the same document, adding the input address the payment should be directed to:</p>
+  <pre><code class="language-javascript">{
+  "input_address": "16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX",
+  "destination": "15qx9ug952GWGTNn7Uiv6vode4RcGrRemh",
+  "callback_url": "https://my.domain.com/callbacks/payments",
+  "id": "399d0923-e920-48ee-8928-2051cbfbc369",
+  "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+}</code></pre>
+  <p>Any money sent to 16uKw... will from then on be automatically transferred to 15qx9... In addition, the <em>callback_url</em> will be invoked with a POST request anytime a payment is made, providing a payment summary:</p>
+  <pre><code class="language-javascript">{
+  "value": 100000000,
+  "input_address": "16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX",
+  "input_transaction_hash": "39bed5d007d7ccf3ff0c150b580bc73d6f7e8c988063953da3ef964761b28b0d",
+  "transaction_hash": "1aa6103d8dfc067ad42c4b9a5b157d0fc403b85064d852abbc162bb274cd9def"
+}</code></pre>
+  <p>All payments will be debited with a 10,000 satoshis mining fee.</p>
+
+  <h2 id="payments_details">Details</h2>
+  <p>The following endpoints are available for payments:</p>
+  <table class="table">
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>Create</td><td>/v1/{coin}/{chain}/payments</td><td>/v1/btc/main/payments<td>POST</td></td>
+      <td>Sets up a new payment, returning the <em>input_address</em> that will automatically forward to the <em>destination</em> address as well as the payment id.</td>
+    </tr>
+    <tr>
+      <td>List</td><td>/v1/{coin}/{chain}/payments?token={token}</td><td>/v1/btc/main/payments?token=14df7860-eb44-11e3-ac10-0800200c9a66<td>GET</td></td>
+      <td>Returns an array of payments associated with the provided token with their ids.</td>
+    </tr>
+    <tr>
+      <td>Delete</td><td>/v1/{coin}/{chain}/payments/{id}</td><td>/v1/btc/main/payments/399d0923-e920-48ee-8928-2051cbfbc369<td>DELETE</td></td>
+      <td>Deletes a payment using its id.</td>
+    </tr>
+    </tbody>
+  </table>
+  <p>A payment can have the following properties:</p>
+  <table class="table">
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>id</td><td>399d0923-e920-48ee-8928-2051cbfbc369</td>
+      <td>Identifier of the payment forwarding, generated when a new payment is created.</td>
+    </tr>
+    <tr>
+      <td>token</td><td>f47ac10b-58cc-4372-a567-0e02b2c3d479</td>
+      <td>User token, mandatory.</td>
+    </tr>
+    <tr>
+      <td>destination</td><td>15qx9ug952GWGTNn7Uiv6vode4RcGrRemh</td>
+      <td>The destination address money will automatically be forwarded to. Required.</td>
+    </tr>
+    <tr>
+      <td>input_address</td><td>16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX</td>
+      <td>The address the payment should be made to to be forwarded, generated when the payment forwarding is created.</td>
+    </tr>
+    <tr>
+      <td>callback_url</td><td>https://my.domain.com/callbacks/payments</td>
+      <td>The URL to call anytime a new payment is forwarded. Optional.</td>
+    </tr>
+    <tr>
+      <td>enable_confirmations</td><td>true</td>
+      <td>Whether to also call the <em>callback_url</em> with subsequent confirmations of the forwarding transactions. Automatically sets up a WebHook.</td>
+    </tr>
+    <tr>
+      <td>transactions</td><td>["39bed5d...", "1aa6103..."]</td>
+      <td>History of forwarding transactions for this payment.</td>
+    </tr>
+    </tbody>
+  </table>
+  <p>When a new payment is forwarded, the document sent to you at the <em>callback_url</em> will have the following properties:</p>
+  <table class="table">
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>value</td><td>100000000</td>
+      <td>Amount sent to the destination address, in Satoshi.</td>
+    </tr>
+    <tr>
+      <td>input_address</td><td>16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX</td>
+      <td>The address the payment was originally sent to.</td>
+    </tr>
+    <tr>
+      <td>destination</td><td>15qx9ug952GWGTNn7Uiv6vode4RcGrRemh</td>
+      <td>The address the payment amount is being forwarded to.</td>
+    </tr>
+    <tr>
+      <td>input_transaction_hash</td><td>39bed5d...</td>
+      <td>The transaction hash that credited the input address.</td>
+    </tr>
+    <tr>
+      <td>transaction_hash</td><td>1aa6103...</td>
+      <td>The transaction hash of the generated transaction that forwards the payment from the input address to the destination.</td>
+    </tr>
+    </tbody>
+  </table>
+
   <h1 id="creating_transactions">Creating Transactions</h1>
   <p>For security reasons we do not keep any private keys: you are the only one who can sign transactions. There are 2 ways to send a transaction using our API:</p>
   <ul class="list">
@@ -1060,10 +1172,16 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
                 <li><a href="#chains">Chains</a></li>
                 <li><a href="#blocks">Blocks</a></li>
                 <li><a href="#transactions">Transactions</a></li>
-                <li><a href="#zero_confirmations">0-Confirmations <b><font color="red">(NEW!) </font></b></a></li>
+                <li><a href="#zero_confirmations">0-Confirmations <b><font color="red">(new!) </font></b></a></li>
               </ul>
             </li>
-            <li class="top"><a href="#creating_transactions">Creating Transactions</a>
+            <li><a href="#payments">Payments and Transfers <b><font color="red">(new!) </font></b></a>
+              <ul>
+                <li><a href="#payments_summary">Summary</a></li>
+                <li><a href="#payments_details">Details</a></li>
+              </ul>
+            </li>
+            <li><a href="#creating_transactions">Creating Transactions</a>
               <ul>
                 <li><a href="#transaction_skeleton">Transaction Skeleton</a></li>
                 <li><a href="#signing_sending">Signing and Sending</a></li>
@@ -1071,14 +1189,14 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
                 <li><a href="#multisig">Multisig</a></li>
               </ul>
             </li>
-            <li class="top"><a href="#websocket_webhook">WebSockets & WebHooks</a>
+            <li><a href="#websocket_webhook">WebSockets & WebHooks</a>
               <ul>
                 <li><a href="#events">Events</a></li>
                 <li><a href="#websockets">WebSockets</a></li>
                 <li><a href="#webhooks">WebHooks</a></li>
               </ul>
             </li>
-            <li class="top"><a href="#address_api">Address API</a>
+            <li><a href="#address_api">Address API</a>
               <ul>
                 <li><a href="#address_gen">Address Generation</a></li>
                 <li><a href="#address_details">Address Details</a></li>
