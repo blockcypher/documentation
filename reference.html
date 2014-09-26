@@ -526,6 +526,9 @@ https://api.blockcypher.com/v1/uro/main</code></br></pre>
   "transaction_hash": "1aa6103d8dfc067ad42c4b9a5b157d0fc403b85064d852abbc162bb274cd9def"
 }</code></pre>
   <p>All payments will be debited with a 10,000 satoshis mining fee.</p>
+  <p>A quick and easy way to test payments is to use curl to create a simple one without a callback (replace with your own address):</p>
+  <pre><code class="language-bash">$ curl -d '{"destination": "17astdTmG8zzVmry8mV8A7atAr3XefEgRX"}' https://api.blockcypher.com/v1/btc/main/payments</code></pre>
+  <p>Send some money to the returned <em>input_address</em> and watch it being instantly forwarded to your desintation address.</p>
 
   <h2 id="payments_details">Details</h2>
   <p>The following endpoints are available for payments:</p>
