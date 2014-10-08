@@ -79,6 +79,9 @@ button.btn {
 .content-table .active > a {
   color: #59218c;
 }
+.content-table > ul > li > a {
+  padding: 12px 0 2px 12px;
+}
 ul.list, ol.list {
   padding-bottom: 20px;
 }
@@ -287,6 +290,9 @@ ol.list li {
 .bg-danger ul {
   font-size: 16px;
   padding-left: 20px;
+}
+.bg-danger ul ul {
+  font-size: 14px;
 }
 .bg-danger li {
   font-weight: bold;
