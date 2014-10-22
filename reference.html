@@ -74,7 +74,8 @@
 
       <div class="col-md-9" role="main">
 
-  <h1 id="introduction">Introduction</h1>
+  <a class="title-anchor" id="introduction"></a>
+  <h1>Introduction</h1>
   <p>BlockCypher runs the Main and Test Bitcoin and Litecoin block chains as well as the Uro block chain. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a>.
 	<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
   <p>Most resources exist under a given block chain. The URLs to Bitcoin, Litecoin, Uro and BlockCypher chains are:</p>
@@ -94,7 +95,8 @@ https://api.blockcypher.com/v1/bcy/test</code></br></pre>
   <pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latest_url | xargs curl -s | json n_tx
 267</code></pre>
 
-  <h2 id="rate_limits">Rate Limits</h2>
+  <a class="title-anchor" id="rate_limits"></a>
+  <h2>Rate Limits</h2>
   <p>BlockCypher APIs can be used up to these rate limits: 
 	<ul class="list">
 	  <li>Classic requests, up to 5 requests/sec and 600 requests/hr</il>
@@ -104,7 +106,8 @@ https://api.blockcypher.com/v1/bcy/test</code></br></pre>
   <p>When you have a token, just pass it as a URL parameter to every single of youre requests, for example:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main?token=$USER_TOKEN</code></pre>
 
-  <h2 id="testing">Testing</h2>
+  <a class="title-anchor" id="testing"></a>
+  <h2>Testing</h2>
   <p>To facilitate the testing of your application when using BlockCypher's API, we provide our own test blockchain that supports all of our web services. This blockchain has characteristics very similar to Bitcoin's main chain and a "faucet", which allows you to very easily get free coins for automated testing.</p>
   <p>The only differences with the Bitcoin main chain are the following:</p>
   <ul class="list">
@@ -128,7 +131,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   <p>A token is required to be use the faucet. The faucet will refuse to fund an address with more than 50 billion coins and will not accept transfers of more than 10 million coins.</p>
   <p>Of course, you can still test your applications against the Bitcoin testnet. Our test blockchain just provides more stability and a reliable automated faucet.</p>
  
-<h1 id="blockchain-api">Blockchain API</h1>
+<a class="title-anchor" id="blockchain-api"></a>
+<h1>Blockchain API</h1>
   <p>The Blockchain API allows you to access raw data from the block chain's <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
 
   <p>Three main resources make up the Blockchain API (all GETs under https://api.blockcypher.com):</p>
@@ -156,7 +160,9 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </tr>
     </tbody>
   </table>
-  <h2 id="chains">Chains</h2>
+
+  <a class="title-anchor" id="chains"></a>
+  <h2>Chains</h2>
   <p>Currently, we support the main and test Bitcoin and Litecoin block chains. Depending on market demands, we'll add additional block chains and alt coins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
   <p>A request to a given chain returns the following properties:</p>
   <table class="table">
@@ -186,7 +192,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </tbody>
   </table>
 
-  <h2 id="blocks">Blocks</h2>
+  <a class="title-anchor" id="blocks"></a>
+  <h2>Blocks</h2>
   <p>Blocks are located under a chain's URL. The most interesting properties of blocks are:</p>
 
   <table class="table">
@@ -276,7 +283,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 	  "tx_url": "http://api.blockcypher.com/v1/btc/main/txs/"
 	}</code></pre>
 
-  <h2 id="transactions">Transactions</h2>
+  <a class="title-anchor" id="transactions"></a>
+  <h2>Transactions</h2>
   <p>Transactions can be confirmed into a block, in a pool of non-confirmed transactions, or orphaned. Confirmed transactions transfer a certain amount of bitcoin from previous <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a> (referenced by inputs and controlled by a set of addresses) to a set of target <a href="https://en.bitcoin.it/wiki/Address">addresses</a>.</p>
   <p>The main properties in a transaction are:</p>
 
@@ -480,7 +488,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 	  ]
 	}</code></pre>
 
-  <h2 id="zero_confirmations">Zero Confirmations and Double Spending</h2>
+  <a class="title-anchor" id="zero_confirmations"></a>
+  <h2>Zero Confirmations and Double Spending</h2>
   <p>To help you deal with zero confirmation (aka unconfirmed) transactions and the risk of <a href="https://en.bitcoin.it/wiki/Double-spending">double spending</a>, we provide 2 additional transaction properties:</p>
   <ul class="list">
     <li><b>receive_count</b>: the number of nodes in the bitcoin network we've received that transaction from so far, indicates how many nodes, at the minimum, accepted this transaction.</li>
@@ -520,8 +529,11 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 }</code></pre>
   <p>Finally, note that these measures are mitigation strategies you can rely on if you need fast transaction confirmations. They're not a bulletproof way to secure unconfirmed transactions and double spending attacks, even extremely unlikely, can still occur. Block chain confirmations ultimately provide the highest level of security.</p>
 
-  <h1 id="payments">Payments and Forwarding</h1>
-  <h2 id="payments_summary">Summary</h2>
+  <a class="title-anchor" id="payments"></a>
+  <h1>Payments and Forwarding</h1>
+
+  <a class="title-anchor" id="payments_summary"></a>
+  <h2>Summary</h2>
   <p>Our payment API is the easiest way to accept payments securely without the need to create accounts for your users. It's also a generic way to automatically transfer value from one address to another. The 2 main use cases are:</p>
   <ul class="list">
     <li>Generate payment-specific addresses for which funds will automatically transfer to a main merchant address.</li>
@@ -555,7 +567,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   <pre><code class="language-bash">$ curl -d '{"destination": "17astdTmG8zzVmry8mV8A7atAr3XefEgRX"}' https://api.blockcypher.com/v1/btc/main/payments</code></pre>
   <p>Send some money to the returned <em>input_address</em> and watch it being instantly forwarded to your desintation address.</p>
 
-  <h2 id="payments_details">Details</h2>
+  <a class="title-anchor" id="payments_details"></a>
+  <h2>Details</h2>
   <p>The following endpoints are available for payments:</p>
   <table class="table">
     <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
@@ -635,7 +648,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </tbody>
   </table>
 
-  <h1 id="creating_transactions">Creating Transactions</h1>
+  <a class="title-anchor" id="creating_transactions"></a>
+  <h1>Creating Transactions</h1>
   <p>For security reasons we do not keep any private keys: you are the only one who can sign transactions. There are 2 ways to send a transaction using our API:</p>
   <ul class="list">
     <li>Build the transaction yourself (using a 3rd party library) and push the raw hex-encoded string. We will broadcast to the network and track it for you.</li>
@@ -802,7 +816,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   ]
 }</code></pre>
 
-  <h2 id="signing_sending">Signing and Sending</h2>
+  <a class="title-anchor" id="signing_sending"></a>
+  <h2>Signing and Sending</h2>
   <p>Use your private key(s) to sign each of the data strings provided (decode them to byte arrays and use ECDSA). Return the signatures as hex-encoded strings in a <em>signatures</em> array property inserted in the previous document.</p>
 
   <pre><code class="language-javascript">{
@@ -838,7 +853,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 
   <p>See our <a href="/samples/create-tx.html">full sample</a> to issue a transaction on testnet from your browser.</p>
 
-  <h2 id="error_handling">Error Handling</h2>
+  <a class="title-anchor" id="error_handling"></a>
+  <h2>Error Handling</h2>
   <p>When something is wrong with the provided transaction, the server will reply with a 400 HTTP error code. It will also return a JSON document that includes the transaction and an <i>errors</i> section listing the different issues that were encountered. If you're experiencing any difficulty, please check the returned errors.</p>
   <pre><code class="language-javascript">{
   "tx": { ... },
@@ -850,7 +866,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   <p>The most common issue is the absence of confirmed unspent outputs to build the transaction from. By default, spending unconfirmed transactions isn't enabled, so you may not be able to issue a 2nd transaction until the first has been confirmed. To enable spending from unconfirmed transactions, in the partially filled transaction provided to the new endpoint add "confirmations: -1".</p>
   <p>The second most common issue is to use uncompressed public keys when compressed public keys were used to generate the address. If the script generated can't be verified, try passing compressed public keys instead.</p>
 
-<h2 id="multisig">Multisig Transactions</h2>
+  <a class="title-anchor" id="multisig"></a>
+<h2>Multisig Transactions</h2>
 
 <p>Our multiple signature transaction API works similarly to our classic <a href="#creating_transactions">transaction API</a> with a few differences:</p>
 <ul class="list">
@@ -894,8 +911,10 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 
 <p>Note: if you're using a blockexplorer to check a transaction, be aware that blockchain.info does not support pay-to-script transactions and will not show the transaction until it's confirmed.</p>
 	
-  <h1 id="websocket_webhook">WebSockets and WebHooks</h1>
-  <h2 id="events">Events</h2>
+  <a class="title-anchor" id="websocket_webhook"></a>
+  <h1>WebSockets and WebHooks</h1>
+  <a class="title-anchor" id="events"></a>
+  <h2>Events</h2>
   <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
   <p>We support both WebSockets and WebHooks:</p>
   <ul class="list">
@@ -941,7 +960,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   </table>
   <p>Depending on the provided properties, the message content will be either a transaction or a block.</p>
 
-  <h2 id="websockets">WebSockets</h2>
+  <a class="title-anchor" id="websockets"></a>
+  <h2>WebSockets</h2>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
   <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
   <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, the JSON document describing the event of interest should be sent.</p>
@@ -957,7 +977,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   <pre data-src="samples/browser-websocket.js"></pre>
   <button class="tryme btn btn-primary" type="button" id="browser-websocket">Try me!</button>
 
-  <h2 id="webhooks">WebHooks</h2>
+  <a class="title-anchor" id="webhooks"></a>
+  <h2>WebHooks</h2>
   <p>WebHooks have the same interaction format but with two key differences:</p>
   <ul class="list">
     <li>The JSON document describing the event subscription should be sent using a POST request to https://api.blockcypher.com/v1/btc/main/hooks and include an additional property containing the URL to be called.</li>
@@ -1001,7 +1022,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </tbody>
   </table>
 
-  <h1 id="address_api">Address API</h1>
+  <a class="title-anchor" id="address_api"></a>
+  <h1>Address API</h1>
 
   <p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. A collection resource and a detail resource make up the Address API.</p>
   <table class="table">
@@ -1024,7 +1046,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </tbody>
   </table>
   
-  <h2 id="address_gen">Address Generation</h2>
+  <a class="title-anchor" id="address_gen"></a>
+  <h2>Address Generation</h2>
 
   <p>The generation API is offered for convenience purpose, for security reasons please always use HTTPS to use this resource. No information is required in the POST request, the following information will be returned:</p>
 
@@ -1051,7 +1074,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 }
 </code></pre>
 
-  <p><h2 id="address_details">Address Details</h2></p>
+  <a class="title-anchor" id="address_details"></a>
+  <p>Address Details</h2></p>
   <p>The Address API details gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address. To get only the unspent transactions, append <em>?unspentOnly=true</em> to the address URL.</p>
 	
   <p>A request to a given address returns the following properties:</p>

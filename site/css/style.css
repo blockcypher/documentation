@@ -161,6 +161,12 @@ ol.list li {
 .navbar-nav {
 	padding-top: 17px;
 }
+a.title-anchor {
+  display: block;
+  position: relative;
+  top: -70px;
+  visibility: hidden;
+}
 /*nav css nd*/
 
 /*bg-primary css st*/
