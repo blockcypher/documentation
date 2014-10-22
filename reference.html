@@ -685,7 +685,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 
   <p>When a transaction has been successfully sent (using the Send or Push endpoints), an HTTP status of 201 is returned.</p>
 
-  <h2 id="transaction_skeleton">Transaction Skeleton</h2>
+  <a class="title-anchor" id="transaction_skeleton"></a>
+  <h2>Transaction Skeleton</h2>
   <p>A partially filled transaction is needed to create a full transaction. We require at least one input with a minimum of one address and at least one output with an address and value (in satoshis). For example:</p>
   <pre><code class="language-javascript">{
   "inputs": [
@@ -1075,7 +1076,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 </code></pre>
 
   <a class="title-anchor" id="address_details"></a>
-  <p>Address Details</h2></p>
+  <p><h2>Address Details</h2></p>
   <p>The Address API details gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address. To get only the unspent transactions, append <em>?unspentOnly=true</em> to the address URL.</p>
 	
   <p>A request to a given address returns the following properties:</p>
