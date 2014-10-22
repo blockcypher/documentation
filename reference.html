@@ -105,14 +105,14 @@ https://api.blockcypher.com/v1/bcy/test</code></br></pre>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main?token=$USER_TOKEN</code></pre>
 
   <h2 id="testing">Testing</h2>
-  <p>To facilitate the testing of your application when developing using BlockCypher's API, we provide a separate test blockchain with characteristics very similar to Bitcoin's main chain that also supports all of our web services. This blockchain has a "faucet", which allows you to very easily get free coins for automated testing.</p>
+  <p>To facilitate the testing of your application when using BlockCypher's API, we provide our own test blockchain that supports all of our web services. This blockchain has characteristics very similar to Bitcoin's main chain and a "faucet", which allows you to very easily get free coins for automated testing.</p>
   <p>The only differences with the Bitcoin main chain are the following:</p>
-  <ul>
-    <li>The chain is private (no data is broadcasted, only BlockCypher mines the transactions), making it much more predictable than the Bitcoin's testnet (which is frequently attacked).</li>
+  <ul class="list">
+    <li>The chain is private (no data is broadcasted, only BlockCypher mines the transactions), making it much more predictable than the Bitcoin's testnet (which is frequently under attack).</li>
     <li>New blocks get built every minute, confirming the transactions that have been created using our <a href="##creating_transactions">transaction API</a>.</li>
     <li>The prefix for standard addreses is 'B' or 'C'. The prefix for multisig addresses is 'D'.</li>
   </ul>
-  <p>This blockchain is available under the following address:</p>
+  <p>This blockchain is available under the following URL:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/bcy/test</code></br></pre>
   <p>In addition to all our APIs, a faucet endpoint is available. Calling it passing an address will automatically create a new transaction funding the address with the provided amount. For example to create a new test address and fund it with 100,000 of our coins:</p>
   <pre><code class="language-bash">$ curl -X POST http://api.blockcypher.com/v1/bcy/test/addrs?token=$TOKEN
