@@ -494,7 +494,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   <ul class="list">
     <li><b>receive_count</b>: the number of nodes in the bitcoin network we've received that transaction from so far, indicates how many nodes, at the minimum, accepted this transaction.</li>
     <li><b>confidence</b>: the percentage chance (between 0 and 1) that a transaction will make it into a block over time, which accounts for double-spend or transaction loss. Note that it doesn't indicate <em>how fast</em> the confirmation will happen.</li>
-    <li><b>preference</b>: level of preference miners will have to include this transaction in their block, a high preference means the transaction is very likely to be confirmed in the next block, a low confidence means it's likely to take several blocks (&gt;6).</li>
+    <li><b>preference</b>: level of preference miners will have to include this transaction in their block, a high preference means the transaction is very likely to be confirmed in the next block, a low preference means it's likely to take several blocks (&gt;6).</li>
   </ul>
   <p>The confidence is calculated based on elapsed time as well as the receive count and is based on several public research results.</p>
   <p>In addition, 2 other properties indicate when a double-spend has been detected:</p>
