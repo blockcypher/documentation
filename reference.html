@@ -699,10 +699,10 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 </code></pre>
 
   <p>We build the full set of inputs using unspent transactions from the input address and fill up a temporary, unsigned transaction. Passing a negative value (like -1) will automatically generate a <em>sweep</em>, transferring the entire balance of the input address (minus potential fees).</p>
-  <p>By default, spending from unconfirmed transactions isn't enabled. So you may have to wait for a transaction to be confirmed before being able to issue another. To enable spending from unconfirmed transactions provide a "confirmations" property of value -1.</p>
+  <p>By default, we allow spending from unconfirmed transactions. So unconfirmed transactions may be used as inputs of your transactions. To disable spending from unconfirmed transactions and force the selection of only confirmed inputs, provide a "confirmations" property of value 1.</p>
 
   <pre><code class="language-javascript">{
-  "confirmations": -1,
+  "confirmations": 1,
   "inputs": [
     {"addresses": ["181w71oR7nTEsKducLBTUJkdbTvLDQzymL"]}
   ],
