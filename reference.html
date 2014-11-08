@@ -1077,7 +1077,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 
   <a class="title-anchor" id="address_details"></a>
   <p><h2>Address Details</h2></p>
-  <p>The Address API details gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address. To get only the unspent transactions, append <em>?unspentOnly=true</em> to the address URL.</p>
+  <p>The Address API details gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address. For addresses as for <a href="#transactions">transactions</a>, we consider a transaction confirmed (and hence part of the confirmed balance) if the transaction is in a block, regardless of whether the block is the latest or 50 blocks old.</p>
+  <p>To get only the unspent transactions, append <em>?unspentOnly=true</em> to the address URL.</p>
 	
   <p>A request to a given address returns the following properties:</p>
   <table class="table">
@@ -1092,15 +1093,27 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </tr>
     <tr>
       <td>balance</td><td>12550020000</td>
-      <td>Balance on the specified address, in satoshi.</td>
+      <td>Balance on the specified address, in satoshi. This is the difference between outputs and inputs on this address, for transactions that have been included into a block (confirmations &gt;  0)</td>
     </tr>
     <tr>
       <td>unconfirmed_balance</td><td>-100000000</td>
-      <td>Balance of unconfirmed transactions for this address, in satoshi. Can be negative (if unconfirmed transactions are just spending.)</td>
+      <td>Balance of unconfirmed transactions for this address, in satoshi. Can be negative (if unconfirmed transactions are just spending.). Only unconfirmed transactions (haven't made it into a block) are included.</td>
     </tr>
     <tr>
       <td>final_balance</td><td>124500020000</td>
       <td>Final balance including unconfirmed transactions for this address, in satoshi.</td>
+    </tr>
+    <tr>
+      <td>n_tx</td><td>12</td>
+      <td>Number of confirmed transactions on the specified address. Only transactions that have made it into a block (confirmations &gt;  0) are counted.</td>
+    </tr>
+    <tr>
+      <td>unconfirmed_n_tx</td><td>2</td>
+      <td>Number of unconfirmed transactions for this address. Only unconfirmed transactions (haven't made it into a block) are counted.</td>
+    </tr>
+    <tr>
+      <td>final_n_tx</td><td>14</td>
+      <td>Final number of transactions, including unconfirmed transactions, for this address.</td>
     </tr>
     <tr>
       <td>tx_url</td><td>https://api.blockcypher.com/v1/btc/main/txs/</td>
