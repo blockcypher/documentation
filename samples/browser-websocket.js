@@ -11,5 +11,5 @@ ws.onmessage = function (event) {
   if (count > 10) ws.close();
 }
 ws.onopen = function(event) {
-  ws.send(JSON.stringify({filter: "event=new-pool-tx"}));
+  ws.send(JSON.stringify({filter: "event=unconfirmed-tx"}));
 }
