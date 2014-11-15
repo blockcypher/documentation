@@ -383,6 +383,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     <li>Pay-to-multi-pubkey-hash (multi-signatures transaction)</li>
     <li>Pay-to-pubkey (used for mining transactions)</li>
     <li>Pay-to-script-hash (used for transactions relying on arbitrary scripts, rarely used)</li>
+    <li>Null-data, sometimes called op-return (used to embed small chunks of data in the block chain)</li>
     <li>Empty (no script present, mostly used for the input of a mining transaction)</li>
     <li>Unknown (non-standard script)</li>
   </ol>
@@ -749,6 +750,16 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   <p>Note that low <a href="https://en.bitcoin.it/wiki/Transaction_fees">transaction fees</a> are automatically included as required to ensure your transaction will be relayed.</p>
   <p>Since the transaction is not yet complete yet, the transaction hash is a temporary one. The final hash will be calculated and returned with the completed transaction.</p>
   <p>You may also provide inputs filled from the <em>prev_hash</em> and <em>output_index</em> properties. In this case, we use your inputs as provided and will not attempt to generate them from the address. Fees and change will still be inserted appropriately.</p>
+  <p>Finally, additional control over the generated script can be achieved by setting the <em>script_type</em> property, in particular for multisig outputs (which are pay-to-script-hash).</p>
+  <ol class="list">
+    <li>pay-to-pubkey-hash (most common transaction transferring to a public key hash)</li>
+    <li>pay-to-multi-pubkey-hash (multi-signatures transaction)</li>
+    <li>pay-to-pubkey (used for mining transactions)</li>
+    <li>pay-to-script-hash (used for transactions relying on arbitrary scripts, rarely used)</li>
+    <li>null-data, sometimes called op-return (used to embed small chunks of data in the block chain)</li>
+    <li>empty (no script present, mostly used for the input of a mining transaction)</li>
+    <li>unknown (non-standard script)</li>
+  </ol>
 
   <h3>Example</h3>
   <p>The following example will create 2 inputs because 2 previous transactions must be used for the requested amount. It also creates 2 outputs, one for the required transaction and another for the change.</p>
