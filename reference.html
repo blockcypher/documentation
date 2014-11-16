@@ -971,7 +971,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   <a class="title-anchor" id="websockets"></a>
   <h2>WebSockets</h2>
   <p>Opening a WebSocket to listen to our feeds is easy:</p>
-  <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
+  <pre><code class="language-javascript">new WebSocket("wss://socket.blockcypher.com/v1/btc/main");</code></pre>
   <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, the JSON document describing the event of interest should be sent.</p>
   <p>In addition to standard events, websockets accept a <em>ping</em> event. If you send the following, you will receive the same message back with "ping" replaced by "pong":</p>
   <pre><code class="language-javascript">{
