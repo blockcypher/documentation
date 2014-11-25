@@ -148,6 +148,11 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
       <td>All details about a given block, including transaction hashes. Can be retrieved either by block height or block hash.</td>
     </tr>
     <tr>
+      <td>Transaction</td><td>/v1/{coin}/{chain}/txs</td>
+      <td><a href="https://api.blockcypher.com/v1/btc/main/txs">/v1/btc/main/txs</a></td>
+      <td>An array of the latest unconfirmed transactions received. Page through results by passing the date of the oldest received transaction to a before URL parameter.</td>
+    </tr>
+    <tr>
       <td>Transaction</td><td>/v1/{coin}/{chain}/txs/{hash}</td>
       <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/txs/f854aeba...</a></td>
       <td>All details about a given transaction, including involved addresses, inputs and outputs.</td>
