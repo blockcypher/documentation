@@ -1,0 +1,18 @@
+# Site settings
+title: BlockCypher
+email: contact@blockcypher.com
+description: "Build block chain applications easily with our web APIs and callbacks. Run them reliably on our cloud-optimized platform. High throughputs, linear scaling, low-latency. Over 99.99% up time. No single point of failure."
+
+#local url
+baseurl: "http://localhost/documentation/jekyll/_site/"
+#live url
+#baseurl: http://www.blockcypher.com/
+
+url: "http://dev.blockcypher.com/"
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+sass:
+    sass_dir: _sass
+#    style: :compressed
