@@ -1,0 +1,273 @@
+<a class="title-anchor" id="creating_transactions"></a>
+<h1>Creating Transactions</h1>
+<p>For security reasons we do not keep any private keys: you are the only one who can sign transactions. There are 2 ways to send a transaction using our API:</p>
+<ul class="list">
+  <li>Build the transaction yourself (using a 3rd party library) and push the raw hex-encoded string. We will broadcast to the network and track it for you.</li>
+  <li>Create the transaction with our API, the 2 addresses and the amount.</li>
+</ul>
+<p>Using our API, creating a transaction from scratch is a 3-step process:</p>
+<ol class="list">
+  <li>We build the unsigned transaction and the data to sign it from basic information: an input address, an output address, and the value transferred.</li>
+  <li>You sign the transaction data.</li>
+  <li>We finish building the transaction, broadcast it over the peer-to-peer network, and send it back to you.</li>
+</ol>
+
+  <p>This is accomplished with two simple POST requests and a third one which allows you to push raw hexadecimal transactions:</p>
+  <table class="table">
+    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>New</td><td>/v1/{coin}/{chain}/txs/new</td><td>/v1/btc/main/txs/new</a><td>POST</td></td>
+      <td>Takes transaction information and returns a partially built transaction with the data to sign.</td>
+    </tr>
+    <tr>
+      <td>Send</td><td>/v1/{coin}/{chain}/txs/send</td>
+      <td>/v1/btc/main/txs/send</td><td>POST</td>
+      <td>Takes the partially built transaction, signed data and public keys. Returns the completed transaction and transmits it over the network.</td>
+    </tr>
+    <tr>
+      <td>Push</td><td>/v1/{coin}/{chain}/txs/push</td>
+      <td>/v1/btc/main/txs/push</td><td>POST</td>
+      <td>If you're already building your own signed transaction, allows you to validate them and transmit them over the network. Takes the transaction's hex-encoded string in a {"tx": "12A45F67..."} JSON wrapper.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>When a transaction has been successfully sent (using the Send or Push endpoints), an HTTP status of 201 is returned.</p>
+
+  <a class="title-anchor" id="transaction_skeleton"></a>
+  <h2>Transaction Skeleton</h2>
+  <p>A partially filled transaction is needed to create a full transaction. We require at least one input with a minimum of one address and at least one output with an address and value (in satoshis). For example:</p>
+  <pre><code class="language-javascript">{
+  "inputs": [
+    {"addresses": ["181w71oR7nTEsKducLBTUJkdbTvLDQzymL"]}
+  ],
+  "outputs": [
+    {"addresses": ["1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"], "value": 4000000000}
+  ]
+}
+</code></pre>
+
+  <p>We build the full set of inputs using unspent transactions from the input address and fill up a temporary, unsigned transaction. Passing a negative value (like -1) will automatically generate a <em>sweep</em>, transferring the entire balance of the input address (minus potential fees).</p>
+  <p>By default, we allow spending from unconfirmed transactions. So unconfirmed transactions may be used as inputs of your transactions. To disable spending from unconfirmed transactions and force the selection of only confirmed inputs, provide a "confirmations" property of value 1.</p>
+
+  <pre><code class="language-javascript">{
+  "confirmations": 1,
+  "inputs": [
+    {"addresses": ["181w71oR7nTEsKducLBTUJkdbTvLDQzymL"]}
+  ],
+  "outputs": [
+    {"addresses": ["1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"], "value": 4000000000}
+  ]
+}
+</code></pre>
+
+  <p>The document returned by a call to new uses the following format:</p>
+  <table class="table">
+    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <tbody>
+    <tr>
+      <td>errors</td><td>[{"error": ""Address 1DEP... with balance 4271116 does not have enough funds to transfer 500000000."}]</td>
+      <td>Array of errors encountered while generating the transaction. If the generation is successful, nothing will appear.</td>
+    </tr>
+    <tr>
+      <td>tx</td><td>tx: {...}</td>
+      <td>Temporary transaction, fully filled up except for the input scripts (requires signature).</td>
+    </tr>
+    <tr>
+      <td>tosign</td><td>["04779733bb...", "0396ea6f1b..."]</td>
+      <td>Array of hexadecimal-encoded data to sign, one for each generated input.</td>
+    </tr>
+    <tr>
+      <td>(signatures)</td><td>["bcd2c363a2...", "dc621478..."]</td>
+      <td>Array of hexadecimal-encoded signatures you need to provide.</td>
+    </tr>
+    <tr>
+      <td>(pubkeys)</td><td>["02c8d29d...", "02c8d29d..."]</td>
+      <td>The public key for each generated input (in general, repeat the public key corresponding to the provided input address).</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>Note that low <a href="https://en.bitcoin.it/wiki/Transaction_fees">transaction fees</a> are automatically included as required to ensure your transaction will be relayed.</p>
+  <p>Since the transaction is not yet complete yet, the transaction hash is a temporary one. The final hash will be calculated and returned with the completed transaction.</p>
+  <p>You may also provide inputs filled from the <em>prev_hash</em> and <em>output_index</em> properties. In this case, we use your inputs as provided and will not attempt to generate them from the address. Fees and change will still be inserted appropriately.</p>
+  <p>Finally, additional control over the generated script can be achieved by setting the <em>script_type</em> property, in particular for multisig outputs (which are pay-to-script-hash).</p>
+  <ol class="list">
+    <li>pay-to-pubkey-hash (most common transaction transferring to a public key hash)</li>
+    <li>pay-to-multi-pubkey-hash (multi-signatures transaction)</li>
+    <li>pay-to-pubkey (used for mining transactions)</li>
+    <li>pay-to-script-hash (used for transactions relying on arbitrary scripts, rarely used)</li>
+    <li>null-data, sometimes called op-return (used to embed small chunks of data in the block chain)</li>
+    <li>empty (no script present, mostly used for the input of a mining transaction)</li>
+    <li>unknown (non-standard script)</li>
+  </ol>
+
+  <h3>Example</h3>
+  <p>The following example will create 2 inputs because 2 previous transactions must be used for the requested amount. It also creates 2 outputs, one for the required transaction and another for the change.</p>
+  <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/txs/new
+> {
+>   "inputs": [
+>     {"addresses": ["1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"]}
+>   ],
+>   "outputs": [
+>     {"addresses": ["1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"], "value": 500000}
+>   ] 
+> }
+{
+  "tx": {
+    "block_height": -1,
+    "hash": "f961dea839fd69653547a0308360de67846a49d3593f7459773e27af8d9f5ec0",
+    "addresses": [
+      "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD",
+      "1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje",
+    ],
+    "total": 661116,
+    "fees": 10000,
+    "received": "2014-04-20T23:52:21.069978821Z",
+    "ver": 1,
+    "lock_time": 0,
+    "vin_sz": 2,
+    "vout_sz": 2,
+    "confirmed": 0,
+    "inputs": [
+      {
+        "prev_hash": "0c83c8321537a7c79dc6214788944ba6cd5ea76f0594453b6251fcf1856f2e4b",
+        "output_index": 0,
+        "script": "",
+        "output_value": 171116,
+        "addresses": [
+          "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      },
+      {
+        "prev_hash": "995a50e05d197be88d4da74160b4bcd2c363ebb1a49f95e572667d580bc70aba",
+        "output_index": 0,
+        "script": "",
+        "output_value": 500000,
+        "addresses": [
+          "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      }
+    ],
+    "outputs": [
+      {
+        "value": 500000,
+        "script": "76a9149c703cb3e9f1a2a154e548b3acafd0054d4835a788ac",
+        "addresses": [
+          "1FGAsJFNgWvFz2tWQAnRq8S6fVX9Zmuxje"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      },
+      {
+        "value": 161116,
+        "script": "76a9148629647bd642a2372d846a7660e210c8414f047c88ac",
+        "addresses": [
+          "1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD"
+        ],
+        "script_type": "pay-to-pubkey-hash"
+      }
+    ]
+  },
+  "tosign": [
+    "04779733bba8085dd86c21d86c8f9e786a1124751c42061d4c539229a07c4464",
+    "0396ea6f1bf7493e738339bd720267e7281144b222343ffe4167e00792c62ff2"
+  ]
+}</code></pre>
+
+  <a class="title-anchor" id="signing_sending"></a>
+  <h2>Signing and Sending</h2>
+  <p>Use your private key(s) to sign each of the data strings provided (decode them to byte arrays and use ECDSA). Return the signatures as hex-encoded strings in a <em>signatures</em> array property inserted in the previous document.</p>
+
+  <pre><code class="language-javascript">{
+  "tx": { ... },
+  "tosign": [
+    "04779733bba8085dd86c21d86c8f9e786a1124751c42061d4c539229a07c4464",
+    "0396ea6f1bf7493e738339bd720267e7281144b222343ffe4167e00792c62ff2"
+  ],
+  "signatures": [
+    "3045022100e91585519a9b637e122558644b67d6e9de618f906943aaeb00c95d3...",
+    "304502207df92c19101048de8a8a4fcb2cfb62ac937dfc6cf34c7fc8465336bfc..."
+  ],
+  "pubkeys": [
+    "02c8d29d8c8afb4725d25a1ec496aeddc36fa9eb6f0e014bfc21742fc3d78cb438",
+    "02c8d29d8c8afb4725d25a1ec496aeddc36fa9eb6f0e014bfc21742fc3d78cb438"
+  ]
+}</code></pre>
+
+  <p>Additionally, for each input the public key matching the input address must be provided because the input address cannot be calculated from the address. In general, repeat the public key for the address provided in the transaction skeleton input.</p>
+  <p>Here's an example showing how to sign the transaction in Javascript using the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">bitcoinjs</a> library:</p>
+  <pre><code class="language-javascript">
+  var key     = Bitcoin.ECKey.fromHex(source.private);
+  var pubkeys = [];
+  var signatures = newtx.tosign.map(function(tosign) {
+    pubkeys.push(source.public);
+    return bytesToHex(key.sign(hexToBytes(tosign)));
+  });
+  newtx.signatures  = signatures;
+  newtx.pubkeys     = pubkeys;
+</pre></code>
+
+  <p>Once signatures are inserted, POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send). The same document will be returned with the finalized transaction. If no errors are returned, your transaction was successfully issued and broadcasted across the network.</p>
+
+  <p>See our <a href="/samples/create-tx.html">full sample</a> to issue a transaction on testnet from your browser.</p>
+
+  <a class="title-anchor" id="error_handling"></a>
+  <h2>Error Handling</h2>
+  <p>When something is wrong with the provided transaction, the server will reply with a 400 HTTP error code. It will also return a JSON document that includes the transaction and an <i>errors</i> section listing the different issues that were encountered. If you're experiencing any difficulty, please check the returned errors.</p>
+  <pre><code class="language-javascript">{
+  "tx": { ... },
+  "errors": [
+    {"error": "..."}
+  ]
+}</code></pre>
+
+  <p>The most common issue is the absence of confirmed unspent outputs to build the transaction from. By default, spending unconfirmed transactions isn't enabled, so you may not be able to issue a 2nd transaction until the first has been confirmed. To enable spending from unconfirmed transactions, in the partially filled transaction provided to the new endpoint add "confirmations: -1".</p>
+  <p>The second most common issue is to use uncompressed public keys when compressed public keys were used to generate the address. If the script generated can't be verified, try passing compressed public keys instead.</p>
+
+  <a class="title-anchor" id="multisig"></a>
+<h2>Multisig Transactions</h2>
+
+<p>Our multiple signature transaction API works similarly to our classic <a href="#creating_transactions">transaction API</a> with a few differences:</p>
+<ul class="list">
+  <li>A script type of multisig-N-of-M must be set (with N and M replaced by actual numbers, like multisig-2-of-3).</li>
+  <li>Public keys must be provided instead of addresses for the multisig inputs or outputs.</li>
+</ul>
+<p>For a multisig interaction to happen, first the multisig address has to be sent some money using a transaction that includes N public keys in its output. Then that transaction can be spent by another by repeatedly issuing the required M number of signature. The interaction can be broken down as follows:</p>
+<ol class="list">
+  <li>Call the <a href="#transaction_skeleton">txs/new</a> endpoint to create a funding transaction. For a 2-of-3 transaction:
+<pre><code class="language-javascript">{
+    "inputs": [{"addresses": [sourceAddr]}],
+    "outputs": [{
+      "addresses"   : [pubkey1, pubkey2, pubkey3],
+      "script_type" : "multisig-2-of-3",
+      "value"       : 250000,
+    }]
+  }</code></pre>
+  </li>
+  <li><a href="#signing_sending">Sign the returned hex string</a> and post it with the transaction to txs/send. The multisig address is now funded.</li>
+</ol>
+<p>To spend the previous transaction, each party (e.g., 3 in a 3-of-4 multisig) needs to send a new signed multisig transaction, specifying the public keys and script_type for input and the receiving address as output:</p>
+<ol class="list">
+  <li>Call the txs/new endpoint to create the spending transaction. For example:
+<pre><code class="language-javascript">{
+  "inputs": [{
+    "addresses"   : [pubkey1, pubkey2, pubkey3],
+    "script_type" : "multisig-2-of-3"
+  }],
+  "outputs": [{
+    "addresses" : [destAddr],
+    "value"     : 150000
+  }]
+}</code></pre>
+  </li>
+  <li><a href="#signing_sending">Sign the returned hex string</a> and post it with the transaction to txs/send. We correlate each call based on the pubkeys/destination/amount and will send the transaction automatically once we have enough signatures.</li>
+</ol>
+  
+<p>Alternatively, instead of having each party call our API, you may also share the hex string to sign and provide the required signatures all at once. Note that in all cases, the order in which the public keys are provided matters and should be consistent, as required for Bitcoin P2SH transactions. Remaining funds (change) will be sent back to the multisig address.</p>
+  
+<p>See our <a href="/samples/multisig-tx.html">full Javascript sample</a> for how to issue a 2 out of 3 multisig transaction.</p>
+
+<p>Note: if you're using a blockexplorer to check a transaction, be aware that blockchain.info does not support pay-to-script transactions and will not show the transaction until it's confirmed.</p>

@@ -5,11 +5,11 @@ $blue: #0B8ED8;
 // Utilities
 .bg-white-gradient {
 	background: #f3f4f8; /* Old browsers */
-	background: -moz-radial-gradient(center, ellipse cover,  #f3f4f8 0%, #fff 100%); /* FF3.6+ */
-	background: -webkit-gradient(radial, center center,0, center center, 100%, color-stop(0%,#f3f4f8), color-stop(100%,#fff)); /* Chrome,Safari4+ */
-	background: -webkit-radial-gradient(center, ellipse cover,  #f3f4f8 0%,#fff 100%); /* Chrome10+,Safari5.1+ */
-	background: -ms-radial-gradient(center, ellipse cover,  #f3f4f8 0%,#fff 100%); /* IE10+ */
-	background: radial-gradient(ellipse at center,  #f3f4f8 0%,#fff 100%); /* W3C */
+	background: -moz-radial-gradient(center, ellipse cover,  #f3f4f8 0%, #fff 100%);
+	background: -webkit-gradient(radial, center center,0, center center, 100%, color-stop(0%,#f3f4f8), color-stop(100%,#fff));
+	background: -webkit-radial-gradient(center, ellipse cover,  #f3f4f8 0%,#fff 100%);
+	background: -ms-radial-gradient(center, ellipse cover,  #f3f4f8 0%,#fff 100%);
+	background: radial-gradient(ellipse at center,  #f3f4f8 0%,#fff 100%);
 }
 .text-purple {
 	color: $purple;
@@ -25,6 +25,12 @@ $blue: #0B8ED8;
 	text-indent: 100%;
 	white-space: nowrap;
 	overflow: hidden;
+}
+.title-anchor {
+	display: block;
+	position: relative;
+	top: -80px;
+	visibility: hidden;
 }
 /* Layout */
 body {
