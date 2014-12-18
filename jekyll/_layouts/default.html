@@ -5,9 +5,14 @@
 
   <body>
 
-    {% include header.html %}
-
-    {{ content }}
+	<div class="main-container">
+		{% include header.html %}
+		<div class="bg-white-gradient">
+			<div class="container">
+				{{ content }}
+			</div>
+		</div>
+	</div>
 
     {% include footer.html %}
 

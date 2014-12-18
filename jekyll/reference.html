@@ -1,24 +1,10 @@
 ---
 layout: default
-title: Documentation Reference
+title: Reference
 permalink: reference.html
 ---
 
-<!-- bg-primary st-->
-<section id="home" class="bg-primary">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <h1>Bitcoin Web Services</h1>
-        <h2>Build. Monitor. Secure.</h2>
-      </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="main" class="bg-danger">
-  <div class="container">
+<section class="section">
     <div class="row">
 
       <div class="col-md-9" role="main">
@@ -951,7 +937,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   <h3>Example</h3>
   <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
 
-  <pre data-src="samples/browser-websocket.js"></pre>
+  <pre data-src="{{ "js/samples/browser-websocket.js" | prepend: site.baseurl }}"></pre>
   <button class="tryme btn btn-primary" type="button" id="browser-websocket">Try me!</button>
 
   <a class="title-anchor" id="webhooks"></a>
@@ -1232,7 +1218,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
                 <li><a href="#multisig">Multisig</a></li>
               </ul>
             </li>
-            <li><a href="#websocket_webhook">WebSockets & WebHooks</a>
+            <li><a href="#websocket_webhook">WebSockets &amp; WebHooks</a>
               <ul>
                 <li><a href="#events">Events</a></li>
                 <li><a href="#websockets">WebSockets</a></li>
@@ -1250,32 +1236,6 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
       </div>
   
     </div>
-  </div>
+
 </section>
 
-
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-  <script src="{{ "js/jquery.js" | prepend: site.baseurl }}"></script> 
-  <!-- Include all compiled plugins (below), or include individual files as needed --> 
-  <script src="{{ "js/bootstrap.js" | prepend: site.baseurl }}"></script> 
-  <script src="{{ "js/prism.js" | prepend: site.baseurl }}"></script>
-  <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-  <script>
-    $('button.tryme').click(function(e) {
-      eval($(this).prev().children().text());
-    });
-    $(function() {
-      $('.content-table').affix();
-    });
-  </script>
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-50839214-1', 'blockcypher.com');
-    ga('send', 'pageview');
-  </script>
-</body>
-</html>

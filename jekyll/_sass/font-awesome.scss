@@ -1,20 +1,12 @@
-/*
- *  Font Awesome 4.1.0 by @davegandy - http://fontawesome.io - @fontawesome
- *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
- */
+// Font Awesome 4.1.0 by @davegandy - http://fontawesome.io - @fontawesome
+// License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+
 $font-path: '../assets/fonts/';
 
 @font-face {
 	font-family: 'FontAwesome';
 	src: url('#{$font-path}fontawesome-webfont.eot?v=4.1.0');
 	src: url('#{$font-path}fontawesome-webfont.eot?#iefix&v=4.1.0') format('embedded-opentype'), url('#{$font-path}fontawesome-webfont.woff?v=4.1.0') format('woff'), url('#{$font-path}fontawesome-webfont.ttf?v=4.1.0') format('truetype'), url('#{$font-path}fontawesome-webfont.svg?v=4.1.0#fontawesomeregular') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'MyriadProRegular';
-	src: url('#{$font-path}pro-regular-webfont.eot');
-	src: url('#{$font-path}pro-regular-webfont.eot?#iefix') format('embedded-opentype'), url('#{$font-path}pro-regular-webfont.woff') format('woff'), url('#{$font-path}pro-regular-webfont.ttf') format('truetype'), url('#{$font-path}pro-regular-webfont.svg#MyriadProRegular') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -32,41 +24,7 @@ $font-path: '../assets/fonts/';
 	font-weight: normal;
 	font-style: normal;
 }
-@font-face {
-	font-family: 'MyriadProBold';
-	src: url('#{$font-path}pro-bold-webfont.eot');
-	src: url('#{$font-path}pro-bold-webfont.eot?#iefix') format('embedded-opentype'), url('#{$font-path}pro-bold-webfont.woff') format('woff'), url('#{$font-path}pro-bold-webfont.ttf') format('truetype'), url('#{$font-path}#pro-bold-webfont.svgMyriadProBold') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OpenSansLight';
-	src: url('#{$font-path}OpenSans-Light-webfont.eot');
-	src: url('#{$font-path}OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('#{$font-path}OpenSans-Light-webfont.woff') format('woff'), url('#{$font-path}OpenSans-Light-webfont.ttf') format('truetype'), url('#{$font-path}OpenSans-Light-webfont.svg#OpenSansLight') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OpenSansRegular';
-	src: url('#{$font-path}OpenSans-Regular-webfont.eot');
-	src: url('#{$font-path}OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('#{$font-path}penSans-Regular-webfont.woff') format('woff'), url('#{$font-path}OpenSans-Regular-webfont.ttf') format('truetype'), url('#{$font-path}OpenSans-Regular-webfont.svg#OpenSansRegular') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OpenSansSemibold';
-	src: url('#{$font-path}OpenSans-Semibold-webfont.eot');
-	src: url('#{$font-path}OpenSans-Semibold-webfont.eot?#iefix') format('embedded-opentype'),  url('#{$font-path}OpenSans-Semibold-webfont.woff') format('woff'),  url('#{$font-path}OpenSans-Semibold-webfont.ttf') format('truetype'),  url('#{$font-path}OpenSans-Semibold-webfont.svg#OpenSansSemibold') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OpenSansBold';
-	src: url('#{$font-path}OpenSans-Bold-webfont.eot');
-	src: url('#{$font-path}OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'), url('#{$font-path}OpenSans-Bold-webfont.woff') format('woff'), url('#{$font-path}OpenSans-Bold-webfont.ttf') format('truetype'), url('#{$font-path}OpenSans-Bold-webfont.svg#OpenSansBold') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
+
 .fa {
 	display: inline-block;
 	font-family: FontAwesome;
