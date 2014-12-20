@@ -115,3 +115,14 @@ body {
 		border-color:#888;
 	}
 }
+#content-table .active {
+	border-right:2px solid $purple;
+	.active {
+		background:#eee;
+	}
+}
+.affix {
+	top:60px;
+}
+
+
