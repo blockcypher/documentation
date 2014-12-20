@@ -1,142 +1,212 @@
-<a class="title-anchor" id="blockchain-api"></a>
-<h1>Blockchain API</h1>
-  <p>The Blockchain API allows you to access raw data from the block chain's <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
+<span class="title-anchor" id="blockchain-api"></span>
+<h2 class="section-title">Blockchain API</h2>
 
-  <p>Three main resources make up the Blockchain API (all GETs under https://api.blockcypher.com):</p>
+<p>The Blockchain API allows you to access raw data from the block chain's <a href="https://en.bitcoin.it/wiki/Transaction">transactions</a> and <a href="https://en.bitcoin.it/wiki/Blocks">blocks</a>.
+
+<p>Three main resources make up the Blockchain API (all GETs under https://api.blockcypher.com):</p>
+
+<div class="table-responsive">
   <table class="table">
-    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Description</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>URL Pattern</th>
+        <th>Example</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
-    <tr>
-      <td>Chain</td><td>/v1/{coin}/{chain}</td><td><a href="https://api.blockcypher.com/v1/btc/main">/v1/btc/main</a></td>
-      <td>Returns the current state of the specified block chain, including height and the two latest blocks.</td>
-    </tr>
-    <tr>
-      <td>Block</td><td>/v1/{coin}/{chain}/blocks/{hash|height}</td>
-      <td><a href="http://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/blocks/293000</a></td>
-      <td>All details about a given block, including transaction hashes. Can be retrieved either by block height or block hash.</td>
-    </tr>
-    <tr>
-      <td>Transaction</td><td>/v1/{coin}/{chain}/txs</td>
-      <td><a href="https://api.blockcypher.com/v1/btc/main/txs">/v1/btc/main/txs</a></td>
-      <td>An array of the latest unconfirmed transactions received. Page through results by passing the date of the oldest received transaction to a before URL parameter.</td>
-    </tr>
-    <tr>
-      <td>Transaction</td><td>/v1/{coin}/{chain}/txs/{hash}</td>
-      <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">/v1/btc/main/txs/f854aeba...</a></td>
-      <td>All details about a given transaction, including involved addresses, inputs and outputs.</td>
-    </tr>
-    <tr>
-      <td>Transaction Confidence</td><td>/v1/{coin}/{chain}/txs/{hash}/confidence</td>
-      <td><a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449/confidence">/v1/btc/main/txs/f854aeba.../confidence</a></td>
-      <td>Transaction confidence information (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
-    </tr>
+      <tr>
+        <td>Chain</td><td>/v1/{coin}/{chain}</td><td><a href="https://api.blockcypher.com/v1/btc/main">/v1/btc/main</a></td>
+        <td>Returns the current state of the specified block chain, including height and the two latest blocks.</td>
+      </tr>
+      <tr>
+        <td>Block</td>
+        <td>/v1/{coin}/{chain}/blocks/{hash|height}</td>
+        <td>
+          <a href="http://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">
+            /v1/btc/main/blocks/293000
+          </a>
+        </td>
+        <td>All details about a given block, including transaction hashes. Can be retrieved either by block height or block hash.</td>
+      </tr>
+      <tr>
+        <td>Transaction</td>
+        <td>/v1/{coin}/{chain}/txs</td>
+        <td><a href="https://api.blockcypher.com/v1/btc/main/txs">/v1/btc/main/txs</a></td>
+        <td>An array of the latest unconfirmed transactions received. Page through results by passing the date of the oldest received transaction to a before URL parameter.</td>
+      </tr>
+      <tr>
+        <td>Transaction</td>
+        <td>/v1/{coin}/{chain}/txs/{hash}</td>
+        <td>
+          <a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449">
+            /v1/btc/main/txs/f854aeba...
+          </a>
+        </td>
+        <td>All details about a given transaction, including involved addresses, inputs and outputs.</td>
+      </tr>
+      <tr>
+        <td>Transaction Confidence</td>
+        <td>/v1/{coin}/{chain}/txs/{hash}/confidence</td>
+        <td>
+          <a href="https://api.blockcypher.com/v1/btc/main/txs/f854aebae95150b379cc1187d848d58225f3c4157fe992bcd166f58bd5063449/confidence">
+            /v1/btc/main/txs/f854aeba.../confidence
+          </a>
+        </td>
+        <td>Transaction confidence information (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+      </tr>
     </tbody>
   </table>
+</div>
 
-  <a class="title-anchor" id="chains"></a>
-  <h2>Chains</h2>
-  <p>Currently, we support the main and test Bitcoin and Litecoin block chains. Depending on market demands, we'll add additional block chains and alt coins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
-  <p>A request to a given chain returns the following properties:</p>
+<span class="title-anchor" id="chains"></span>
+<h3 class="text-purple">Chains</h3>
+
+<p>Currently, we support the main and test Bitcoin and Litecoin block chains. Depending on market demands, we'll add additional block chains and alt coins. Please <a href="mailto:contact@blockcypher.com">contact us</a> if interested.</p>
+
+<p>A request to a given chain returns the following properties:</p>
+
+<div class="table-responsive">
   <table class="table">
-    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Example (abbreviated URLs and hashes)</th>
+          <th>Description</th>
+        </tr>
+      </thead>
     <tbody>
-    <tr>
-      <td>name</td><td>BTC.main</td><td>Chain name</td>
-    </tr>
-    <tr>
-      <td>latest</td><td>0000...974f</td>
-      <td>Hash of the latest block in the chain.</td>
-    </tr>
-    <tr>
-      <td>previous</td><td>0000...1d66</td>
-      <td>Hash of the second to last block in the chain.</td>
-    </tr>
-    <tr>
-      <td>latest_url</td>
-      <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666...">.../v1/btc/main/blocks/0000...974f</a></td>
-      <td>URL to retrieve information on the latest block in the chain.</td>
-    </tr>
-    <tr>
-      <td>previous_url</td>
-      <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64ee...">.../v1/btc/main/blocks/0000...1d66</a></td>
-      <td>URL to retrieve information on the second to last block in the chain.</td>
-    </tr>
+      <tr>
+        <td>name</td>
+        <td>BTC.main</td>
+        <td>Chain name</td>
+      </tr>
+      <tr>
+        <td>latest</td>
+        <td>0000...974f</td>
+        <td>Hash of the latest block in the chain.</td>
+      </tr>
+      <tr>
+        <td>previous</td>
+        <td>0000...1d66</td>
+        <td>Hash of the second to last block in the chain.</td>
+      </tr>
+      <tr>
+        <td>latest_url</td>
+        <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666...">.../v1/btc/main/blocks/0000...974f</a></td>
+        <td>URL to retrieve information on the latest block in the chain.</td>
+      </tr>
+      <tr>
+        <td>previous_url</td>
+        <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64ee...">.../v1/btc/main/blocks/0000...1d66</a></td>
+        <td>URL to retrieve information on the second to last block in the chain.</td>
+      </tr>
     </tbody>
   </table>
+</div>
 
-  <a class="title-anchor" id="blocks"></a>
-  <h2>Blocks</h2>
-  <p>Blocks are located under a chain's URL. The most interesting properties of blocks are:</p>
+<span class="title-anchor" id="blocks"></span>
+<h3 class="text-purple">Blocks</h3>
 
+<p>Blocks are located under a chain's URL. The most interesting properties of blocks are:</p>
+
+<div class="table-responsive">
   <table class="table">
-    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
-    <tr>
-      <td>hash</td><td>0000...35fa</td><td>Block hash. Can be used as a unique identifier.</td>
-    </tr>
-    <tr>
-      <td>height</td><td>293268</td>
-      <td>The height of the block is the distance from the root of the chain, the genesis block at height = 0.</td>
-    </tr>
-    <tr>
-      <td>depth</td><td>11</td>
-      <td>The depth is the distance from the latest block in the chain, or how many blocks have been found after this one.</td>
-    </tr>
-    <tr>
-      <td>chain</td><td>BTC.main</td>
-      <td>The name of the chain the block is from.</td>
-    </tr>
-    <tr>
-      <td>total</td><td>448188159094</td>
-      <td>The total amount in <a href="https://en.bitcoin.it/wiki/Units">satoshis</a> transacted in this block. Divide by 10^8 to obtain the number of bitcoins.</td>
-    </tr>
-    <tr>
-      <td>fees</td><td>13383533</td>
-      <td>Amount of fees, in satoshis, collected by miners on this block.</td>
-    </tr>
-    <tr>
-      <td>time</td><td>2014-03-30T18:52:44Z</td>
-      <td>Recorded time at which the block was built. (Note: miners rarely post accurate clock times).</td>
-    </tr>
-    <tr>
-      <td>received_time</td><td>2014-03-30T18:52:36.539Z</td>
-      <td>The time BlockCypher's servers receive the block. Our servers' time is continuously adjusted and accurate.</td>
-    </tr>
-    <tr>
-      <td>bits</td><td>419486617</td>
-      <td>The block-encoded difficulty target, for more information see <a href="https://en.bitcoin.it/wiki/Difficulty">https://en.bitcoin.it/wiki/Difficulty</a></td>
-    </tr>
-    <tr>
-      <td>nonce</td><td>1225187768</td>
-      <td>Number used to generate this block. Incremented by miners to allow variation in the header (and hence its hash).</td>
-    </tr>
-    <tr>
-      <td>n_tx</td><td>579</td>
-      <td>Number of transactions in this block.</td>
-    </tr>
-    <tr>
-      <td>prev_block</td><td>0000...35fa</td>
-      <td>Hash of the block previous to this one.</td>
-    </tr>
-    <tr>
-      <td>prev_block_url</td><td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa">.../v1/btc/main/blocks/0000...35fa</a></td>
-      <td>URL for the previous block's details.</td>
-    </tr>
-    <tr>
-      <td>tx_url</td><td>https://api.blockcypher.com/v1/btc/main/txs/</td>
-      <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
-    </tr>
-    <tr>
-      <td>txids</td><td>["96d8...4f6ab", "3b2c...12bb", "7fa2...90d1", ...]</td>
-      <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions. To obtain more, use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
-    </tr>
-    <tr>
-      <td>next_txids</td><td>.../v1/btc/main/blocks/0000...7b72?txstart=20&limit=20</td>
-      <td>URL to get the same block information with the next 20 transactions.</td>
-    </tr>
+      <tr>
+        <td>hash</td>
+        <td>0000...35fa</td>
+        <td>Block hash. Can be used as a unique identifier.</td>
+      </tr>
+      <tr>
+        <td>height</td>
+        <td>293268</td>
+        <td>The height of the block is the distance from the root of the chain, the genesis block at height = 0.</td>
+      </tr>
+      <tr>
+        <td>depth</td>
+        <td>11</td>
+        <td>The depth is the distance from the latest block in the chain, or how many blocks have been found after this one.</td>
+      </tr>
+      <tr>
+        <td>chain</td>
+        <td>BTC.main</td>
+        <td>The name of the chain the block is from.</td>
+      </tr>
+      <tr>
+        <td>total</td><td>448188159094</td>
+        <td>The total amount in <a href="https://en.bitcoin.it/wiki/Units">satoshis</a> transacted in this block. Divide by 10^8 to obtain the number of bitcoins.</td>
+      </tr>
+      <tr>
+        <td>fees</td>
+        <td>13383533</td>
+        <td>Amount of fees, in satoshis, collected by miners on this block.</td>
+      </tr>
+      <tr>
+        <td>time</td>
+        <td>2014-03-30T18:52:44Z</td>
+        <td>Recorded time at which the block was built. (Note: miners rarely post accurate clock times).</td>
+      </tr>
+      <tr>
+        <td>received_time</td>
+        <td>2014-03-30T18:52:36.539Z</td>
+        <td>The time BlockCypher's servers receive the block. Our servers' time is continuously adjusted and accurate.</td>
+      </tr>
+      <tr>
+        <td>bits</td>
+        <td>419486617</td>
+        <td>The block-encoded difficulty target, for more information see <a href="https://en.bitcoin.it/wiki/Difficulty">https://en.bitcoin.it/wiki/Difficulty</a></td>
+      </tr>
+      <tr>
+        <td>nonce</td>
+        <td>1225187768</td>
+        <td>Number used to generate this block. Incremented by miners to allow variation in the header (and hence its hash).</td>
+      </tr>
+      <tr>
+        <td>n_tx</td>
+        <td>579</td>
+        <td>Number of transactions in this block.</td>
+      </tr>
+      <tr>
+        <td>prev_block</td>
+        <td>0000...35fa</td>
+        <td>Hash of the block previous to this one.</td>
+      </tr>
+      <tr>
+        <td>prev_block_url</td>
+        <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa">.../v1/btc/main/blocks/0000...35fa</a></td>
+        <td>URL for the previous block's details.</td>
+      </tr>
+      <tr>
+        <td>tx_url</td>
+        <td>https://api.blockcypher.com/v1/btc/main/txs/</td>
+        <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
+      </tr>
+      <tr>
+        <td>txids</td>
+        <td>["96d8...4f6ab", "3b2c...12bb", "7fa2...90d1", ...]</td>
+        <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions. To obtain more, use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
+      </tr>
+      <tr>
+        <td>next_txids</td>
+        <td>.../v1/btc/main/blocks/0000...7b72?txstart=20&amp;limit=20</td>
+        <td>URL to get the same block information with the next 20 transactions.</td>
+      </tr>
+    </tbody>
   </table>
+</div>
+
 <p>Here's a sample return document for a given block:</p>
-  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/blocks/294322</code>
+
+<pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/blocks/294322</code>
 <code class="language-javascript">{
     "hash": "0000000000000000189bba3564a63772107b5673c940c16f12662b3e8546b412",
     "height": 294322,
@@ -167,106 +237,137 @@
     "tx_url": "http://api.blockcypher.com/v1/btc/main/txs/"
   }</code></pre>
 
-  <a class="title-anchor" id="transactions"></a>
-  <h2>Transactions</h2>
-  <p>Transactions can be confirmed into a block, in a pool of non-confirmed transactions, or orphaned. Confirmed transactions transfer a certain amount of bitcoin from previous <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a> (referenced by inputs and controlled by a set of addresses) to a set of target <a href="https://en.bitcoin.it/wiki/Address">addresses</a>.</p>
-  <p>The main properties in a transaction are:</p>
+<span class="title-anchor" id="transactions"></span>
+<h3 class="text-purple">Transactions</h3>
 
+<p>Transactions can be confirmed into a block, in a pool of non-confirmed transactions, or orphaned. Confirmed transactions transfer a certain amount of bitcoin from previous <a href="https://en.bitcoin.it/wiki/Transactions">transactions</a> (referenced by inputs and controlled by a set of addresses) to a set of target <a href="https://en.bitcoin.it/wiki/Address">addresses</a>.</p>
+
+<p>The main properties in a transaction are:</p>
+
+<div class="table-responsive">
   <table class="table">
-    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <thead>
+      <tr>
+          <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
-    <tr>
-      <td>block_hash</td><td>0000...35fa</td>
-      <td>Hash of the block the transaction is in. Only exists for confirmed transactions.</td>
-    </tr>
-    <tr>
-      <td>block_height</td><td>293331</td>
-      <td>Height of the block the transaction is in. Only exists for confirmed transactions.</td>
-    </tr>
-    <tr>
-      <td>hash</td><td>9a20...9e84</td>
-      <td>Hash of the transaction. While hashes are reasonably unique, using them as identifiers may be <a href="https://en.bitcoin.it/wiki/Transaction_Malleability">unsafe.</a></td>
-    </tr>
-    <tr>
-      <td>addresses</td><td>["1EJFhJDvS2ncpPotz6Lb3mGGchHfr3zgXv", "1N32Ts6eA2YHrcUjwZnzmPsLUnThZ6bDbb"]</td>
-      <td>Array of Bitcoin addresses involved in the transaction.</td> </tr>
-    </tr>
-    <tr>
-      <td>total</td><td>22180950000</td>
-      <td>Total amount exchanged in this transaction, in satoshis.</td>
-    </tr>
-    <tr>
-      <td>fees</td><td>10000</td>
-      <td>Fees collected by miners in the transaction, in satoshis.</td>
-    </tr>
-    <tr>
-      <td>relayed_by</td><td>50.154.237.192:8333</td>
-      <td>Address of the peer that sent us this transaction.</td>
-    </tr>
-    <tr>
-      <td>received</td><td>2014-03-31T04:23:44.833536145Z</td>
-      <td>When the transaction was received by BlockCypher servers.</td>
-    </tr>
-    <tr>
-      <td>confirmations</td><td>5</td>
-      <td>Number of subsequent blocks, including the block the transaction is in. Unconfirmed transactions have 0 for confirmation.</td>
-    </tr>
-    <tr>
-      <td>confirmed</td><td>2014-03-31T04:25:12.93471948Z</td>
-      <td>Date at which the transaction was included in a block, in ISO format.</td>
-    </tr>
-    <tr>
-      <td>preference</td><td>high</td>
-      <td>How likely is this transaction to make it to the next block, reflects the preference level miners have to include this transaction. Can be high, medium or low.</td>
-    </tr>
-    <tr>
-      <td>double_spend</td><td>false</td>
-      <td>Whether the transaction is a double spend (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
-    </tr>
-    <tr>
-      <td>double_of</td><td>a672f0...</td>
-      <td>If the transaction is a double spend, what transaction it's double-spending  (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
-    </tr>
-    <tr>
-      <td>receive_count</td><td>42</td>
-      <td>Unconfirmed transactions only. The number of peers that have sent this transaction to us (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
-    </tr>
-    <tr>
-      <td>confidence</td><td>0.98819</td>
-      <td>Unconfirmed transactions only. Confidence this transaction will be confirmed (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
-    </tr>
-    <tr>
-      <td>vin_sz</td><td>1</td>
-      <td>Total number of inputs</td>
-    </tr>
-    <tr>
-      <td>vout_sz</td><td>2</td>
-      <td>Total number of outputs</td>
-    </tr>
-    <tr>
-      <td>inputs</td><td>(see below)</td>
-      <td>Array of inputs, limited to 20. Use paging to get more inputs (see section on blocks).</td>
-    </tr>
-    <tr>
-      <td>outputs</td><td>(see below)</td>
-      <td>Array of outputs, limited to 20. Use paging to get more outputs (see section on blocks).</td>
-    </tr>
+      <tr>
+        <td>block_hash</td>
+        <td>0000...35fa</td>
+        <td>Hash of the block the transaction is in. Only exists for confirmed transactions.</td>
+      </tr>
+      <tr>
+        <td>block_height</td>
+        <td>293331</td>
+        <td>Height of the block the transaction is in. Only exists for confirmed transactions.</td>
+      </tr>
+      <tr>
+        <td>hash</td>
+        <td>9a20...9e84</td>
+        <td>Hash of the transaction. While hashes are reasonably unique, using them as identifiers may be <a href="https://en.bitcoin.it/wiki/Transaction_Malleability">unsafe.</a></td>
+      </tr>
+      <tr>
+        <td>addresses</td>
+        <td>["1EJFhJDvS2ncpPotz6Lb3mGGchHfr3zgXv", "1N32Ts6eA2YHrcUjwZnzmPsLUnThZ6bDbb"]</td>
+        <td>Array of Bitcoin addresses involved in the transaction.</td>
+      </tr>
+      <tr>
+        <td>total</td>
+        <td>22180950000</td>
+        <td>Total amount exchanged in this transaction, in satoshis.</td>
+      </tr>
+      <tr>
+        <td>fees</td>
+        <td>10000</td>
+        <td>Fees collected by miners in the transaction, in satoshis.</td>
+      </tr>
+      <tr>
+        <td>relayed_by</td>
+        <td>50.154.237.192:8333</td>
+        <td>Address of the peer that sent us this transaction.</td>
+      </tr>
+      <tr>
+        <td>received</td>
+        <td>2014-03-31T04:23:44.833536145Z</td>
+        <td>When the transaction was received by BlockCypher servers.</td>
+      </tr>
+      <tr>
+        <td>confirmations</td>
+        <td>5</td>
+        <td>Number of subsequent blocks, including the block the transaction is in. Unconfirmed transactions have 0 for confirmation.</td>
+      </tr>
+      <tr>
+        <td>confirmed</td>
+        <td>2014-03-31T04:25:12.93471948Z</td>
+        <td>Date at which the transaction was included in a block, in ISO format.</td>
+      </tr>
+      <tr>
+        <td>preference</td>
+        <td>high</td>
+        <td>How likely is this transaction to make it to the next block, reflects the preference level miners have to include this transaction. Can be high, medium or low.</td>
+      </tr>
+      <tr>
+        <td>double_spend</td>
+        <td>false</td>
+        <td>Whether the transaction is a double spend (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+      </tr>
+      <tr>
+        <td>double_of</td>
+        <td>a672f0...</td>
+        <td>If the transaction is a double spend, what transaction it's double-spending  (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+      </tr>
+      <tr>
+        <td>receive_count</td>
+        <td>42</td>
+        <td>Unconfirmed transactions only. The number of peers that have sent this transaction to us (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+      </tr>
+      <tr>
+        <td>confidence</td>
+        <td>0.98819</td>
+        <td>Unconfirmed transactions only. Confidence this transaction will be confirmed (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+      </tr>
+      <tr>
+        <td>vin_sz</td>
+        <td>1</td>
+        <td>Total number of inputs</td>
+      </tr>
+      <tr>
+        <td>vout_sz</td>
+        <td>2</td>
+        <td>Total number of outputs</td>
+      </tr>
+      <tr>
+        <td>inputs</td>
+        <td>(see below)</td>
+        <td>Array of inputs, limited to 20. Use paging to get more inputs (see section on blocks).</td>
+      </tr>
+      <tr>
+        <td>outputs</td>
+        <td>(see below)</td>
+        <td>Array of outputs, limited to 20. Use paging to get more outputs (see section on blocks).</td>
+      </tr>
     </tbody>
   </table>
+</div>
 
-  <p>Inputs and outputs rely on scripts. When executed, they define if the transaction is valid and what type of transaction it is. We recognize 6 types of transaction scripts:</p>
-  <ol class="list">
-    <li>Pay-to-pubkey-hash (most common transaction transferring to a public key hash)</li>
-    <li>Pay-to-multi-pubkey-hash (multi-signatures transaction)</li>
-    <li>Pay-to-pubkey (used for mining transactions)</li>
-    <li>Pay-to-script-hash (used for transactions relying on arbitrary scripts, rarely used)</li>
-    <li>Null-data, sometimes called op-return (used to embed small chunks of data in the block chain)</li>
-    <li>Empty (no script present, mostly used for the input of a mining transaction)</li>
-    <li>Unknown (non-standard script)</li>
-  </ol>
+<p>Inputs and outputs rely on scripts. When executed, they define if the transaction is valid and what type of transaction it is. We recognize 6 types of transaction scripts:</p>
 
-  <p>Transaction inputs have the following properties:</p>
+<ol class="list">
+  <li>Pay-to-pubkey-hash (most common transaction transferring to a public key hash)</li>
+  <li>Pay-to-multi-pubkey-hash (multi-signatures transaction)</li>
+  <li>Pay-to-pubkey (used for mining transactions)</li>
+  <li>Pay-to-script-hash (used for transactions relying on arbitrary scripts, rarely used)</li>
+  <li>Null-data, sometimes called op-return (used to embed small chunks of data in the block chain)</li>
+  <li>Empty (no script present, mostly used for the input of a mining transaction)</li>
+  <li>Unknown (non-standard script)</li>
+</ol>
 
+<p>Transaction inputs have the following properties:</p>
+
+<div class="table-responsive">
   <table class="table">
     <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
@@ -300,9 +401,11 @@
     </tr>
     </tbody>
   </table>
+</div>
 
-  <p>Transaction outputs have the following properties:</p>
+<p>Transaction outputs have the following properties:</p>
 
+<div class="table-responsive">
   <table class="table">
     <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
     <tbody>
@@ -328,8 +431,11 @@
     </tr>
     </tbody>
   </table>
+</div>
+
 <p>Here's a sample return document for a given transaction:</p>
-  <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/txs/dd1f183348eb41eaaa9ecf8012f9cca3ecbae41a6349f0cc4bfd2b1a497fa3d0</code>
+
+<pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/txs/dd1f183348eb41eaaa9ecf8012f9cca3ecbae41a6349f0cc4bfd2b1a497fa3d0</code>
 <code class="language-javascript">{
     "block_hash": "0000000000000000189bba3564a63772107b5673c940c16f12662b3e8546b412",
     "block_height": 294322,
@@ -373,21 +479,27 @@
     ]
   }</code></pre>
 
-  <a class="title-anchor" id="zero_confirmations"></a>
-  <h2>Zero Confirmations and Double Spending</h2>
-  <p>To help you deal with zero confirmation (aka unconfirmed) transactions and the risk of <a href="https://en.bitcoin.it/wiki/Double-spending">double spending</a>, we provide 2 additional transaction properties:</p>
-  <ul class="list">
-    <li><b>receive_count</b>: the number of nodes in the bitcoin network we've received that transaction from so far, indicates how many nodes, at the minimum, accepted this transaction.</li>
-    <li><b>confidence</b>: the percentage chance (between 0 and 1) that a transaction will make it into a block over time, which accounts for double-spend or transaction loss. Note that it doesn't indicate <em>how fast</em> the confirmation will happen.</li>
-    <li><b>preference</b>: level of preference miners will have to include this transaction in their block, a high preference means the transaction is very likely to be confirmed in the next block, a low preference means it's likely to take several blocks (&gt;6).</li>
-  </ul>
-  <p>The confidence is calculated based on elapsed time as well as the receive count and is based on several public research results.</p>
-  <p>In addition, 2 other properties indicate when a double-spend has been detected:</p>
-  <ul class="list">
-    <li><b>double_spend</b>: a boolean indicating whether this transaction is a double spend.</li>
-    <li><b>double_spend_tx</b>: the hash of the other transaction involved in the double spend attempt.</li>
-  </ul>
-  <p>These properties are added to any unconfirmed transactions when retrieved either through the blockchain API or the address API. To be notified when a double spending attempt occurs, also see our <a href="#events">double spend webhook</a>.</p>
+<span class="title-anchor" id="zero_confirmations"></span>
+<h3 class="text-purple">Zero Confirmations and Double Spending</h3>
+
+<p>To help you deal with zero confirmation (aka unconfirmed) transactions and the risk of <a href="https://en.bitcoin.it/wiki/Double-spending">double spending</a>, we provide 2 additional transaction properties:</p>
+
+<ul class="list">
+  <li><b>receive_count</b>: the number of nodes in the bitcoin network we've received that transaction from so far, indicates how many nodes, at the minimum, accepted this transaction.</li>
+  <li><b>confidence</b>: the percentage chance (between 0 and 1) that a transaction will make it into a block over time, which accounts for double-spend or transaction loss. Note that it doesn't indicate <em>how fast</em> the confirmation will happen.</li>
+  <li><b>preference</b>: level of preference miners will have to include this transaction in their block, a high preference means the transaction is very likely to be confirmed in the next block, a low preference means it's likely to take several blocks (&gt;6).</li>
+</ul>
+
+<p>The confidence is calculated based on elapsed time as well as the receive count and is based on several public research results.</p>
+
+<p>In addition, 2 other properties indicate when a double-spend has been detected:</p>
+
+<ul class="list">
+  <li><b>double_spend</b>: a boolean indicating whether this transaction is a double spend.</li>
+  <li><b>double_spend_tx</b>: the hash of the other transaction involved in the double spend attempt.</li>
+</ul>
+
+<p>These properties are added to any unconfirmed transactions when retrieved either through the blockchain API or the address API. To be notified when a double spending attempt occurs, also see our <a href="#events">double spend webhook</a>.</p>
 
 <pre><code class="language-javascript">{
   "block_height": -1,
@@ -412,4 +524,5 @@
   "inputs": [...],
   "outputs": [...]
 }</code></pre>
-  <p>Finally, note that these measures are mitigation strategies you can rely on if you need fast transaction confirmations. They're not a bulletproof way to secure unconfirmed transactions and double spending attacks, even extremely unlikely, can still occur. Block chain confirmations ultimately provide the highest level of security.</p>
+
+<p>Finally, note that these measures are mitigation strategies you can rely on if you need fast transaction confirmations. They're not a bulletproof way to secure unconfirmed transactions and double spending attacks, even extremely unlikely, can still occur. Block chain confirmations ultimately provide the highest level of security.</p>

@@ -1,118 +1,175 @@
-<a class="title-anchor" id="payments"></a>
-<h1>Payments and Forwarding</h1>
+<span class="title-anchor" id="payments"></span>
+<h2 class="section-title">Payments and Forwarding</h2>
 
-  <a class="title-anchor" id="payments_summary"></a>
-  <h2>Summary</h2>
-  <p>Our payment API is the easiest way to accept payments securely without the need to create accounts for your users. It's also a generic way to automatically transfer value from one address to another. The 2 main use cases are:</p>
-  <ul class="list">
-    <li>Generate payment-specific addresses for which funds will automatically transfer to a main merchant address.</li>
-    <li>Easily fund a multisig address from any wallet by providing a using a classic address that will automatically transfer to the multisig.</li>
-  </ul>
-  <p>Payments are free (other than the required 0.1 mBTC miner fee).</p>
-  <p>To create a new payment forwarding:</p>
-  <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/payments
+<span class="title-anchor" id="payments_summary"></span>
+<h3 class="text-purple">Summary</h3>
+
+<p>Our payment API is the easiest way to accept payments securely without the need to create accounts for your users. It's also a generic way to automatically transfer value from one address to another. The 2 main use cases are:</p>
+
+<ul class="list">
+  <li>Generate payment-specific addresses for which funds will automatically transfer to a main merchant address.</li>
+  <li>Easily fund a multisig address from any wallet by providing a using a classic address that will automatically transfer to the multisig.</li>
+</ul>
+
+<p>Payments are free (other than the required 0.1 mBTC miner fee).</p>
+
+<p>To create a new payment forwarding:</p>
+
+<pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/payments
 {
   "destination": "15qx9ug952GWGTNn7Uiv6vode4RcGrRemh",
   "callback_url": "https://my.domain.com/callbacks/new-block"
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
-  <p>This will return the same document, adding the input address the payment should be directed to:</p>
-  <pre><code class="language-javascript">{
+
+<p>This will return the same document, adding the input address the payment should be directed to:</p>
+
+<pre><code class="language-javascript">{
   "input_address": "16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX",
   "destination": "15qx9ug952GWGTNn7Uiv6vode4RcGrRemh",
   "callback_url": "https://my.domain.com/callbacks/payments",
   "id": "399d0923-e920-48ee-8928-2051cbfbc369",
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
-  <p>Any money sent to 16uKw... will from then on be automatically transferred to 15qx9... In addition, the <em>callback_url</em> will be invoked with a POST request anytime a payment is made, providing a payment summary:</p>
-  <pre><code class="language-javascript">{
+
+<p>Any money sent to 16uKw... will from then on be automatically transferred to 15qx9... In addition, the <em>callback_url</em> will be invoked with a POST request anytime a payment is made, providing a payment summary:</p>
+
+<pre><code class="language-javascript">{
   "value": 100000000,
   "input_address": "16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX",
   "input_transaction_hash": "39bed5d007d7ccf3ff0c150b580bc73d6f7e8c988063953da3ef964761b28b0d",
   "transaction_hash": "1aa6103d8dfc067ad42c4b9a5b157d0fc403b85064d852abbc162bb274cd9def"
 }</code></pre>
-  <p>All payments will be debited with a 10,000 satoshis mining fee.</p>
-  <p>A quick and easy way to test payments is to use curl to create a simple one without a callback (replace with your own address):</p>
-  <pre><code class="language-bash">$ curl -d '{"destination": "17astdTmG8zzVmry8mV8A7atAr3XefEgRX"}' https://api.blockcypher.com/v1/btc/main/payments</code></pre>
-  <p>Send some money to the returned <em>input_address</em> and watch it being instantly forwarded to your desintation address.</p>
 
-  <a class="title-anchor" id="payments_details"></a>
-  <h2>Details</h2>
-  <p>The following endpoints are available for payments:</p>
+<p>All payments will be debited with a 10,000 satoshis mining fee.</p>
+
+<p>A quick and easy way to test payments is to use curl to create a simple one without a callback (replace with your own address):</p>
+
+<pre><code class="language-bash">$ curl -d '{"destination": "17astdTmG8zzVmry8mV8A7atAr3XefEgRX"}' https://api.blockcypher.com/v1/btc/main/payments</code></pre>
+
+<p>Send some money to the returned <em>input_address</em> and watch it being instantly forwarded to your desintation address.</p>
+
+<span class="title-anchor" id="payments_details"></span>
+<h3 class="text-purple">Details</h3>
+
+<p>The following endpoints are available for payments:</p>
+
+<div class="table-responsive">
   <table class="table">
-    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>URL Pattern</th>
+        <th>Example</th>
+        <th>Method</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
-    <tr>
-      <td>Create</td><td>/v1/{coin}/{chain}/payments</td><td>/v1/btc/main/payments<td>POST</td></td>
-      <td>Sets up a new payment, returning the <em>input_address</em> that will automatically forward to the <em>destination</em> address as well as the payment id.</td>
-    </tr>
-    <tr>
-      <td>List</td><td>/v1/{coin}/{chain}/payments?token={token}</td><td>/v1/btc/main/payments?token=14df7860-eb44-11e3-ac10-0800200c9a66<td>GET</td></td>
-      <td>Returns an array of payments associated with the provided token with their ids.</td>
-    </tr>
-    <tr>
-      <td>Delete</td><td>/v1/{coin}/{chain}/payments/{id}</td><td>/v1/btc/main/payments/399d0923-e920-48ee-8928-2051cbfbc369<td>DELETE</td></td>
-      <td>Deletes a payment using its id.</td>
-    </tr>
+      <tr>
+        <td>Create</td><td>/v1/{coin}/{chain}/payments</td><td>/v1/btc/main/payments<td>POST</td></td>
+        <td>Sets up a new payment, returning the <em>input_address</em> that will automatically forward to the <em>destination</em> address as well as the payment id.</td>
+      </tr>
+      <tr>
+        <td>List</td><td>/v1/{coin}/{chain}/payments?token={token}</td><td>/v1/btc/main/payments?token=14df7860-eb44-11e3-ac10-0800200c9a66<td>GET</td></td>
+        <td>Returns an array of payments associated with the provided token with their ids.</td>
+      </tr>
+      <tr>
+        <td>Delete</td><td>/v1/{coin}/{chain}/payments/{id}</td><td>/v1/btc/main/payments/399d0923-e920-48ee-8928-2051cbfbc369<td>DELETE</td></td>
+        <td>Deletes a payment using its id.</td>
+      </tr>
     </tbody>
   </table>
-  <p>A payment can have the following properties:</p>
+</div>
+
+<p>A payment can have the following properties:</p>
+
+<div class="table-responsive">
   <table class="table">
-    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
-    <tr>
-      <td>id</td><td>399d0923-e920-48ee-8928-2051cbfbc369</td>
-      <td>Identifier of the payment forwarding, generated when a new payment is created.</td>
-    </tr>
-    <tr>
-      <td>token</td><td>f47ac10b-58cc-4372-a567-0e02b2c3d479</td>
-      <td>User token, mandatory.</td>
-    </tr>
-    <tr>
-      <td>destination</td><td>15qx9ug952GWGTNn7Uiv6vode4RcGrRemh</td>
-      <td>The destination address money will automatically be forwarded to. Required.</td>
-    </tr>
-    <tr>
-      <td>input_address</td><td>16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX</td>
-      <td>The address the payment should be made to to be forwarded, generated when the payment forwarding is created.</td>
-    </tr>
-    <tr>
-      <td>callback_url</td><td>https://my.domain.com/callbacks/payments</td>
-      <td>The URL to call anytime a new payment is forwarded. Optional.</td>
-    </tr>
-    <tr>
-      <td>enable_confirmations</td><td>true</td>
-      <td>Whether to also call the <em>callback_url</em> with subsequent confirmations of the forwarding transactions. Automatically sets up a WebHook.</td>
-    </tr>
-    <tr>
-      <td>transactions</td><td>["39bed5d...", "1aa6103..."]</td>
-      <td>History of forwarding transactions for this payment.</td>
-    </tr>
+      <tr>
+        <td>id</td>
+        <td>399d0923-e920-48ee-8928-2051cbfbc369</td>
+        <td>Identifier of the payment forwarding, generated when a new payment is created.</td>
+      </tr>
+      <tr>
+        <td>token</td>
+        <td>f47ac10b-58cc-4372-a567-0e02b2c3d479</td>
+        <td>User token, mandatory.</td>
+      </tr>
+      <tr>
+        <td>destination</td>
+        <td>15qx9ug952GWGTNn7Uiv6vode4RcGrRemh</td>
+        <td>The destination address money will automatically be forwarded to. Required.</td>
+      </tr>
+      <tr>
+        <td>input_address</td>
+        <td>16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX</td>
+        <td>The address the payment should be made to to be forwarded, generated when the payment forwarding is created.</td>
+      </tr>
+      <tr>
+        <td>callback_url</td>
+        <td>https://my.domain.com/callbacks/payments</td>
+        <td>The URL to call anytime a new payment is forwarded. Optional.</td>
+      </tr>
+      <tr>
+        <td>enable_confirmations</td>
+        <td>true</td>
+        <td>Whether to also call the <em>callback_url</em> with subsequent confirmations of the forwarding transactions. Automatically sets up a WebHook.</td>
+      </tr>
+      <tr>
+        <td>transactions</td>
+        <td>["39bed5d...", "1aa6103..."]</td>
+        <td>History of forwarding transactions for this payment.</td>
+      </tr>
     </tbody>
   </table>
-  <p>When a new payment is forwarded, the document sent to you at the <em>callback_url</em> will have the following properties:</p>
+</div>
+
+<p>When a new payment is forwarded, the document sent to you at the <em>callback_url</em> will have the following properties:</p>
+
+<div class="table-responsive">
   <table class="table">
-    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
-    <tr>
-      <td>value</td><td>100000000</td>
-      <td>Amount sent to the destination address, in Satoshi.</td>
-    </tr>
-    <tr>
-      <td>input_address</td><td>16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX</td>
-      <td>The address the payment was originally sent to.</td>
-    </tr>
-    <tr>
-      <td>destination</td><td>15qx9ug952GWGTNn7Uiv6vode4RcGrRemh</td>
-      <td>The address the payment amount is being forwarded to.</td>
-    </tr>
-    <tr>
-      <td>input_transaction_hash</td><td>39bed5d...</td>
-      <td>The transaction hash that credited the input address.</td>
-    </tr>
-    <tr>
-      <td>transaction_hash</td><td>1aa6103...</td>
-      <td>The transaction hash of the generated transaction that forwards the payment from the input address to the destination.</td>
-    </tr>
+      <tr>
+        <td>value</td>
+        <td>100000000</td>
+        <td>Amount sent to the destination address, in Satoshi.</td>
+      </tr>
+      <tr>
+        <td>input_address</td>
+        <td>16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX</td>
+        <td>The address the payment was originally sent to.</td>
+      </tr>
+      <tr>
+        <td>destination</td>
+        <td>15qx9ug952GWGTNn7Uiv6vode4RcGrRemh</td>
+        <td>The address the payment amount is being forwarded to.</td>
+      </tr>
+      <tr>
+        <td>input_transaction_hash</td>
+        <td>39bed5d...</td>
+        <td>The transaction hash that credited the input address.</td>
+      </tr>
+      <tr>
+        <td>transaction_hash</td>
+        <td>1aa6103...</td>
+        <td>The transaction hash of the generated transaction that forwards the payment from the input address to the destination.</td>
+      </tr>
     </tbody>
   </table>
+</div>
