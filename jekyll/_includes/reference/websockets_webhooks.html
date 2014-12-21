@@ -1,110 +1,165 @@
-<a class="title-anchor" id="websocket_webhook"></a>
-<h1>WebSockets and WebHooks</h1>
-  <a class="title-anchor" id="events"></a>
-  <h2>Events</h2>
-  <p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
-  <p>We support both WebSockets and WebHooks:</p>
-  <ul class="list">
-    <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> - used typically in client applications when a web server is not already running: e.g., a web page displaying the most recent transactions or a wallet app updating its UI when a transaction has been confirmed. Websockets are less reliable in longer interactions (over several hours) because they require a connection to stay open.</li> 
-    <li><a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a> - the most reliable way to get notified but requires running a web server to receive the calls. We automatically retry HTTP requests 3 times.</li>
-  </ul>
-  <p>Both WebSockets and WebHooks can forward the following events:</p>
-  <ul class="list">
-    <li><em>unconfirmed-tx</em>: Triggered for every new transaction before it goes into a block; basically, for every unconfirmed transactions. The payload is the unconfirmed <a href="#transactions">transaction</a>.</li>
-    <li><em>new-block</em>: Triggered for every new block added to the main chain. The payload is the <a href="#blocks">block</a>.</li>
-    <li><em>confirmed-tx</em>: Triggered for every new transaction making it into a new block on the main chain; basically, for every first transaction confirmation. This is equivalent to listening to the above events and fetching each transaction in the block. The payload is the confirmed <a href="#transactions">transaction</a>.</li>
-    <li><em>tx-confirmation</em>: Simplifies listening to confirmations on all transactions on a given address up to a provided threshold (maximum 10, default 6). Use the "confirmations" property to specify the number of confirmations desired.</li>
-    <li><em>double-spend-tx</em>: Triggered any time a double spend is detected. The payload is the transaction that triggered the even and the hash of the transaction that it's trying to double spend is included in its <em>double_spend_tx</em> property.</li>
-  </ul>
+<span class="title-anchor" id="websocket_webhook"></span>
+<h2 class="section-title">WebSockets and WebHooks</h2>
 
-  <p>To subscribe to an event, send a document with the following format:</p>
-  <pre><code class="language-javascript">{
+<span class="title-anchor" id="events"></span>
+<h3 class="text-purple">Events</h3>
+
+<p>Crypto-currencies are highly transactional systems. Usage patterns require knowing when an event occurs: e.g., when a transaction is included into a block get its first confirmation. We provide push APIs to facilitate those use cases (instead of polling resources).</p>
+
+<p>We support both WebSockets and WebHooks:</p>
+
+<ul class="list">
+  <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> - used typically in client applications when a web server is not already running: e.g., a web page displaying the most recent transactions or a wallet app updating its UI when a transaction has been confirmed. Websockets are less reliable in longer interactions (over several hours) because they require a connection to stay open.</li> 
+  <li><a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a> - the most reliable way to get notified but requires running a web server to receive the calls. We automatically retry HTTP requests 3 times.</li>
+</ul>
+
+<p>Both WebSockets and WebHooks can forward the following events:</p>
+
+<ul class="list">
+  <li><em>unconfirmed-tx</em>: Triggered for every new transaction before it goes into a block; basically, for every unconfirmed transactions. The payload is the unconfirmed <a href="#transactions">transaction</a>.</li>
+  <li><em>new-block</em>: Triggered for every new block added to the main chain. The payload is the <a href="#blocks">block</a>.</li>
+  <li><em>confirmed-tx</em>: Triggered for every new transaction making it into a new block on the main chain; basically, for every first transaction confirmation. This is equivalent to listening to the above events and fetching each transaction in the block. The payload is the confirmed <a href="#transactions">transaction</a>.</li>
+  <li><em>tx-confirmation</em>: Simplifies listening to confirmations on all transactions on a given address up to a provided threshold (maximum 10, default 6). Use the "confirmations" property to specify the number of confirmations desired.</li>
+  <li><em>double-spend-tx</em>: Triggered any time a double spend is detected. The payload is the transaction that triggered the even and the hash of the transaction that it's trying to double spend is included in its <em>double_spend_tx</em> property.</li>
+</ul>
+
+<p>To subscribe to an event, send a document with the following format:</p>
+
+<pre><code class="language-javascript">{
   "event": "unconfirmed-tx",
   "address": "15qx9ug952GWGTNn7Uiv6vode4RcGrRemh",
   "token": "b972c4c0-180f-11e4-8c21-0800200c9a66"
 }</code></pre>
-  <p>The token is optional and is the value we provide you (see <a href="#rate_limits">rate limits</a>). Currently supported properties are:</p>
+
+<p>The token is optional and is the value we provide you (see <a href="#rate_limits">rate limits</a>). Currently supported properties are:</p>
+
+<div class="table-responsive">
   <table class="table">
-    <thead><tr><th>Key</th><th>Example</th><th>Description</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Key</th>
+        <th>Example</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
-    <tr>
-      <td>event</td><td>"event": "new-block"</td>
-      <td>Type of event to receive. See above for the supported event types.</td>
-    </tr>
-    <tr>
-      <td>hash</td><td>"hash": "346a5...b77e5" (abbreviated)</td>
-      <td>Only objects with a matching hash will be sent. The hash can either be for a block or a transaction.</td>
-    </tr>
-    <tr>
-      <td>address</td><td>"address": "1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"</td>
-      <td>Only transactions associated with the given address will be sent.</td>
-    </tr>
-    <tr>
-      <td>script</td><td>"script": "pay-to-script-hash"</td>
-      <td>Only transactions with an output script of the provided type will be sent. The recognized types of scripts are: pay-to-pubkey-hash, pay-to-multi-pubkey-hash, pay-to-pubkey, pay-to-script-hash, null-data (sometimes called OP_RETURN), empty or unknown.</td>
-    </tr>
+      <tr>
+        <td>event</td>
+        <td>"event": "new-block"</td>
+        <td>Type of event to receive. See above for the supported event types.</td>
+      </tr>
+      <tr>
+        <td>hash</td>
+        <td>"hash": "346a5...b77e5" (abbreviated)</td>
+        <td>Only objects with a matching hash will be sent. The hash can either be for a block or a transaction.</td>
+      </tr>
+      <tr>
+        <td>address</td>
+        <td>"address": "1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"</td>
+        <td>Only transactions associated with the given address will be sent.</td>
+      </tr>
+      <tr>
+        <td>script</td>
+        <td>"script": "pay-to-script-hash"</td>
+        <td>Only transactions with an output script of the provided type will be sent. The recognized types of scripts are: pay-to-pubkey-hash, pay-to-multi-pubkey-hash, pay-to-pubkey, pay-to-script-hash, null-data (sometimes called OP_RETURN), empty or unknown.</td>
+      </tr>
     </tbody>
   </table>
-  <p>Depending on the provided properties, the message content will be either a transaction or a block.</p>
+</div>
 
-  <a class="title-anchor" id="websockets"></a>
-  <h2>WebSockets</h2>
-  <p>Opening a WebSocket to listen to our feeds is easy:</p>
-  <pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
-  <p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, the JSON document describing the event of interest should be sent.</p>
-  <p>In addition to standard events, websockets accept a <em>ping</em> event. If you send the following, you will receive the same message back with "ping" replaced by "pong":</p>
-  <pre><code class="language-javascript">{
+<p>Depending on the provided properties, the message content will be either a transaction or a block.</p>
+
+<span class="title-anchor" id="websockets"></span>
+<h3 class="text-purple">WebSockets</h3>
+
+<p>Opening a WebSocket to listen to our feeds is easy:</p>
+
+<pre><code class="language-javascript">new WebSocket("ws://socket.blockcypher.com/v1/btc/main");</code></pre>
+
+<p>The code may differ if you're not programming in Javascript but the URL will be identical. Once the socket is opened, the JSON document describing the event of interest should be sent.</p>
+
+<p>In addition to standard events, websockets accept a <em>ping</em> event. If you send the following, you will receive the same message back with "ping" replaced by "pong":</p>
+
+<pre><code class="language-javascript">{
   "event": "ping"
 }</code></pre>
-  <p>A regular ping (i.e. every 20 seconds) allows the websocket to stay connected for a longer period of time.</p>
 
-  <h3>Example</h3>
-  <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
+<p>A regular ping (i.e. every 20 seconds) allows the websocket to stay connected for a longer period of time.</p>
 
-  <pre data-src="{{ "js/samples/browser-websocket.js" | prepend: site.baseurl }}"></pre>
-  <button class="tryme btn btn-primary" type="button" id="browser-websocket">Try me!</button>
+<h4>Example</h4>
 
-  <a class="title-anchor" id="webhooks"></a>
-  <h2>WebHooks</h2>
-  <p>WebHooks have the same interaction format but with two key differences:</p>
-  <ul class="list">
-    <li>The JSON document describing the event subscription should be sent using a POST request to https://api.blockcypher.com/v1/btc/main/hooks and include an additional property containing the URL to be called.</li>
-    <li>The transaction or block associated with the event you subscribed to will be POSTed to the provided URL. The POST request will also include a X-EventType HTTP header specifying the type of event which triggered the request.</li>
-  </ul>
-  <p>See <a href="#events">above</a> for all the different type of events you can listen to with a WebHook. To create a new WebHook:</p>
-  <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/hooks
+<p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
+
+<pre id="websocket-example" data-src="{{ "js/samples/browser-websocket.js" | prepend: site.baseurl }}"></pre>
+
+<p><button class="tryme btn btn-primary" type="button" id="browser-websocket">Try me!</button></p>
+
+<span class="title-anchor" id="webhooks"></span>
+<h3 class="text-purple">WebHooks</h3>
+
+<p>WebHooks have the same interaction format but with two key differences:</p>
+
+<ul class="list">
+  <li>The JSON document describing the event subscription should be sent using a POST request to https://api.blockcypher.com/v1/btc/main/hooks and include an additional property containing the URL to be called.</li>
+  <li>The transaction or block associated with the event you subscribed to will be POSTed to the provided URL. The POST request will also include a X-EventType HTTP header specifying the type of event which triggered the request.</li>
+</ul>
+
+<p>See <a href="#events">above</a> for all the different type of events you can listen to with a WebHook. To create a new WebHook:</p>
+
+<pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/hooks
 {
   "event": "new-block",
   "url": "https://my.domain.com/callbacks/new-block"
   "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 }</code></pre>
 
-  <p>To secure the endpoint at the callback URL you give to us and prevent a potential attacker from calling it, we recommend you append a secret as a URL parameter to that URL. We will call you leaving the URL unchanged, which allows you to test for that parameter. For example:</p>
-  <pre><code>https://my.domain.com/api/callbacks/doublespend?secret=justbetweenus</code></pre>
-  <p>The use of https is also recommended to prevent eavesdropper from potentially capturing the secret.</p>
+<p>To secure the endpoint at the callback URL you give to us and prevent a potential attacker from calling it, we recommend you append a secret as a URL parameter to that URL. We will call you leaving the URL unchanged, which allows you to test for that parameter. For example:</p>
 
-  <p>A simple way to test a WebHook is to use curl and <a href="http://requestb.in/">requestb.in</a>. First go to <a href="http://requestb.in/">requestb.in</a> and create a new bin. Then use curl to create a BlockCypher WebHook that will POST to your bin. For example to get every new block:</p>
+<pre><code>https://my.domain.com/api/callbacks/doublespend?secret=justbetweenus</code></pre>
 
-  <pre><code class="language-bash">$ curl -H "Content-Type: application/json" -d '{"event":"new-block", "url": "http://requestb.in/YOUR_BIN"}' https://api.blockcypher.com/v1/btc/main/hooks</code></pre>
+<p>The use of https is also recommended to prevent eavesdropper from potentially capturing the secret.</p>
 
-  <p>For an example of using WebHooks written in node.js, refer to our <a href="https://github.com/blockcypher/documentation/blob/gh-pages/samples/nodejs-webhook.js">sample</a>.</p>
+<p>A simple way to test a WebHook is to use curl and <a href="http://requestb.in/">requestb.in</a>. First go to <a href="http://requestb.in/">requestb.in</a> and create a new bin. Then use curl to create a BlockCypher WebHook that will POST to your bin. For example to get every new block:</p>
 
-  <p>If calling the URL configured in a WebHook fails, it will be retried 3 times. If a WebHook fails to deliver 50 distinct events, the WebHook will be disabled.</p>
+<pre><code class="language-bash">$ curl -H "Content-Type: application/json" -d '{"event":"new-block", "url": "http://requestb.in/YOUR_BIN"}' https://api.blockcypher.com/v1/btc/main/hooks</code></pre>
 
+<p>For an example of using WebHooks written in node.js, refer to our <a href="https://github.com/blockcypher/documentation/blob/gh-pages/samples/nodejs-webhook.js">sample</a>.</p>
+
+<p>If calling the URL configured in a WebHook fails, it will be retried 3 times. If a WebHook fails to deliver 50 distinct events, the WebHook will be disabled.</p>
+
+<div class="table-responsive">
   <table class="table">
-    <thead><tr><th>Name</th><th>URL Pattern</th><th>Example</th><th>Method</th><th>Description</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>URL Pattern</th>
+        <th>Example</th>
+        <th>Method</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
-    <tr>
-      <td>Create</td><td>/v1/{coin}/{chain}/hooks</td><td>/v1/btc/main/hooks<td>POST</td></td>
-      <td>Creates a new webhook, returned its information along with its id.</td>
-    </tr>
-    <tr>
-      <td>List</td><td>/v1/{coin}/{chain}/hooks?token={token}</td><td>/v1/btc/main/hooks?token=14df7860-eb44-11e3-ac10-0800200c9a66<td>GET</td></td>
-      <td>Returns an array of webhooks associated with the provided token.</td>
-    </tr>
-    <tr>
-      <td>Delete</td><td>/v1/{coin}/{chain}/hooks/{id}</td><td>/v1/btc/main/hooks/399d0923-e920-48ee-8928-2051cbfbc369<td>DELETE</td></td>
-      <td>Deletes a webhook using its id.</td>
-    </tr>
+      <tr>
+        <td>Create</td>
+        <td>/v1/{coin}/{chain}/hooks</td>
+        <td>/v1/btc/main/hooks</td>
+        <td>POST</td>
+        <td>Creates a new webhook, returned its information along with its id.</td>
+      </tr>
+      <tr>
+        <td>List</td>
+        <td>/v1/{coin}/{chain}/hooks?token={token}</td>
+        <td>/v1/btc/main/hooks?token=14df7860-eb44-11e3-ac10-0800200c9a66</td>
+        <td>GET</td>
+        <td>Returns an array of webhooks associated with the provided token.</td>
+      </tr>
+      <tr>
+        <td>Delete</td>
+        <td>/v1/{coin}/{chain}/hooks/{id}</td>
+        <td>/v1/btc/main/hooks/399d0923-e920-48ee-8928-2051cbfbc369</td>
+        <td>DELETE</td>
+        <td>Deletes a webhook using its id.</td>
+      </tr>
     </tbody>
   </table>
+</div>

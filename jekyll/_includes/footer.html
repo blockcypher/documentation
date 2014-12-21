@@ -35,7 +35,8 @@
 <script src="{{ "js/prism.js" | prepend: site.baseurl }}"></script>
 <script>
   $('button.tryme').click(function(e) {
-    eval($(this).prev().children().text());
+    //eval($(this).prev().children().text());
+    eval($('#websocket-example').text());
   });
 
   // GA

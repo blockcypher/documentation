@@ -67,15 +67,24 @@
     </thead>
     <tbody>
       <tr>
-        <td>Create</td><td>/v1/{coin}/{chain}/payments</td><td>/v1/btc/main/payments<td>POST</td></td>
+        <td>Create</td>
+        <td>/v1/{coin}/{chain}/payments</td>
+        <td>/v1/btc/main/payments</td>
+        <td>POST</td>
         <td>Sets up a new payment, returning the <em>input_address</em> that will automatically forward to the <em>destination</em> address as well as the payment id.</td>
       </tr>
       <tr>
-        <td>List</td><td>/v1/{coin}/{chain}/payments?token={token}</td><td>/v1/btc/main/payments?token=14df7860-eb44-11e3-ac10-0800200c9a66<td>GET</td></td>
+        <td>List</td>
+        <td>/v1/{coin}/{chain}/payments?token={token}</td>
+        <td>/v1/btc/main/payments?token=14df7860-eb44-11e3-ac10-0800200c9a66</td>
+        <td>GET</td>
         <td>Returns an array of payments associated with the provided token with their ids.</td>
       </tr>
       <tr>
-        <td>Delete</td><td>/v1/{coin}/{chain}/payments/{id}</td><td>/v1/btc/main/payments/399d0923-e920-48ee-8928-2051cbfbc369<td>DELETE</td></td>
+        <td>Delete</td>
+        <td>/v1/{coin}/{chain}/payments/{id}</td>
+        <td>/v1/btc/main/payments/399d0923-e920-48ee-8928-2051cbfbc369</td>
+        <td>DELETE</td>
         <td>Deletes a payment using its id.</td>
       </tr>
     </tbody>
