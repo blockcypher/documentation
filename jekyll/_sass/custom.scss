@@ -75,10 +75,13 @@ body {
 	padding:30px;
 	@include chain-gradient();
 }
-#content-table .active {
-	border-right:2px solid $purple;
+#content-table {
+	line-height:1.2em;
 	.active {
-		background:#eee;
+		border-right:2px solid $purple;
+		.active {
+			background:#eee;
+		}
 	}
 }
 .affix {
@@ -97,6 +100,9 @@ body {
 	background:url(#{$asset-path}logo.svg) center no-repeat;
 	height:50px;
 	width:313px;
+	@media screen and (max-width: 991px) {
+	    width:220px;
+ 	}
 }
 .navbar-default .navbar-nav > li > a {
 	color: #929191;
@@ -133,5 +139,12 @@ body {
 		border-color:#888;
 	}
 }
-
-
+// Media query
+@media (max-width:767px){
+	.main-footer, .main-footer .text-right {
+		text-align: center !important;
+	}
+	.pager .text-right, .pager .text-left {
+		text-align: center !important;
+	}
+}
