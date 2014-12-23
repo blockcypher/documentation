@@ -4,7 +4,7 @@
 <p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. A collection resource and a detail resource make up the Address API.</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -54,7 +54,7 @@
 <p>The generation API is offered for convenience purpose, for security reasons please always use HTTPS to use this resource. No information is required in the POST request, the following information will be returned:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -64,17 +64,17 @@
     </thead>
     <tbody>
       <tr>
-        <td>address</td>
+        <td><code>address</code></td>
         <td>181w71oR7nTEsKducLBTUJkdbTvLDQzymL</td>
         <td>Standard address representation.</td>
       </tr>
       <tr>
-        <td>public</td>
+        <td><code>public</code></td>
         <td>028b3b3fc5d437...</td>
         <td>Public key.</td>
       </tr>
       <tr>
-        <td>private</td>
+        <td><code>private</code></td>
         <td>028b3b3fc5d437...</td>
         <td>Private key.</td>
       </tr>
@@ -102,7 +102,7 @@
 <p>A request to a given address returns the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -112,52 +112,52 @@
     </thead>
     <tbody>
       <tr>
-        <td>address</td>
+        <td><code>address</code></td>
         <td>1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</td>
         <td>The requested address.</td>
       </tr>
       <tr>
-        <td>balance</td>
+        <td><code>balance</code></td>
         <td>12550020000</td>
         <td>Balance on the specified address, in satoshi. This is the difference between outputs and inputs on this address, for transactions that have been included into a block (confirmations &gt;  0)</td>
       </tr>
       <tr>
-        <td>unconfirmed_balance</td>
+        <td><code>unconfirmed_balance</code></td>
         <td>-100000000</td>
         <td>Balance of unconfirmed transactions for this address, in satoshi. Can be negative (if unconfirmed transactions are just spending.). Only unconfirmed transactions (haven't made it into a block) are included.</td>
       </tr>
       <tr>
-        <td>final_balance</td>
+        <td><code>final_balance</code></td>
         <td>124500020000</td>
         <td>Balance including confirmed and unconfirmed transactions for this address, in satoshi.</td>
       </tr>
       <tr>
-        <td>n_tx</td>
+        <td><code>n_tx</code></td>
         <td>12</td>
         <td>Number of confirmed transactions on the specified address. Only transactions that have made it into a block (confirmations &gt;  0) are counted.</td>
       </tr>
       <tr>
-        <td>unconfirmed_n_tx</td>
+        <td><code>unconfirmed_n_tx</code></td>
         <td>2</td>
         <td>Number of unconfirmed transactions for this address. Only unconfirmed transactions (haven't made it into a block) are counted.</td>
       </tr>
       <tr>
-        <td>final_n_tx</td>
+        <td><code>final_n_tx</code></td>
         <td>14</td>
         <td>Final number of transactions, including unconfirmed transactions, for this address.</td>
       </tr>
       <tr>
-        <td>tx_url</td>
+        <td><code>tx_url</code></td>
         <td>https://api.blockcypher.com/v1/btc/main/txs/</td>
         <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
       </tr>
       <tr>
-        <td>txrefs</td>
+        <td><code>txrefs</code></td>
         <td>[...]</td>
         <td>All transaction inputs and outputs for the specified address.</td>
       </tr>
       <tr>
-        <td>unconfirmed_txrefs</td>
+        <td><code>unconfirmed_txrefs</code></td>
         <td>[...]</td>
         <td>All unconfirmed transaction inputs and outputs for the specified address.</td>
       </tr>
@@ -168,7 +168,7 @@
 <p>The arrays of transaction inputs or outputs reference in <em>txrefs</em> and <em>unconfirmed_txrefs</em> have the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -178,67 +178,67 @@
     </thead>
     <tbody>
       <tr>
-        <td>tx_hash</td>
+        <td><code>tx_hash</code></td>
         <td>0d7ac056a...</td>
         <td>One of the transaction hashes for the specified address.</td>
       </tr>
       <tr>
-        <td>block_height</td>
+        <td><code>block_height</code></td>
         <td>292781</td>
         <td>Height of the block for the transaction.</td>
       </tr>
       <tr>
-        <td>confirmations</td>
+        <td><code>confirmations</code></td>
         <td>1092</td>
         <td>Number of confirmations for the transaction.</td>
       </tr>
       <tr>  
-        <td>tx_input_n</td>
+        <td><code>tx_input_n</code></td>
         <td>1</td>
         <td>Index of the input in the transaction. It's a negative number for an output.</td>
       </tr>
       <tr>
-        <td>tx_output_n</td>
+        <td><code>tx_output_n</code></td>
         <td>-1</td>
         <td>Index of the output in the transaction. It's a negative number for an input.</td>
       </tr>
       <tr>
-        <td>value</td>
+        <td><code>value</code></td>
         <td>28318177</td>
         <td>The value transferred by the particular input or output.</td>
       </tr>
       <tr>
-        <td>preference</td>
+        <td><code>preference</code></td>
         <td>high</td>
         <td>How likely is the transaction to make it to the next block, reflects the preference level miners have to include this transaction. Can be high, medium or low.</td>
       </tr>
       <tr>
-        <td>spent</td>
+        <td><code>spent</code></td>
         <td>true</td>
         <td>Is 'true' if the output was spent.</td>
       </tr>
       <tr>
-        <td>spent_by</td>
+        <td><code>spent_by</code></td>
         <td>b4735a06...</td>
         <td>Hash of the transaction that spent this output, if it was spent.</td>
       </tr>
       <tr>
-        <td>double_spend</td>
+        <td><code>double_spend</code></td>
         <td>false</td>
         <td>Whether the transaction is a double spend (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>double_of</td>
+        <td><code>double_of</code></td>
         <td>a672f0...</td>
         <td>If the transaction is a double spend, what transaction it's double-spending  (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>receive_count</td>
+        <td><code>receive_count</code></td>
         <td>42</td>
         <td>Unconfirmed transactions only. The number of peers that have sent this transaction to us (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>confidence</td>
+        <td><code>confidence</code></td>
         <td>0.98819</td>
         <td>Unconfirmed transactions only. Confidence this transaction will be confirmed (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>

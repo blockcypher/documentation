@@ -19,7 +19,7 @@
 <p>This is accomplished with two simple POST requests and a third one which allows you to push raw hexadecimal transactions:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -90,7 +90,7 @@
 <p>The document returned by a call to new uses the following format:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -100,27 +100,27 @@
     </thead>
     <tbody>
       <tr>
-        <td>errors</td>
+        <td><code>errors</code></td>
         <td>[{"error": ""Address 1DEP... with balance 4271116 does not have enough funds to transfer 500000000."}]</td>
         <td>Array of errors encountered while generating the transaction. If the generation is successful, nothing will appear.</td>
       </tr>
       <tr>
-        <td>tx</td>
+        <td><code>tx</code></td>
         <td>tx: {...}</td>
         <td>Temporary transaction, fully filled up except for the input scripts (requires signature).</td>
       </tr>
       <tr>
-        <td>tosign</td>
+        <td><code>tosign</code></td>
         <td>["04779733bb...", "0396ea6f1b..."]</td>
         <td>Array of hexadecimal-encoded data to sign, one for each generated input.</td>
       </tr>
       <tr>
-        <td>(signatures)</td>
+        <td><code>signatures</code></td>
         <td>["bcd2c363a2...", "dc621478..."]</td>
         <td>Array of hexadecimal-encoded signatures you need to provide.</td>
       </tr>
       <tr>
-        <td>(pubkeys)</td>
+        <td><code>pubkeys</code></td>
         <td>["02c8d29d...", "02c8d29d..."]</td>
         <td>The public key for each generated input (in general, repeat the public key corresponding to the provided input address).</td>
       </tr>

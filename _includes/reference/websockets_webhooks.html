@@ -34,7 +34,7 @@
 <p>The token is optional and is the value we provide you (see <a href="#rate_limits">rate limits</a>). Currently supported properties are:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Key</th>
@@ -44,22 +44,22 @@
     </thead>
     <tbody>
       <tr>
-        <td>event</td>
+        <td><code>event</code></td>
         <td>"event": "new-block"</td>
         <td>Type of event to receive. See above for the supported event types.</td>
       </tr>
       <tr>
-        <td>hash</td>
+        <td><code>hash</code></td>
         <td>"hash": "346a5...b77e5" (abbreviated)</td>
         <td>Only objects with a matching hash will be sent. The hash can either be for a block or a transaction.</td>
       </tr>
       <tr>
-        <td>address</td>
+        <td><code>address</code></td>
         <td>"address": "1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"</td>
         <td>Only transactions associated with the given address will be sent.</td>
       </tr>
       <tr>
-        <td>script</td>
+        <td><code>script</code></td>
         <td>"script": "pay-to-script-hash"</td>
         <td>Only transactions with an output script of the provided type will be sent. The recognized types of scripts are: pay-to-pubkey-hash, pay-to-multi-pubkey-hash, pay-to-pubkey, pay-to-script-hash, null-data (sometimes called OP_RETURN), empty or unknown.</td>
       </tr>
@@ -86,7 +86,7 @@
 
 <p>A regular ping (i.e. every 20 seconds) allows the websocket to stay connected for a longer period of time.</p>
 
-<h4>Example</h4>
+<h3>Example</h3>
 
 <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
 
@@ -115,7 +115,7 @@
 
 <p>To secure the endpoint at the callback URL you give to us and prevent a potential attacker from calling it, we recommend you append a secret as a URL parameter to that URL. We will call you leaving the URL unchanged, which allows you to test for that parameter. For example:</p>
 
-<pre><code>https://my.domain.com/api/callbacks/doublespend?secret=justbetweenus</code></pre>
+<pre><code class="language-javascript">https://my.domain.com/api/callbacks/doublespend?secret=justbetweenus</code></pre>
 
 <p>The use of https is also recommended to prevent eavesdropper from potentially capturing the secret.</p>
 
@@ -128,7 +128,7 @@
 <p>If calling the URL configured in a WebHook fails, it will be retried 3 times. If a WebHook fails to deliver 50 distinct events, the WebHook will be disabled.</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -140,21 +140,21 @@
     </thead>
     <tbody>
       <tr>
-        <td>Create</td>
+        <td><code>Create</code></td>
         <td>/v1/{coin}/{chain}/hooks</td>
         <td>/v1/btc/main/hooks</td>
         <td>POST</td>
         <td>Creates a new webhook, returned its information along with its id.</td>
       </tr>
       <tr>
-        <td>List</td>
+        <td><code>List</code></td>
         <td>/v1/{coin}/{chain}/hooks?token={token}</td>
         <td>/v1/btc/main/hooks?token=14df7860-eb44-11e3-ac10-0800200c9a66</td>
         <td>GET</td>
         <td>Returns an array of webhooks associated with the provided token.</td>
       </tr>
       <tr>
-        <td>Delete</td>
+        <td><code>Delete</code></td>
         <td>/v1/{coin}/{chain}/hooks/{id}</td>
         <td>/v1/btc/main/hooks/399d0923-e920-48ee-8928-2051cbfbc369</td>
         <td>DELETE</td>

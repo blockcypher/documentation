@@ -6,7 +6,7 @@
 <p>Three main resources make up the Blockchain API (all GETs under https://api.blockcypher.com):</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -17,7 +17,9 @@
     </thead>
     <tbody>
       <tr>
-        <td>Chain</td><td>/v1/{coin}/{chain}</td><td><a href="https://api.blockcypher.com/v1/btc/main">/v1/btc/main</a></td>
+        <td>Chain</td>
+        <td>/v1/{coin}/{chain}</td>
+        <td><a href="https://api.blockcypher.com/v1/btc/main">/v1/btc/main</a></td>
         <td>Returns the current state of the specified block chain, including height and the two latest blocks.</td>
       </tr>
       <tr>
@@ -68,7 +70,7 @@
 <p>A request to a given chain returns the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
       <thead>
         <tr>
           <th>Property</th>
@@ -78,27 +80,27 @@
       </thead>
     <tbody>
       <tr>
-        <td>name</td>
+        <td><code>name</code></td>
         <td>BTC.main</td>
         <td>Chain name</td>
       </tr>
       <tr>
-        <td>latest</td>
+        <td><code>latest</code></td>
         <td>0000...974f</td>
         <td>Hash of the latest block in the chain.</td>
       </tr>
       <tr>
-        <td>previous</td>
+        <td><code>previous</code></td>
         <td>0000...1d66</td>
         <td>Hash of the second to last block in the chain.</td>
       </tr>
       <tr>
-        <td>latest_url</td>
+        <td><code>latest_url</code></td>
         <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666...">.../v1/btc/main/blocks/0000...974f</a></td>
         <td>URL to retrieve information on the latest block in the chain.</td>
       </tr>
       <tr>
-        <td>previous_url</td>
+        <td><code>previous_url</code></td>
         <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64ee...">.../v1/btc/main/blocks/0000...1d66</a></td>
         <td>URL to retrieve information on the second to last block in the chain.</td>
       </tr>
@@ -112,7 +114,7 @@
 <p>Blocks are located under a chain's URL. The most interesting properties of blocks are:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -122,81 +124,82 @@
     </thead>
     <tbody>
       <tr>
-        <td>hash</td>
+        <td><code>hash</code></td>
         <td>0000...35fa</td>
         <td>Block hash. Can be used as a unique identifier.</td>
       </tr>
       <tr>
-        <td>height</td>
+        <td><code>height</code></td>
         <td>293268</td>
         <td>The height of the block is the distance from the root of the chain, the genesis block at height = 0.</td>
       </tr>
       <tr>
-        <td>depth</td>
+        <td><code>depth</code></td>
         <td>11</td>
         <td>The depth is the distance from the latest block in the chain, or how many blocks have been found after this one.</td>
       </tr>
       <tr>
-        <td>chain</td>
+        <td><code>chain</code></td>
         <td>BTC.main</td>
         <td>The name of the chain the block is from.</td>
       </tr>
       <tr>
-        <td>total</td><td>448188159094</td>
+        <td><code>total</code></td>
+        <td>448188159094</td>
         <td>The total amount in <a href="https://en.bitcoin.it/wiki/Units">satoshis</a> transacted in this block. Divide by 10^8 to obtain the number of bitcoins.</td>
       </tr>
       <tr>
-        <td>fees</td>
+        <td><code>fees</code></td>
         <td>13383533</td>
         <td>Amount of fees, in satoshis, collected by miners on this block.</td>
       </tr>
       <tr>
-        <td>time</td>
+        <td><code>time</code></td>
         <td>2014-03-30T18:52:44Z</td>
         <td>Recorded time at which the block was built. (Note: miners rarely post accurate clock times).</td>
       </tr>
       <tr>
-        <td>received_time</td>
+        <td><code>received_time</code></td>
         <td>2014-03-30T18:52:36.539Z</td>
         <td>The time BlockCypher's servers receive the block. Our servers' time is continuously adjusted and accurate.</td>
       </tr>
       <tr>
-        <td>bits</td>
+        <td><code>bits</code></td>
         <td>419486617</td>
         <td>The block-encoded difficulty target, for more information see <a href="https://en.bitcoin.it/wiki/Difficulty">https://en.bitcoin.it/wiki/Difficulty</a></td>
       </tr>
       <tr>
-        <td>nonce</td>
+        <td><code>nonce</code></td>
         <td>1225187768</td>
         <td>Number used to generate this block. Incremented by miners to allow variation in the header (and hence its hash).</td>
       </tr>
       <tr>
-        <td>n_tx</td>
+        <td><code>n_tx</code></td>
         <td>579</td>
         <td>Number of transactions in this block.</td>
       </tr>
       <tr>
-        <td>prev_block</td>
+        <td><code>prev_block</code></td>
         <td>0000...35fa</td>
         <td>Hash of the block previous to this one.</td>
       </tr>
       <tr>
-        <td>prev_block_url</td>
+        <td><code>prev_block_url</code></td>
         <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa">.../v1/btc/main/blocks/0000...35fa</a></td>
         <td>URL for the previous block's details.</td>
       </tr>
       <tr>
-        <td>tx_url</td>
+        <td><code>tx_url</code></td>
         <td>https://api.blockcypher.com/v1/btc/main/txs/</td>
         <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
       </tr>
       <tr>
-        <td>txids</td>
+        <td><code>txids</code></td>
         <td>["96d8...4f6ab", "3b2c...12bb", "7fa2...90d1", ...]</td>
         <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions. To obtain more, use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
       </tr>
       <tr>
-        <td>next_txids</td>
+        <td><code>next_txids</code></td>
         <td>.../v1/btc/main/blocks/0000...7b72?txstart=20&amp;limit=20</td>
         <td>URL to get the same block information with the next 20 transactions.</td>
       </tr>
@@ -245,107 +248,107 @@
 <p>The main properties in a transaction are:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
-          <th>Property</th>
+        <th>Property</th>
         <th>Example (abbreviated URLs and hashes)</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>block_hash</td>
+        <td><code>block_hash</code></td>
         <td>0000...35fa</td>
         <td>Hash of the block the transaction is in. Only exists for confirmed transactions.</td>
       </tr>
       <tr>
-        <td>block_height</td>
+        <td><code>block_height</code></td>
         <td>293331</td>
         <td>Height of the block the transaction is in. Only exists for confirmed transactions.</td>
       </tr>
       <tr>
-        <td>hash</td>
+        <td><code>hash</code></td>
         <td>9a20...9e84</td>
         <td>Hash of the transaction. While hashes are reasonably unique, using them as identifiers may be <a href="https://en.bitcoin.it/wiki/Transaction_Malleability">unsafe.</a></td>
       </tr>
       <tr>
-        <td>addresses</td>
+        <td><code>addresses</code></td>
         <td>["1EJFhJDvS2ncpPotz6Lb3mGGchHfr3zgXv", "1N32Ts6eA2YHrcUjwZnzmPsLUnThZ6bDbb"]</td>
         <td>Array of Bitcoin addresses involved in the transaction.</td>
       </tr>
       <tr>
-        <td>total</td>
+        <td><code>total</code></td>
         <td>22180950000</td>
         <td>Total amount exchanged in this transaction, in satoshis.</td>
       </tr>
       <tr>
-        <td>fees</td>
+        <td><code>fees</code></td>
         <td>10000</td>
         <td>Fees collected by miners in the transaction, in satoshis.</td>
       </tr>
       <tr>
-        <td>relayed_by</td>
+        <td><code>relayed_by</code></td>
         <td>50.154.237.192:8333</td>
         <td>Address of the peer that sent us this transaction.</td>
       </tr>
       <tr>
-        <td>received</td>
+        <td><code>received</code></td>
         <td>2014-03-31T04:23:44.833536145Z</td>
         <td>When the transaction was received by BlockCypher servers.</td>
       </tr>
       <tr>
-        <td>confirmations</td>
+        <td><code>confirmations</code></td>
         <td>5</td>
         <td>Number of subsequent blocks, including the block the transaction is in. Unconfirmed transactions have 0 for confirmation.</td>
       </tr>
       <tr>
-        <td>confirmed</td>
+        <td><code>confirmed</code></td>
         <td>2014-03-31T04:25:12.93471948Z</td>
         <td>Date at which the transaction was included in a block, in ISO format.</td>
       </tr>
       <tr>
-        <td>preference</td>
+        <td><code>preference</code></td>
         <td>high</td>
         <td>How likely is this transaction to make it to the next block, reflects the preference level miners have to include this transaction. Can be high, medium or low.</td>
       </tr>
       <tr>
-        <td>double_spend</td>
+        <td><code>double_spend</code></td>
         <td>false</td>
         <td>Whether the transaction is a double spend (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>double_of</td>
+        <td><code>double_of</code></td>
         <td>a672f0...</td>
         <td>If the transaction is a double spend, what transaction it's double-spending  (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>receive_count</td>
+        <td><code>receive_count</code></td>
         <td>42</td>
         <td>Unconfirmed transactions only. The number of peers that have sent this transaction to us (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>confidence</td>
+        <td><code>confidence</code></td>
         <td>0.98819</td>
         <td>Unconfirmed transactions only. Confidence this transaction will be confirmed (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>vin_sz</td>
+        <td><code>vin_sz</code></td>
         <td>1</td>
         <td>Total number of inputs</td>
       </tr>
       <tr>
-        <td>vout_sz</td>
+        <td><code>vout_sz</code></td>
         <td>2</td>
         <td>Total number of outputs</td>
       </tr>
       <tr>
-        <td>inputs</td>
+        <td><code>inputs</code></td>
         <td>(see below)</td>
         <td>Array of inputs, limited to 20. Use paging to get more inputs (see section on blocks).</td>
       </tr>
       <tr>
-        <td>outputs</td>
+        <td><code>outputs</code></td>
         <td>(see below)</td>
         <td>Array of outputs, limited to 20. Use paging to get more outputs (see section on blocks).</td>
       </tr>
@@ -368,35 +371,48 @@
 <p>Transaction inputs have the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
-    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
     <tr>
-      <td>prev_hash</td><td>0000...35fa</td>
+      <td><code>prev_hash</code></td>
+      <td>0000...35fa</td>
       <td>Hash of the transaction for which an output is being spent by this input. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
     </tr>
     <tr>
-      <td>output_index</td><td>1</td>
+      <td><code>output_index</code></td>
+      <td>1</td>
       <td>Index in the previous transaction of the output being spent. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
     </tr>
     <tr>
-      <td>output_value</td><td>1</td>
+      <td><code>output_value</code></td>
+      <td>1</td>
       <td>Value of the output being spent. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
     </tr>
     <tr>
-      <td>script_type</td><td>pay-to-pubkey-hash</td>
+      <td><code>script_type</code></td>
+      <td>pay-to-pubkey-hash</td>
       <td>Script type in the transaction output being spent.</td>
     </tr>
     <tr>
-      <td>addresses</td><td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
+      <td><code>addresses</code></td>
+      <td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
       <td>Addresses referenced in the transaction output being spent.</td>
     </tr>
     <tr>
-      <td>script</td><td>76a914...ac</td>
+      <td><code>script</code></td>
+      <td>76a914...ac</td>
       <td>Raw hexadecimal encoding of the script.</td>
     </tr>
     <tr>
-      <td>script</td><td>76a914...ac</td>
+      <td><code>script</td>
+      <td>76a914...ac</td>
       <td>Raw hexadecimal encoding of the spent output script.</td>
     </tr>
     </tbody>
@@ -406,27 +422,38 @@
 <p>Transaction outputs have the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
-    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
     <tr>
-      <td>value</td><td>2508682714</td>
+      <td><code>value</code></td>
+      <td>2508682714</td>
       <td>Value transferred by the transaction output, in satoshi.</td>
     </tr>
     <tr>
-      <td>script_type</td><td>pay-to-pubkey-hash</td>
+      <td><code>script_type</code></td>
+      <td>pay-to-pubkey-hash</td>
       <td>Script type for this output.</td>
     </tr>
     <tr>
-      <td>addresses</td><td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
+      <td><code>addresses</code></td>
+      <td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
       <td>Addresses where the value is being transfered to.</td>
     </tr>
     <tr>
-      <td>script</td><td>76a914...ac</td>
+      <td><code>script</code></td>
+      <td>76a914...ac</td>
       <td>Raw hexadecimal encoding of the script.</td>
     </tr>
     <tr>
-      <td>spent_by</td><td>b4735a06...</td>
+      <td><code>spent_by</code></td>
+      <td>b4735a06...</td>
       <td>Hash of the transaction that spent this output, if it was spent.</td>
     </tr>
     </tbody>

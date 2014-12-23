@@ -57,7 +57,7 @@
 
 <header class="page-header">
   <div class="container">
-    <h1>Reference</h1>
+    <h1><i class="fa fa-code"></i> Reference</h1>
   </div>
 </header>
 		<div class="bg-white-gradient">
@@ -170,7 +170,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>Three main resources make up the Blockchain API (all GETs under https://api.blockcypher.com):</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -181,7 +181,9 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </thead>
     <tbody>
       <tr>
-        <td>Chain</td><td>/v1/{coin}/{chain}</td><td><a href="https://api.blockcypher.com/v1/btc/main">/v1/btc/main</a></td>
+        <td>Chain</td>
+        <td>/v1/{coin}/{chain}</td>
+        <td><a href="https://api.blockcypher.com/v1/btc/main">/v1/btc/main</a></td>
         <td>Returns the current state of the specified block chain, including height and the two latest blocks.</td>
       </tr>
       <tr>
@@ -232,7 +234,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>A request to a given chain returns the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
       <thead>
         <tr>
           <th>Property</th>
@@ -242,27 +244,27 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
       </thead>
     <tbody>
       <tr>
-        <td>name</td>
+        <td><code>name</code></td>
         <td>BTC.main</td>
         <td>Chain name</td>
       </tr>
       <tr>
-        <td>latest</td>
+        <td><code>latest</code></td>
         <td>0000...974f</td>
         <td>Hash of the latest block in the chain.</td>
       </tr>
       <tr>
-        <td>previous</td>
+        <td><code>previous</code></td>
         <td>0000...1d66</td>
         <td>Hash of the second to last block in the chain.</td>
       </tr>
       <tr>
-        <td>latest_url</td>
+        <td><code>latest_url</code></td>
         <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/0000000000000000b90b199e699b6df77433666...">.../v1/btc/main/blocks/0000...974f</a></td>
         <td>URL to retrieve information on the latest block in the chain.</td>
       </tr>
       <tr>
-        <td>previous_url</td>
+        <td><code>previous_url</code></td>
         <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000008a317621eb28de89e4e97d64ee...">.../v1/btc/main/blocks/0000...1d66</a></td>
         <td>URL to retrieve information on the second to last block in the chain.</td>
       </tr>
@@ -276,7 +278,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>Blocks are located under a chain's URL. The most interesting properties of blocks are:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -286,81 +288,82 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </thead>
     <tbody>
       <tr>
-        <td>hash</td>
+        <td><code>hash</code></td>
         <td>0000...35fa</td>
         <td>Block hash. Can be used as a unique identifier.</td>
       </tr>
       <tr>
-        <td>height</td>
+        <td><code>height</code></td>
         <td>293268</td>
         <td>The height of the block is the distance from the root of the chain, the genesis block at height = 0.</td>
       </tr>
       <tr>
-        <td>depth</td>
+        <td><code>depth</code></td>
         <td>11</td>
         <td>The depth is the distance from the latest block in the chain, or how many blocks have been found after this one.</td>
       </tr>
       <tr>
-        <td>chain</td>
+        <td><code>chain</code></td>
         <td>BTC.main</td>
         <td>The name of the chain the block is from.</td>
       </tr>
       <tr>
-        <td>total</td><td>448188159094</td>
+        <td><code>total</code></td>
+        <td>448188159094</td>
         <td>The total amount in <a href="https://en.bitcoin.it/wiki/Units">satoshis</a> transacted in this block. Divide by 10^8 to obtain the number of bitcoins.</td>
       </tr>
       <tr>
-        <td>fees</td>
+        <td><code>fees</code></td>
         <td>13383533</td>
         <td>Amount of fees, in satoshis, collected by miners on this block.</td>
       </tr>
       <tr>
-        <td>time</td>
+        <td><code>time</code></td>
         <td>2014-03-30T18:52:44Z</td>
         <td>Recorded time at which the block was built. (Note: miners rarely post accurate clock times).</td>
       </tr>
       <tr>
-        <td>received_time</td>
+        <td><code>received_time</code></td>
         <td>2014-03-30T18:52:36.539Z</td>
         <td>The time BlockCypher's servers receive the block. Our servers' time is continuously adjusted and accurate.</td>
       </tr>
       <tr>
-        <td>bits</td>
+        <td><code>bits</code></td>
         <td>419486617</td>
         <td>The block-encoded difficulty target, for more information see <a href="https://en.bitcoin.it/wiki/Difficulty">https://en.bitcoin.it/wiki/Difficulty</a></td>
       </tr>
       <tr>
-        <td>nonce</td>
+        <td><code>nonce</code></td>
         <td>1225187768</td>
         <td>Number used to generate this block. Incremented by miners to allow variation in the header (and hence its hash).</td>
       </tr>
       <tr>
-        <td>n_tx</td>
+        <td><code>n_tx</code></td>
         <td>579</td>
         <td>Number of transactions in this block.</td>
       </tr>
       <tr>
-        <td>prev_block</td>
+        <td><code>prev_block</code></td>
         <td>0000...35fa</td>
         <td>Hash of the block previous to this one.</td>
       </tr>
       <tr>
-        <td>prev_block_url</td>
+        <td><code>prev_block_url</code></td>
         <td><a href="http://api.blockcypher.com/v1/btc/main/blocks/00000000000000009cc33fe219537756a68ee5433d593034b6dc200b34aa35fa">.../v1/btc/main/blocks/0000...35fa</a></td>
         <td>URL for the previous block's details.</td>
       </tr>
       <tr>
-        <td>tx_url</td>
+        <td><code>tx_url</code></td>
         <td>https://api.blockcypher.com/v1/btc/main/txs/</td>
         <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
       </tr>
       <tr>
-        <td>txids</td>
+        <td><code>txids</code></td>
         <td>["96d8...4f6ab", "3b2c...12bb", "7fa2...90d1", ...]</td>
         <td>Array of transaction hashes included in this block. By default, we only return the 20 first transactions. To obtain more, use the next_txids URL or the <i>txstart</i> and <i>limit</i> url query string parameters.</td>
       </tr>
       <tr>
-        <td>next_txids</td>
+        <td><code>next_txids</code></td>
         <td>.../v1/btc/main/blocks/0000...7b72?txstart=20&amp;limit=20</td>
         <td>URL to get the same block information with the next 20 transactions.</td>
       </tr>
@@ -409,107 +412,107 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>The main properties in a transaction are:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
-          <th>Property</th>
+        <th>Property</th>
         <th>Example (abbreviated URLs and hashes)</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>block_hash</td>
+        <td><code>block_hash</code></td>
         <td>0000...35fa</td>
         <td>Hash of the block the transaction is in. Only exists for confirmed transactions.</td>
       </tr>
       <tr>
-        <td>block_height</td>
+        <td><code>block_height</code></td>
         <td>293331</td>
         <td>Height of the block the transaction is in. Only exists for confirmed transactions.</td>
       </tr>
       <tr>
-        <td>hash</td>
+        <td><code>hash</code></td>
         <td>9a20...9e84</td>
         <td>Hash of the transaction. While hashes are reasonably unique, using them as identifiers may be <a href="https://en.bitcoin.it/wiki/Transaction_Malleability">unsafe.</a></td>
       </tr>
       <tr>
-        <td>addresses</td>
+        <td><code>addresses</code></td>
         <td>["1EJFhJDvS2ncpPotz6Lb3mGGchHfr3zgXv", "1N32Ts6eA2YHrcUjwZnzmPsLUnThZ6bDbb"]</td>
         <td>Array of Bitcoin addresses involved in the transaction.</td>
       </tr>
       <tr>
-        <td>total</td>
+        <td><code>total</code></td>
         <td>22180950000</td>
         <td>Total amount exchanged in this transaction, in satoshis.</td>
       </tr>
       <tr>
-        <td>fees</td>
+        <td><code>fees</code></td>
         <td>10000</td>
         <td>Fees collected by miners in the transaction, in satoshis.</td>
       </tr>
       <tr>
-        <td>relayed_by</td>
+        <td><code>relayed_by</code></td>
         <td>50.154.237.192:8333</td>
         <td>Address of the peer that sent us this transaction.</td>
       </tr>
       <tr>
-        <td>received</td>
+        <td><code>received</code></td>
         <td>2014-03-31T04:23:44.833536145Z</td>
         <td>When the transaction was received by BlockCypher servers.</td>
       </tr>
       <tr>
-        <td>confirmations</td>
+        <td><code>confirmations</code></td>
         <td>5</td>
         <td>Number of subsequent blocks, including the block the transaction is in. Unconfirmed transactions have 0 for confirmation.</td>
       </tr>
       <tr>
-        <td>confirmed</td>
+        <td><code>confirmed</code></td>
         <td>2014-03-31T04:25:12.93471948Z</td>
         <td>Date at which the transaction was included in a block, in ISO format.</td>
       </tr>
       <tr>
-        <td>preference</td>
+        <td><code>preference</code></td>
         <td>high</td>
         <td>How likely is this transaction to make it to the next block, reflects the preference level miners have to include this transaction. Can be high, medium or low.</td>
       </tr>
       <tr>
-        <td>double_spend</td>
+        <td><code>double_spend</code></td>
         <td>false</td>
         <td>Whether the transaction is a double spend (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>double_of</td>
+        <td><code>double_of</code></td>
         <td>a672f0...</td>
         <td>If the transaction is a double spend, what transaction it's double-spending  (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>receive_count</td>
+        <td><code>receive_count</code></td>
         <td>42</td>
         <td>Unconfirmed transactions only. The number of peers that have sent this transaction to us (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>confidence</td>
+        <td><code>confidence</code></td>
         <td>0.98819</td>
         <td>Unconfirmed transactions only. Confidence this transaction will be confirmed (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>vin_sz</td>
+        <td><code>vin_sz</code></td>
         <td>1</td>
         <td>Total number of inputs</td>
       </tr>
       <tr>
-        <td>vout_sz</td>
+        <td><code>vout_sz</code></td>
         <td>2</td>
         <td>Total number of outputs</td>
       </tr>
       <tr>
-        <td>inputs</td>
+        <td><code>inputs</code></td>
         <td>(see below)</td>
         <td>Array of inputs, limited to 20. Use paging to get more inputs (see section on blocks).</td>
       </tr>
       <tr>
-        <td>outputs</td>
+        <td><code>outputs</code></td>
         <td>(see below)</td>
         <td>Array of outputs, limited to 20. Use paging to get more outputs (see section on blocks).</td>
       </tr>
@@ -532,35 +535,48 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>Transaction inputs have the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
-    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
     <tr>
-      <td>prev_hash</td><td>0000...35fa</td>
+      <td><code>prev_hash</code></td>
+      <td>0000...35fa</td>
       <td>Hash of the transaction for which an output is being spent by this input. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
     </tr>
     <tr>
-      <td>output_index</td><td>1</td>
+      <td><code>output_index</code></td>
+      <td>1</td>
       <td>Index in the previous transaction of the output being spent. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
     </tr>
     <tr>
-      <td>output_value</td><td>1</td>
+      <td><code>output_value</code></td>
+      <td>1</td>
       <td>Value of the output being spent. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
     </tr>
     <tr>
-      <td>script_type</td><td>pay-to-pubkey-hash</td>
+      <td><code>script_type</code></td>
+      <td>pay-to-pubkey-hash</td>
       <td>Script type in the transaction output being spent.</td>
     </tr>
     <tr>
-      <td>addresses</td><td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
+      <td><code>addresses</code></td>
+      <td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
       <td>Addresses referenced in the transaction output being spent.</td>
     </tr>
     <tr>
-      <td>script</td><td>76a914...ac</td>
+      <td><code>script</code></td>
+      <td>76a914...ac</td>
       <td>Raw hexadecimal encoding of the script.</td>
     </tr>
     <tr>
-      <td>script</td><td>76a914...ac</td>
+      <td><code>script</td>
+      <td>76a914...ac</td>
       <td>Raw hexadecimal encoding of the spent output script.</td>
     </tr>
     </tbody>
@@ -570,27 +586,38 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>Transaction outputs have the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
-    <thead><tr><th>Property</th><th>Example (abbreviated URLs and hashes)</th><th>Description</th></tr></thead>
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
     <tbody>
     <tr>
-      <td>value</td><td>2508682714</td>
+      <td><code>value</code></td>
+      <td>2508682714</td>
       <td>Value transferred by the transaction output, in satoshi.</td>
     </tr>
     <tr>
-      <td>script_type</td><td>pay-to-pubkey-hash</td>
+      <td><code>script_type</code></td>
+      <td>pay-to-pubkey-hash</td>
       <td>Script type for this output.</td>
     </tr>
     <tr>
-      <td>addresses</td><td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
+      <td><code>addresses</code></td>
+      <td>["1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"]</td>
       <td>Addresses where the value is being transfered to.</td>
     </tr>
     <tr>
-      <td>script</td><td>76a914...ac</td>
+      <td><code>script</code></td>
+      <td>76a914...ac</td>
       <td>Raw hexadecimal encoding of the script.</td>
     </tr>
     <tr>
-      <td>spent_by</td><td>b4735a06...</td>
+      <td><code>spent_by</code></td>
+      <td>b4735a06...</td>
       <td>Hash of the transaction that spent this output, if it was spent.</td>
     </tr>
     </tbody>
@@ -747,7 +774,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>The following endpoints are available for payments:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -786,7 +813,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>A payment can have the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -796,37 +823,37 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </thead>
     <tbody>
       <tr>
-        <td>id</td>
+        <td><code>id</code></td>
         <td>399d0923-e920-48ee-8928-2051cbfbc369</td>
         <td>Identifier of the payment forwarding, generated when a new payment is created.</td>
       </tr>
       <tr>
-        <td>token</td>
+        <td><code>token</code></td>
         <td>f47ac10b-58cc-4372-a567-0e02b2c3d479</td>
         <td>User token, mandatory.</td>
       </tr>
       <tr>
-        <td>destination</td>
+        <td><code>destination</code></td>
         <td>15qx9ug952GWGTNn7Uiv6vode4RcGrRemh</td>
         <td>The destination address money will automatically be forwarded to. Required.</td>
       </tr>
       <tr>
-        <td>input_address</td>
+        <td><code>input_address</code></td>
         <td>16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX</td>
         <td>The address the payment should be made to to be forwarded, generated when the payment forwarding is created.</td>
       </tr>
       <tr>
-        <td>callback_url</td>
+        <td><code>callback_url</code></td>
         <td>https://my.domain.com/callbacks/payments</td>
         <td>The URL to call anytime a new payment is forwarded. Optional.</td>
       </tr>
       <tr>
-        <td>enable_confirmations</td>
+        <td><code>enable_confirmations</code></td>
         <td>true</td>
         <td>Whether to also call the <em>callback_url</em> with subsequent confirmations of the forwarding transactions. Automatically sets up a WebHook.</td>
       </tr>
       <tr>
-        <td>transactions</td>
+        <td><code>transactions</code></td>
         <td>["39bed5d...", "1aa6103..."]</td>
         <td>History of forwarding transactions for this payment.</td>
       </tr>
@@ -837,7 +864,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>When a new payment is forwarded, the document sent to you at the <em>callback_url</em> will have the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -847,27 +874,27 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </thead>
     <tbody>
       <tr>
-        <td>value</td>
+        <td><code>value</code></td>
         <td>100000000</td>
         <td>Amount sent to the destination address, in Satoshi.</td>
       </tr>
       <tr>
-        <td>input_address</td>
+        <td><code>input_address</code></td>
         <td>16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX</td>
         <td>The address the payment was originally sent to.</td>
       </tr>
       <tr>
-        <td>destination</td>
+        <td><code>destination</code></td>
         <td>15qx9ug952GWGTNn7Uiv6vode4RcGrRemh</td>
         <td>The address the payment amount is being forwarded to.</td>
       </tr>
       <tr>
-        <td>input_transaction_hash</td>
+        <td><code>input_transaction_hash</code></td>
         <td>39bed5d...</td>
         <td>The transaction hash that credited the input address.</td>
       </tr>
       <tr>
-        <td>transaction_hash</td>
+        <td><code>transaction_hash</code></td>
         <td>1aa6103...</td>
         <td>The transaction hash of the generated transaction that forwards the payment from the input address to the destination.</td>
       </tr>
@@ -895,7 +922,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>This is accomplished with two simple POST requests and a third one which allows you to push raw hexadecimal transactions:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -966,7 +993,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>The document returned by a call to new uses the following format:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -976,27 +1003,27 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </thead>
     <tbody>
       <tr>
-        <td>errors</td>
+        <td><code>errors</code></td>
         <td>[{"error": ""Address 1DEP... with balance 4271116 does not have enough funds to transfer 500000000."}]</td>
         <td>Array of errors encountered while generating the transaction. If the generation is successful, nothing will appear.</td>
       </tr>
       <tr>
-        <td>tx</td>
+        <td><code>tx</code></td>
         <td>tx: {...}</td>
         <td>Temporary transaction, fully filled up except for the input scripts (requires signature).</td>
       </tr>
       <tr>
-        <td>tosign</td>
+        <td><code>tosign</code></td>
         <td>["04779733bb...", "0396ea6f1b..."]</td>
         <td>Array of hexadecimal-encoded data to sign, one for each generated input.</td>
       </tr>
       <tr>
-        <td>(signatures)</td>
+        <td><code>signatures</code></td>
         <td>["bcd2c363a2...", "dc621478..."]</td>
         <td>Array of hexadecimal-encoded signatures you need to provide.</td>
       </tr>
       <tr>
-        <td>(pubkeys)</td>
+        <td><code>pubkeys</code></td>
         <td>["02c8d29d...", "02c8d29d..."]</td>
         <td>The public key for each generated input (in general, repeat the public key corresponding to the provided input address).</td>
       </tr>
@@ -1239,7 +1266,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>The token is optional and is the value we provide you (see <a href="#rate_limits">rate limits</a>). Currently supported properties are:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Key</th>
@@ -1249,22 +1276,22 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </thead>
     <tbody>
       <tr>
-        <td>event</td>
+        <td><code>event</code></td>
         <td>"event": "new-block"</td>
         <td>Type of event to receive. See above for the supported event types.</td>
       </tr>
       <tr>
-        <td>hash</td>
+        <td><code>hash</code></td>
         <td>"hash": "346a5...b77e5" (abbreviated)</td>
         <td>Only objects with a matching hash will be sent. The hash can either be for a block or a transaction.</td>
       </tr>
       <tr>
-        <td>address</td>
+        <td><code>address</code></td>
         <td>"address": "1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"</td>
         <td>Only transactions associated with the given address will be sent.</td>
       </tr>
       <tr>
-        <td>script</td>
+        <td><code>script</code></td>
         <td>"script": "pay-to-script-hash"</td>
         <td>Only transactions with an output script of the provided type will be sent. The recognized types of scripts are: pay-to-pubkey-hash, pay-to-multi-pubkey-hash, pay-to-pubkey, pay-to-script-hash, null-data (sometimes called OP_RETURN), empty or unknown.</td>
       </tr>
@@ -1291,7 +1318,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 
 <p>A regular ping (i.e. every 20 seconds) allows the websocket to stay connected for a longer period of time.</p>
 
-<h4>Example</h4>
+<h3>Example</h3>
 
 <p>In this example, using a WebSocket, we will subscribe to all pooled transactions (new transactions that have not been confirmed). We open a new WebSocket and send the filter we're interested in. Upon notification of new transactions, we format them and add them into the page.</p>
 
@@ -1320,7 +1347,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 
 <p>To secure the endpoint at the callback URL you give to us and prevent a potential attacker from calling it, we recommend you append a secret as a URL parameter to that URL. We will call you leaving the URL unchanged, which allows you to test for that parameter. For example:</p>
 
-<pre><code>https://my.domain.com/api/callbacks/doublespend?secret=justbetweenus</code></pre>
+<pre><code class="language-javascript">https://my.domain.com/api/callbacks/doublespend?secret=justbetweenus</code></pre>
 
 <p>The use of https is also recommended to prevent eavesdropper from potentially capturing the secret.</p>
 
@@ -1333,7 +1360,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>If calling the URL configured in a WebHook fails, it will be retried 3 times. If a WebHook fails to deliver 50 distinct events, the WebHook will be disabled.</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -1345,21 +1372,21 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </thead>
     <tbody>
       <tr>
-        <td>Create</td>
+        <td><code>Create</code></td>
         <td>/v1/{coin}/{chain}/hooks</td>
         <td>/v1/btc/main/hooks</td>
         <td>POST</td>
         <td>Creates a new webhook, returned its information along with its id.</td>
       </tr>
       <tr>
-        <td>List</td>
+        <td><code>List</code></td>
         <td>/v1/{coin}/{chain}/hooks?token={token}</td>
         <td>/v1/btc/main/hooks?token=14df7860-eb44-11e3-ac10-0800200c9a66</td>
         <td>GET</td>
         <td>Returns an array of webhooks associated with the provided token.</td>
       </tr>
       <tr>
-        <td>Delete</td>
+        <td><code>Delete</code></td>
         <td>/v1/{coin}/{chain}/hooks/{id}</td>
         <td>/v1/btc/main/hooks/399d0923-e920-48ee-8928-2051cbfbc369</td>
         <td>DELETE</td>
@@ -1375,7 +1402,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. A collection resource and a detail resource make up the Address API.</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -1425,7 +1452,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>The generation API is offered for convenience purpose, for security reasons please always use HTTPS to use this resource. No information is required in the POST request, the following information will be returned:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -1435,17 +1462,17 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </thead>
     <tbody>
       <tr>
-        <td>address</td>
+        <td><code>address</code></td>
         <td>181w71oR7nTEsKducLBTUJkdbTvLDQzymL</td>
         <td>Standard address representation.</td>
       </tr>
       <tr>
-        <td>public</td>
+        <td><code>public</code></td>
         <td>028b3b3fc5d437...</td>
         <td>Public key.</td>
       </tr>
       <tr>
-        <td>private</td>
+        <td><code>private</code></td>
         <td>028b3b3fc5d437...</td>
         <td>Private key.</td>
       </tr>
@@ -1473,7 +1500,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>A request to a given address returns the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -1483,52 +1510,52 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </thead>
     <tbody>
       <tr>
-        <td>address</td>
+        <td><code>address</code></td>
         <td>1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</td>
         <td>The requested address.</td>
       </tr>
       <tr>
-        <td>balance</td>
+        <td><code>balance</code></td>
         <td>12550020000</td>
         <td>Balance on the specified address, in satoshi. This is the difference between outputs and inputs on this address, for transactions that have been included into a block (confirmations &gt;  0)</td>
       </tr>
       <tr>
-        <td>unconfirmed_balance</td>
+        <td><code>unconfirmed_balance</code></td>
         <td>-100000000</td>
         <td>Balance of unconfirmed transactions for this address, in satoshi. Can be negative (if unconfirmed transactions are just spending.). Only unconfirmed transactions (haven't made it into a block) are included.</td>
       </tr>
       <tr>
-        <td>final_balance</td>
+        <td><code>final_balance</code></td>
         <td>124500020000</td>
         <td>Balance including confirmed and unconfirmed transactions for this address, in satoshi.</td>
       </tr>
       <tr>
-        <td>n_tx</td>
+        <td><code>n_tx</code></td>
         <td>12</td>
         <td>Number of confirmed transactions on the specified address. Only transactions that have made it into a block (confirmations &gt;  0) are counted.</td>
       </tr>
       <tr>
-        <td>unconfirmed_n_tx</td>
+        <td><code>unconfirmed_n_tx</code></td>
         <td>2</td>
         <td>Number of unconfirmed transactions for this address. Only unconfirmed transactions (haven't made it into a block) are counted.</td>
       </tr>
       <tr>
-        <td>final_n_tx</td>
+        <td><code>final_n_tx</code></td>
         <td>14</td>
         <td>Final number of transactions, including unconfirmed transactions, for this address.</td>
       </tr>
       <tr>
-        <td>tx_url</td>
+        <td><code>tx_url</code></td>
         <td>https://api.blockcypher.com/v1/btc/main/txs/</td>
         <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
       </tr>
       <tr>
-        <td>txrefs</td>
+        <td><code>txrefs</code></td>
         <td>[...]</td>
         <td>All transaction inputs and outputs for the specified address.</td>
       </tr>
       <tr>
-        <td>unconfirmed_txrefs</td>
+        <td><code>unconfirmed_txrefs</code></td>
         <td>[...]</td>
         <td>All unconfirmed transaction inputs and outputs for the specified address.</td>
       </tr>
@@ -1539,7 +1566,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 <p>The arrays of transaction inputs or outputs reference in <em>txrefs</em> and <em>unconfirmed_txrefs</em> have the following properties:</p>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table bc-table">
     <thead>
       <tr>
         <th>Property</th>
@@ -1549,67 +1576,67 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     </thead>
     <tbody>
       <tr>
-        <td>tx_hash</td>
+        <td><code>tx_hash</code></td>
         <td>0d7ac056a...</td>
         <td>One of the transaction hashes for the specified address.</td>
       </tr>
       <tr>
-        <td>block_height</td>
+        <td><code>block_height</code></td>
         <td>292781</td>
         <td>Height of the block for the transaction.</td>
       </tr>
       <tr>
-        <td>confirmations</td>
+        <td><code>confirmations</code></td>
         <td>1092</td>
         <td>Number of confirmations for the transaction.</td>
       </tr>
       <tr>  
-        <td>tx_input_n</td>
+        <td><code>tx_input_n</code></td>
         <td>1</td>
         <td>Index of the input in the transaction. It's a negative number for an output.</td>
       </tr>
       <tr>
-        <td>tx_output_n</td>
+        <td><code>tx_output_n</code></td>
         <td>-1</td>
         <td>Index of the output in the transaction. It's a negative number for an input.</td>
       </tr>
       <tr>
-        <td>value</td>
+        <td><code>value</code></td>
         <td>28318177</td>
         <td>The value transferred by the particular input or output.</td>
       </tr>
       <tr>
-        <td>preference</td>
+        <td><code>preference</code></td>
         <td>high</td>
         <td>How likely is the transaction to make it to the next block, reflects the preference level miners have to include this transaction. Can be high, medium or low.</td>
       </tr>
       <tr>
-        <td>spent</td>
+        <td><code>spent</code></td>
         <td>true</td>
         <td>Is 'true' if the output was spent.</td>
       </tr>
       <tr>
-        <td>spent_by</td>
+        <td><code>spent_by</code></td>
         <td>b4735a06...</td>
         <td>Hash of the transaction that spent this output, if it was spent.</td>
       </tr>
       <tr>
-        <td>double_spend</td>
+        <td><code>double_spend</code></td>
         <td>false</td>
         <td>Whether the transaction is a double spend (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>double_of</td>
+        <td><code>double_of</code></td>
         <td>a672f0...</td>
         <td>If the transaction is a double spend, what transaction it's double-spending  (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>receive_count</td>
+        <td><code>receive_count</code></td>
         <td>42</td>
         <td>Unconfirmed transactions only. The number of peers that have sent this transaction to us (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
       <tr>
-        <td>confidence</td>
+        <td><code>confidence</code></td>
         <td>0.98819</td>
         <td>Unconfirmed transactions only. Confidence this transaction will be confirmed (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
       </tr>
@@ -1660,13 +1687,13 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
     <div class="col-md-3">
       <div id="content-table" class="hidden-print hidden-xs hidden-sm navbar-example" data-spy="affix" data-offset-top="190" data-offset-bottom="100">
         <ul class="nav" role="tablist">
-          <li><a href="#introduction">Introduction</a>
+          <li><a href="#introduction" class="mpsb">Introduction</a>
             <ul>
               <li><a href="#rate_limits">Rate Limits</a></li>
               <li><a href="#testing">Testing</a> <span class="label label-success">NEW!</span></li>
             </ul>
           </li>
-          <li><a href="#blockchain-api">Blockchain API</a>
+          <li><a href="#blockchain-api" class="mpsb">Blockchain API</a>
             <ul>
               <li><a href="#chains">Chains</a></li>
               <li><a href="#blocks">Blocks</a></li>
@@ -1674,13 +1701,13 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
               <li><a href="#zero_confirmations">0-Confirmations</a> <span class="label label-success">NEW!</span></li>
             </ul>
           </li>
-          <li><a href="#payments">Payments and Transfers <span class="label label-success">NEW!</span></a>
+          <li><a href="#payments" class="mpsb">Payments and Transfers <span class="label label-success">NEW!</span></a>
             <ul>
               <li><a href="#payments_summary">Summary</a></li>
               <li><a href="#payments_details">Details</a></li>
             </ul>
           </li>
-          <li><a href="#creating_transactions">Creating Transactions</a>
+          <li><a href="#creating_transactions" class="mpsb">Creating Transactions</a>
             <ul>
               <li><a href="#transaction_skeleton">Transaction Skeleton</a></li>
               <li><a href="#signing_sending">Signing and Sending</a></li>
@@ -1688,20 +1715,20 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
               <li><a href="#multisig">Multisig</a></li>
             </ul>
           </li>
-          <li><a href="#websocket_webhook">WebSockets &amp; WebHooks</a>
+          <li><a href="#websocket_webhook" class="mpsb">WebSockets &amp; WebHooks</a>
             <ul>
               <li><a href="#events">Events</a></li>
               <li><a href="#websockets">WebSockets</a></li>
               <li><a href="#webhooks">WebHooks</a></li>
             </ul>
           </li>
-          <li><a href="#address_api">Address API</a>
+          <li><a href="#address_api" class="mpsb">Address API</a>
             <ul>
               <li><a href="#address_gen">Address Generation</a></li>
               <li><a href="#address_details">Address Details</a></li>
             </ul>
           </li>
-          <li><a href="#top">Back to Top</a></li>
+          <li><a href="#top" class="mpsb"><i class="fa fa-arrow-up"></i> Back to Top</a></li>
         </ul>
       </div>
     </div>
