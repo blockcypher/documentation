@@ -108,11 +108,11 @@ https://api.blockcypher.com/v1/bcy/test</code></br></pre>
   <a class="title-anchor" id="batching"></a>
   <h2>Batching</h2>
   <p>All the endpoints that can be used to retrieve a single object (an address, block, transaction, etc.) can also be used to retrieve multiple at once. Each additional identifier simply needs to be appended to the previous using a semicolon as a separator. For example:</p>
-  <pre><code class="language-http">
-http://api.blockcypher.com/v1/btc/main/blocks/5;6;7
-http://api.blockcypher.com/v1/btc/main/addrs/1J38WorKngZLJvA7qMin9g5jqUfTQUBZNE;1JP8FqoXtCMrR1sZc2McLWmHxENox1Y1PV;1ENn7XmqXNnReiQEFHhBGzfiv5gAyBj7r1/balance
-http://api.blockcypher.com/v1/btc/main/txs/950d61ab2f51ea877e6183c8210de1677d78e16abfd4103990c3703f17de13a7;6370d43593fc47daf9443e0773faf289c54ca0bd9b92c2e538c77a6db67b0780
-</code></pre>
+  <p>
+    <a href="http://api.blockcypher.com/v1/btc/main/blocks/5;6;7">http://api.blockcypher.com/v1/btc/main/blocks/5;6;7</a><br>
+    <a href="http://api.blockcypher.com/v1/btc/main/addrs/1J38WorKngZLJvA7qMin9g5jqUfTQUBZNE;1JP8FqoXtCMrR1sZc2McLWmHxENox1Y1PV;1ENn7XmqXNnReiQEFHhBGzfiv5gAyBj7r1/balance">http://api.blockcypher.com/v1/btc/main/addrs/1J38WorKngZLJvA7qMin9g5jqUfTQUBZNE;1JP8FqoXtCMrR1sZc2McLWmHxENox1Y1PV;1ENn7XmqXNnReiQEFHhBGzfiv5gAyBj7r1/balance</a><br>
+    <a href="http://api.blockcypher.com/v1/btc/main/txs/950d61ab2f51ea877e6183c8210de1677d78e16abfd4103990c3703f17de13a7;6370d43593fc47daf9443e0773faf289c54ca0bd9b92c2e538c77a6db67b0780">http://api.blockcypher.com/v1/btc/main/txs/950d61ab2f51ea877e6183c8210de1677d78e16abfd4103990c3703f17de13a7;6370d43593fc47daf9443e0773faf289c54ca0bd9b92c2e538c77a6db67b0780</a><br>
+  </p>
   <p>Note that this works even when the identifiers arent the last part of the URL (like the address balance request above). The number of elements that can be retrieved at once is limited to 100. <p>
 
   <a class="title-anchor" id="testing"></a>
