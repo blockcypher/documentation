@@ -105,6 +105,16 @@ https://api.blockcypher.com/v1/bcy/test</code></br></pre>
   <p>When you have a token, just pass it as a URL parameter to every single of youre requests, for example:</p>
   <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main?token=$USER_TOKEN</code></pre>
 
+  <a class="title-anchor" id="batching"></a>
+  <h2>Batching</h2>
+  <p>All the endpoints that can be used to retrieve a single object (an address, block, transaction, etc.) can also be used to retrieve multiple at once. Each additional identifier simply needs to be appended to the previous using a semicolon as a separator. For example:</p>
+  <pre><code class="language-http">
+http://api.blockcypher.com/v1/btc/main/blocks/5;6;7
+http://api.blockcypher.com/v1/btc/main/addrs/1J38WorKngZLJvA7qMin9g5jqUfTQUBZNE;1JP8FqoXtCMrR1sZc2McLWmHxENox1Y1PV;1ENn7XmqXNnReiQEFHhBGzfiv5gAyBj7r1/balance
+http://api.blockcypher.com/v1/btc/main/txs/950d61ab2f51ea877e6183c8210de1677d78e16abfd4103990c3703f17de13a7;6370d43593fc47daf9443e0773faf289c54ca0bd9b92c2e538c77a6db67b0780
+</code></pre>
+  <p>Note that this works even when the identifiers arent the last part of the URL (like the address balance request above). The number of elements that can be retrieved at once is limited to 100. <p>
+
   <a class="title-anchor" id="testing"></a>
   <h2>Testing</h2>
   <p>To facilitate the testing of your application when using BlockCypher's API, we provide our own test blockchain that supports all of our web services. This blockchain has characteristics very similar to Bitcoin's main chain and a "faucet", which allows you to very easily get free coins for automated testing.</p>
@@ -1271,6 +1281,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
             <li><a href="#introduction">Introduction</a>
               <ul>
                 <li><a href="#rate_limits">Rate Limits</a></li>
+                <li><a href="#batching">Batching <b><font color="red">(new!) </font></b></a></li>
                 <li><a href="#testing">Testing <b><font color="red">(new!) </font></b></a></li>
               </ul>
             </li>
@@ -1282,7 +1293,7 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
                 <li><a href="#zero_confirmations">0-Confirmations <b><font color="red">(new!) </font></b></a></li>
               </ul>
             </li>
-            <li><a href="#payments">Payments and Transfers <b><font color="red">(new!) </font></b></a>
+            <li><a href="#payments">Payments and Transfers</a>
               <ul>
                 <li><a href="#payments_summary">Summary</a></li>
                 <li><a href="#payments_details">Details</a></li>
