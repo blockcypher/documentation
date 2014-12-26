@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body data-spy="scroll" data-target=".navbar-example">
+  	<span class="title-anchor" id="top"></span>
+	<div class="main-container">
+		{% include header.html %}
+		<div class="bg-white-gradient">
+			<div class="container">
+				{{ content }}
+			</div>
+		</div>
+	</div>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>

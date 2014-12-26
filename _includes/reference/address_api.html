@@ -1,0 +1,286 @@
+<span class="title-anchor" id="address_api"></span>
+<h2 class="section-title">Address API</h2>
+
+<p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. A collection resource and a detail resource make up the Address API.</p>
+
+<div class="table-responsive">
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>URL Pattern</th>
+        <th>Example</th>
+        <th>Method</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Addresses</td>
+        <td>/v1/{coin}/{chain}/addrs</td>
+        <td>/v1/btc/main/addrs</td>
+        <td>POST</td>
+        <td>Returns a newly generated address with the corresponding public and private keys.</td>
+      </tr>
+      <tr>
+        <td>Address</td>
+        <td>/v1/{coin}/{chain}/addrs/{hash}</td>
+        <td>
+          <a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD">
+            /v1/btc/main/addrs/1DEP8i...
+          </a>
+        </td>
+        <td>GET</td>
+        <td>All details about a given address, including transaction information and balance. Use the unspentOnly URL parameter to get only unspent outputs.</td>
+      </tr>
+      <tr>
+        <td>Address</td>
+        <td>/v1/{coin}/{chain}/addrs/{hash}/balance</td>
+        <td>
+          <a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD/balance">
+            /v1/btc/main/addrs/1DEP8i.../balance
+          </a>
+        </td>
+        <td>GET</td>
+        <td>Only balance and number of transactions for a given address.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+  
+<span class="title-anchor" id="address_gen"></span>
+<h3 class="text-purple">Address Generation</h3>
+
+<p>The generation API is offered for convenience purpose, for security reasons please always use HTTPS to use this resource. No information is required in the POST request, the following information will be returned:</p>
+
+<div class="table-responsive">
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>address</code></td>
+        <td>181w71oR7nTEsKducLBTUJkdbTvLDQzymL</td>
+        <td>Standard address representation.</td>
+      </tr>
+      <tr>
+        <td><code>public</code></td>
+        <td>028b3b3fc5d437...</td>
+        <td>Public key.</td>
+      </tr>
+      <tr>
+        <td><code>private</code></td>
+        <td>028b3b3fc5d437...</td>
+        <td>Private key.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>To get a newly generated address::</p>
+
+<pre><code class="language-http">POST https://api.blockcypher.com/v1/btc/main/addrs</code>
+<code class="language-javascript">{
+  "private": "07f6f3dd1f383a8e2085a031f6f3e5183145f3fa1080a5a7f3f39fee981ddd5b",
+  "public": "039920d51829763242314cb61f6bbd69e8daa71e1909f66cf0daa2adf555db29ed",
+  "address": "181w71oR7nTEsKducLBTUJkdbTvLDQzymL"
+}
+</code></pre>
+
+<span class="title-anchor" id="address_details"></span>
+<h3 class="text-purple">Address Details</h3>
+
+<p>The Address API details gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address. For addresses as for <a href="#transactions">transactions</a>, we consider a transaction confirmed (and hence part of the confirmed balance) if the transaction is in a block, regardless of whether the block is the latest or 50 blocks old.</p>
+
+<p>To get only the unspent transactions, append <em>?unspentOnly=true</em> to the address URL.</p>
+
+<p>A request to a given address returns the following properties:</p>
+
+<div class="table-responsive">
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>address</code></td>
+        <td>1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</td>
+        <td>The requested address.</td>
+      </tr>
+      <tr>
+        <td><code>balance</code></td>
+        <td>12550020000</td>
+        <td>Balance on the specified address, in satoshi. This is the difference between outputs and inputs on this address, for transactions that have been included into a block (confirmations &gt;  0)</td>
+      </tr>
+      <tr>
+        <td><code>unconfirmed_balance</code></td>
+        <td>-100000000</td>
+        <td>Balance of unconfirmed transactions for this address, in satoshi. Can be negative (if unconfirmed transactions are just spending.). Only unconfirmed transactions (haven't made it into a block) are included.</td>
+      </tr>
+      <tr>
+        <td><code>final_balance</code></td>
+        <td>124500020000</td>
+        <td>Balance including confirmed and unconfirmed transactions for this address, in satoshi.</td>
+      </tr>
+      <tr>
+        <td><code>n_tx</code></td>
+        <td>12</td>
+        <td>Number of confirmed transactions on the specified address. Only transactions that have made it into a block (confirmations &gt;  0) are counted.</td>
+      </tr>
+      <tr>
+        <td><code>unconfirmed_n_tx</code></td>
+        <td>2</td>
+        <td>Number of unconfirmed transactions for this address. Only unconfirmed transactions (haven't made it into a block) are counted.</td>
+      </tr>
+      <tr>
+        <td><code>final_n_tx</code></td>
+        <td>14</td>
+        <td>Final number of transactions, including unconfirmed transactions, for this address.</td>
+      </tr>
+      <tr>
+        <td><code>tx_url</code></td>
+        <td>https://api.blockcypher.com/v1/btc/main/txs/</td>
+        <td>To retrieve base URL transactions. To get the full URL, concatenate this URL with the transaction's hash.</td>
+      </tr>
+      <tr>
+        <td><code>txrefs</code></td>
+        <td>[...]</td>
+        <td>All transaction inputs and outputs for the specified address.</td>
+      </tr>
+      <tr>
+        <td><code>unconfirmed_txrefs</code></td>
+        <td>[...]</td>
+        <td>All unconfirmed transaction inputs and outputs for the specified address.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>The arrays of transaction inputs or outputs reference in <em>txrefs</em> and <em>unconfirmed_txrefs</em> have the following properties:</p>
+
+<div class="table-responsive">
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>tx_hash</code></td>
+        <td>0d7ac056a...</td>
+        <td>One of the transaction hashes for the specified address.</td>
+      </tr>
+      <tr>
+        <td><code>block_height</code></td>
+        <td>292781</td>
+        <td>Height of the block for the transaction.</td>
+      </tr>
+      <tr>
+        <td><code>confirmations</code></td>
+        <td>1092</td>
+        <td>Number of confirmations for the transaction.</td>
+      </tr>
+      <tr>  
+        <td><code>tx_input_n</code></td>
+        <td>1</td>
+        <td>Index of the input in the transaction. It's a negative number for an output.</td>
+      </tr>
+      <tr>
+        <td><code>tx_output_n</code></td>
+        <td>-1</td>
+        <td>Index of the output in the transaction. It's a negative number for an input.</td>
+      </tr>
+      <tr>
+        <td><code>value</code></td>
+        <td>28318177</td>
+        <td>The value transferred by the particular input or output.</td>
+      </tr>
+      <tr>
+        <td><code>preference</code></td>
+        <td>high</td>
+        <td>How likely is the transaction to make it to the next block, reflects the preference level miners have to include this transaction. Can be high, medium or low.</td>
+      </tr>
+      <tr>
+        <td><code>spent</code></td>
+        <td>true</td>
+        <td>Is 'true' if the output was spent.</td>
+      </tr>
+      <tr>
+        <td><code>spent_by</code></td>
+        <td>b4735a06...</td>
+        <td>Hash of the transaction that spent this output, if it was spent.</td>
+      </tr>
+      <tr>
+        <td><code>double_spend</code></td>
+        <td>false</td>
+        <td>Whether the transaction is a double spend (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+      </tr>
+      <tr>
+        <td><code>double_of</code></td>
+        <td>a672f0...</td>
+        <td>If the transaction is a double spend, what transaction it's double-spending  (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+      </tr>
+      <tr>
+        <td><code>receive_count</code></td>
+        <td>42</td>
+        <td>Unconfirmed transactions only. The number of peers that have sent this transaction to us (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+      </tr>
+      <tr>
+        <td><code>confidence</code></td>
+        <td>0.98819</td>
+        <td>Unconfirmed transactions only. Confidence this transaction will be confirmed (see <a href="#zero_confirmations">Zero Confirmations</a>).</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>To page on the result when there are too many transaction inputs and outputs, use a <i>before</i> URL parameter passing the block height transactions should be older than. Typically, to achieve paging, this will be the block height of the last returned transaction in the txrefs array. For example:</p>
+
+<p>
+  <a href="http://api.blockcypher.com/v1/btc/main/addrs/1J38WorKngZLJvA7qMin9g5jqUfTQUBZNE?unspentOnly=true&amp;before=300000">http://api.blockcypher.com/v1/btc/main/addrs/1J38WorKngZLJvA7qMin9g5jqUfTQUBZNE?unspentOnly=true&amp;before=300000</a>
+</p>
+
+<p>Here's a sample return document for a given address:</p>
+
+<pre><code class="language-http">http://api.blockcypher.com/v1/btc/main/addrs/1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</code>
+<code class="language-javascript">{
+  "address": "1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7",
+  "balance": 0,
+  "unconfirmed_balance": 0,
+  "final_balance": 0,
+  "txrefs": [
+    {
+      "tx_hash": "0d7ac056a96ffc200f53f2a64291a967e5f696c43997f877ef42cb871bb07231",
+      "block_height": 278670,
+      "tx_input_n": 1,
+      "tx_output_n": -1,
+      "value": 283181777,
+      "spent": false,
+      "confirmations": 21405
+    },
+    {
+      "tx_hash": "baee4a85bcc1109fd4133602e6900e13b1b084c617ee75d25418ee3f3e84dcea",
+      "block_height": 278564,
+      "tx_input_n": -1,
+      "tx_output_n": 0,
+      "value": 283181777,
+      "spent": true,
+      "confirmations": 21511
+    }
+  ],
+  "unconfirmed_txrefs": [],
+  "tx_url": "https://api.blockcypher.com/v1/btc/main/txs/"
+}</code></pre>
+ 

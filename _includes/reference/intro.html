@@ -1,0 +1,83 @@
+<span class="title-anchor" id="introduction"></span>
+<h2 class="section-title">Introduction</h2>
+
+<p>BlockCypher runs the Main and Test Bitcoin and Litecoin block chains as well as the Uro block chain. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a>.
+
+<p>Several code samples are provided throughout this documentation. If you would like to check them first, they're listed here:</p>
+<ul>
+  <li><a href="{{ "samples/browse-chain.html" | prepend: site.baseurl }}">Browsing the Block Chain</a></li>
+  <li><a href="{{ "samples/nodejs-webhook.html" | prepend: site.baseurl }}">Using WebHooks</a></li>
+  <li><a href="{{ "samples/create-tx.html" | prepend: site.baseurl }}">Sending a Simple Transaction</a></li>
+  <li><a href="{{ "samples/multisig-tx.html" | prepend: site.baseurl }}">Using Multisig</a></li>
+</ul>
+
+<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
+
+<p>Most resources exist under a given block chain. The URLs to Bitcoin, Litecoin, Uro and BlockCypher chains are:</p>
+
+<pre><code class="language-http">https://api.blockcypher.com/v1/btc/main
+https://api.blockcypher.com/v1/btc/test3
+https://api.blockcypher.com/v1/ltc/main
+https://api.blockcypher.com/v1/uro/main
+https://api.blockcypher.com/v1/bcy/test</code></pre>
+
+<p>Opening the URL to Bitcoin Main will produce the following JSON document. It will show the current chain height, hashes and URLs of the last 2 blocks which are extracted in <i>real-time</i> from our API.</p>
+
+<pre class="language-javascript" data-src="http://api.blockcypher.com/v1/btc/main"></pre>
+
+<p>The samples in this documentation are in Javascript (browser or node.js) or can be accessed using the command line. Complete examples can be found in BlockCypher's <a href="https://github.com/blockcypher/documentation">Github documentation repository</a>. For the command line, we use <a href="http://curl.haxx.se/">curl</a> and <a href="https://github.com/zpoley/json-command">json</a> to illustrate.</p>
+
+<p>For example, this shows the number of transactions in the latest block (see the <a href="#blockchain-api">Blockchain API</a> section for more information):</p>
+
+<pre><code class="language-bash">$ curl -s http://api.blockcypher.com/v1/btc/main | json latest_url | xargs curl -s | json n_tx
+267</code></pre>
+
+<span class="title-anchor" id="rate_limits"></span>
+<h3 class="text-purple">Rate Limits</h3>
+
+<p>BlockCypher APIs can be used up to these rate limits:</p>
+
+<ul class="list">
+  <li>Classic requests, up to 5 requests/sec and 600 requests/hr</li>
+  <li>WebHooks and WebSockets, up to 600 requests/hr</li>
+</ul>
+
+<p>If you exceed a limit, an HTTP status code 429 will be returned. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed those limits, we'll email you one within minutes. Our future pricing plan will be tiered based on usage and volume. We will have a free tier and an extended free plan for our early users.</p>
+
+<p>When you have a token, just pass it as a URL parameter to every single of youre requests, for example:</p>
+
+<pre><code class="language-http">https://api.blockcypher.com/v1/btc/main?token=$USER_TOKEN</code></pre>
+
+<a class="title-anchor" id="testing"></a>
+<h3 class="text-purple">Testing</h3>
+
+<p>To facilitate the testing of your application when using BlockCypher's API, we provide our own test blockchain that supports all of our web services. This blockchain has characteristics very similar to Bitcoin's main chain and a "faucet", which allows you to very easily get free coins for automated testing.</p>
+
+<p>The only differences with the Bitcoin main chain are the following:</p>
+
+<ul class="list">
+  <li>The chain is private (no data is broadcasted, only BlockCypher mines the transactions), making it much more predictable than the Bitcoin's testnet (which is frequently under attack).</li>
+  <li>New blocks get built every minute, confirming the transactions that have been created using our <a href="#creating_transactions">transaction API</a>.</li>
+  <li>The prefix for standard addreses is 'B' or 'C' (0x1B). The prefix for multisig addresses is 'D' (0x1F).</li>
+</ul>
+
+<p>This blockchain is available under the following URL:</p>
+
+<pre><code class="language-http">https://api.blockcypher.com/v1/bcy/test</code></pre>
+<p>In addition to all our APIs, a faucet endpoint is available. Calling it passing an address will automatically create a new transaction funding the address with the provided amount. For example to create a new test address and fund it with 100,000 of our coins:</p>
+
+<pre><code class="language-bash">$ curl -X POST http://api.blockcypher.com/v1/bcy/test/addrs?token=$TOKEN
+{
+"private": "26415016a2fb49f51aef161cb35bd537be07b75a6ac1e297d3b7a370cc85433b",
+"public": "02c572d062fefcc8c3e1bf5016450addcedb89cd7e4507d8a323f327b4ad1018e0",
+"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd"
+}
+$ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' http://api.blockcypher.com/v1/bcy/test/faucet?token=$TOKEN
+{
+  "tx_ref": "02dbf5585d438a1cba82a9041dd815635a6b0df684225cb5271e11397a759479"
+}</code></pre>
+
+<p>A token is required to use the faucet. The faucet will refuse to fund an address with more than 50 billion coins and will not fund more than 10 million coins at a time.</p>
+
+<p>Of course, you can still test your applications against the Bitcoin testnet. Our test blockchain just provides more stability and a reliable automated faucet.</p>
+ 
