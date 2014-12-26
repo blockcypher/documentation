@@ -97,8 +97,9 @@ ol.list li {
 }
 /*nav css st*/
 .navbar-brand {
-	height: auto;
 	padding: 0px;
+  height:50px;
+  width:310px;
 }
 .navbar-name {
   font-family: 'Montserrat', sans-serif;
