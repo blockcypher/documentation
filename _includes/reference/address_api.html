@@ -9,7 +9,6 @@
       <tr>
         <th>Name</th>
         <th>URL Pattern</th>
-        <th>Example</th>
         <th>Method</th>
         <th>Description</th>
       </tr>
@@ -17,29 +16,36 @@
     <tbody>
       <tr>
         <td>Addresses</td>
-        <td>/v1/{coin}/{chain}/addrs</td>
-        <td>/v1/btc/main/addrs</td>
+        <td>/v1/{coin}/{chain}/addrs (/v1/btc/main/addrs)</td>
         <td>POST</td>
         <td>Returns a newly generated address with the corresponding public and private keys.</td>
       </tr>
       <tr>
         <td>Address</td>
-        <td>/v1/{coin}/{chain}/addrs/{hash}</td>
-        <td>
-          <a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD">
+        <td>/v1/{coin}/{chain}/addrs/{hash}
+          (<a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD">
             /v1/btc/main/addrs/1DEP8i...
-          </a>
+          </a>)
         </td>
         <td>GET</td>
-        <td>All details about a given address, including transaction information and balance. Use the unspentOnly URL parameter to get only unspent outputs.</td>
+        <td>All details about a given address, including all inputs and outputs affecting it. Allows retrieval of unspents (UTXO) using the <em>unspentOnly=true</em> URL parameter.</td>
+      </tr>
+      <tr>
+        <td>Full Address Transactions</td>
+        <td>/v1/{coin}/{chain}/addrs/{hash}/full
+          (<a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD/full">
+            /v1/btc/main/addrs/1DEP8i.../full
+          </a>)
+        </td>
+        <td>GET</td>
+        <td>All details about a given address, including full transaction information. More comprehensive than the previous endpoint but slower (as it returns more data).</td>
       </tr>
       <tr>
         <td>Address</td>
-        <td>/v1/{coin}/{chain}/addrs/{hash}/balance</td>
-        <td>
-          <a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD/balance">
+        <td>/v1/{coin}/{chain}/addrs/{hash}/balance
+          (<a href="http://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD/balance">
             /v1/btc/main/addrs/1DEP8i.../balance
-          </a>
+          </a>)
         </td>
         <td>GET</td>
         <td>Only balance and number of transactions for a given address.</td>
@@ -95,9 +101,11 @@
 <span class="title-anchor" id="address_details"></span>
 <h3 class="text-purple">Address Details</h3>
 
-<p>The Address API details gives you the transactions, total inputs and outputs, amount transferred, and current balance for any address. For addresses as for <a href="#transactions">transactions</a>, we consider a transaction confirmed (and hence part of the confirmed balance) if the transaction is in a block, regardless of whether the block is the latest or 50 blocks old.</p>
+<p>The Address API details gives you the transactions inputs and outputs, amount transferred, and current balance for any address. For transactions in addresses as for <a href="#transactions">standalone transactions</a>, we consider a transaction confirmed (and hence part of the confirmed balance) if the transaction is in a block, regardless of whether the block is the latest or 50 blocks old.</p>
 
 <p>To get only the unspent transactions, append <em>?unspentOnly=true</em> to the address URL.</p>
+
+<p>While the simple address endpoint will return transactions inputs and outputs (see below for description), the full address transactions endpoint will return complete transactions in the format described in the <a href="#transactions">transaction Blockchain API</a> section. While this sometimes may be more convenient, it also has the potential of being slower, especially when an address includes very large transactions (just due to the time to transfer the data).</p>
 
 <p>A request to a given address returns the following properties:</p>
 
