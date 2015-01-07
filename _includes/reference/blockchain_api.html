@@ -460,51 +460,65 @@
   </table>
 </div>
 
-<p>Here's a sample return document for a given transaction:</p>
+<p>Here's a sample return document for a given confirmed transaction:</p>
 
-<pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/txs/dd1f183348eb41eaaa9ecf8012f9cca3ecbae41a6349f0cc4bfd2b1a497fa3d0</code>
+<pre><code class="language-http">https://api.blockcypher.com/v1/btc/main/txs/793fafe4223bc6808578ea8fed3d9f8e76cf50b3170857b0d15e244e1db00deb</code>
 <code class="language-javascript">{
-    "block_hash": "0000000000000000189bba3564a63772107b5673c940c16f12662b3e8546b412",
-    "block_height": 294322,
-    "hash": "dd1f183348eb41eaaa9ecf8012f9cca3ecbae41a6349f0cc4bfd2b1a497fa3d0",
-    "addresses": [
-      "143iXmvrg66fCDFNQjahJMHa8P4o8TcMV2",
-      "1LTU7N1Rz8JwgteomqCzaKFMaqzML4nMgZ"
-    ],
-    "total": 14840000,
-    "fees": 10000,
-    "relayed_by": "50.154.237.192:8333",
-    "confirmed": "2014-04-05T07:52:11.827Z",
-    "received": "2014-04-05T07:49:30.983Z",
-    "ver": 1,
-    "lock_time": 0,
-    "double_spend": false,
-    "vin_sz": 1,
-    "vout_sz": 1,
-    "confirmations": 103,
-    "inputs": [
-      {
-        "prev_hash": "3fba439465ac18150070f1b06edbf30b59e25ca10cd773a1f6214366cace0553",
-        "output_index": 0,
-        "script": "49304602210099eeb8166c9edd8ee0c1cb79398bf1642b2289a9156aec583568520415c4...",
-        "addresses": [
-          "143iXmvrg66fCDFNQjahJMHa8P4o8TcMV2"
-        ],
-        "script_type": "pay-to-pubkey-hash"
-      }
-    ],
-    "outputs": [
-      {
-        "value": 14830000,
-        "script": "76a914d56bd5bdffebbc1a8dc08fe535b34641ef74112288ac",
-        "spent_by": "c113d5a71ecfce73a480f8c1bd827e338ae808fbca7c3daf966fdfe1ca615a59",
-        "addresses": [
-          "1LTU7N1Rz8JwgteomqCzaKFMaqzML4nMgZ"
-        ],
-        "script_type": "pay-to-pubkey-hash"
-      }
-    ]
-  }</code></pre>
+
+  "block_hash": "000000000000000000ac026fd6989ee5fc2e103073bf529eb50d45d5badf1f2b",
+  "block_height": 337875,
+  "hash": "793fafe4223bc6808578ea8fed3d9f8e76cf50b3170857b0d15e244e1db00deb",
+  "addresses": [
+    "15dRT5Fo8ucT6duoCzr2MGcoBxRFh4XnRq",
+    "1BcQMbuuwEwns1eDLF2UPckgKUestou6wP",
+    "1NJKqCVJrEknQUder6Lo8vU3uttLY8dY9H"
+  ],
+  "total": 586290000,
+  "fees": 0,
+  "preference": "low",
+  "relayed_by": "192.99.37.171:8333",
+  "confirmed": "2015-01-07T06:22:16Z",
+  "received": "2015-01-07T06:06:04.875Z",
+  "ver": 1,
+  "lock_time": 0,
+  "double_spend": false,
+  "vin_sz": 1,
+  "vout_sz": 2,
+  "confirmations": 2,
+  "inputs": [
+    {
+      "prev_hash": "6fdfda7573bf7fe9cf963c00d2801c171433161f53012a926f3d5367e5412ef0",
+      "output_index": 0,
+      "script": "483045022100a653b228a1114cca173db9df65d903df0260085d405c80f31c3bf032b1bac82d02200387aed659600321254d76e34c9e3060a30ca60d0ab1d8e102abc0e8e394c456012103319bb8ece54c494683350579128adc53e0effec53dc5b0c7a43c8167b14846c3",
+      "output_value": 586290000,
+      "addresses": [
+        "1BcQMbuuwEwns1eDLF2UPckgKUestou6wP"
+      ],
+      "script_type": "pay-to-pubkey-hash"
+    }
+  ],
+  "outputs": [
+    {
+      "value": 468380000,
+      "script": "76a91432c3e32015d44c1da701db01f5014a14ba08f2ea88ac",
+      "spent_by": "",
+      "addresses": [
+        "15dRT5Fo8ucT6duoCzr2MGcoBxRFh4XnRq"
+      ],
+      "script_type": "pay-to-pubkey-hash"
+    },
+    {
+      "value": 117910000,
+      "script": "76a914e9a16ea0978029093c2cd145994fce5b0c48471788ac",
+      "spent_by": "",
+      "addresses": [
+        "1NJKqCVJrEknQUder6Lo8vU3uttLY8dY9H"
+      ],
+      "script_type": "pay-to-pubkey-hash"
+    }
+  ]
+
+}</code></pre>
 
 <span class="title-anchor" id="zero_confirmations"></span>
 <h3 class="text-purple">Zero Confirmations and Double Spending</h3>
