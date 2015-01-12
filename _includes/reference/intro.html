@@ -62,7 +62,7 @@ https://api.blockcypher.com/v1/bcy/test</code></pre>
 <a class="title-anchor" id="testing"></a>
 <h3 class="text-purple">Testing</h3>
 
-<p>To facilitate the testing of your application when using BlockCypher's API, we provide our own test blockchain that supports all of our web services. This blockchain has characteristics very similar to Bitcoin's main chain and a "faucet", which allows you to very easily get free coins for automated testing.</p>
+<p>To facilitate the testing of your application when using BlockCypher's API, we provide our own test blockchain that supports all of our web services. This blockchain has characteristics very similar to Bitcoin's main chain and a <a href="https://accounts.blockcypher.com/blockcypher-faucet">"faucet"</a>, which allows you to very easily get free coins for automated testing.</p>
 
 <p>The only differences with the Bitcoin main chain are the following:</p>
 
@@ -87,6 +87,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 {
   "tx_ref": "02dbf5585d438a1cba82a9041dd815635a6b0df684225cb5271e11397a759479"
 }</code></pre>
+
+<p>The faucet can also be used <a href="https://accounts.blockcypher.com/blockcypher-faucet">from your browser</a> if you want to play with it before automating.</p>
 
 <p>A token is required to use the faucet. The faucet will refuse to fund an address with more than 50 billion coins and will not fund more than 10 million coins at a time.</p>
 
