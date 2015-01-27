@@ -6,8 +6,7 @@ description: "Build block chain applications easily with our web APIs and callba
 #local url
 #baseurl: "http://localhost/documentation/_site/"
 #live url
-#baseurl: http://dev.blockcypher.com/
-baseurl: http://localhost:8080/
+baseurl: http://dev.blockcypher.com/
 
 url: "http://dev.blockcypher.com/"
 
