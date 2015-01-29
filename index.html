@@ -9,10 +9,10 @@ permalink: /
     <div class="col-md-9" role="main">
       {% include reference/intro.html %}
       {% include reference/blockchain_api.html %}
+      {% include reference/address_api.html %}
+      {% include reference/websockets_webhooks.html %}
       {% include reference/payments_transfers.html %}
       {% include reference/creating_txns.html %}
-      {% include reference/websockets_webhooks.html %}
-      {% include reference/address_api.html %}
     </div>
 
     <div class="col-md-3">
@@ -35,6 +35,19 @@ permalink: /
               <li><a href="#zero_confirmations">0-Confirmations</a> <span class="label label-success">NEW!</span></li>
             </ul>
           </li>
+          <li><a href="#address_api" class="mpsb">Address API</a>
+            <ul>
+              <li><a href="#address_details">Address Details</a></li>
+              <li><a href="#address_gen">Address Generation</a></li>
+            </ul>
+          </li>
+          <li><a href="#websocket_webhook" class="mpsb">WebSockets &amp; WebHooks</a>
+            <ul>
+              <li><a href="#events">Events</a></li>
+              <li><a href="#websockets">WebSockets</a></li>
+              <li><a href="#webhooks">WebHooks</a></li>
+            </ul>
+          </li>
           <li><a href="#payments" class="mpsb">Payments and Transfers</a>
             <ul>
               <li><a href="#payments_summary">Summary</a></li>
@@ -47,19 +60,6 @@ permalink: /
               <li><a href="#signing_sending">Signing and Sending</a></li>
               <li><a href="#error_handling">Error Handling</a></li>
               <li><a href="#multisig">Multisig</a></li>
-            </ul>
-          </li>
-          <li><a href="#websocket_webhook" class="mpsb">WebSockets &amp; WebHooks</a>
-            <ul>
-              <li><a href="#events">Events</a></li>
-              <li><a href="#websockets">WebSockets</a></li>
-              <li><a href="#webhooks">WebHooks</a></li>
-            </ul>
-          </li>
-          <li><a href="#address_api" class="mpsb">Address API</a>
-            <ul>
-              <li><a href="#address_gen">Address Generation</a></li>
-              <li><a href="#address_details">Address Details</a></li>
             </ul>
           </li>
           <li><a href="#top" class="mpsb"><i class="fa fa-arrow-up"></i> Back to Top</a></li>

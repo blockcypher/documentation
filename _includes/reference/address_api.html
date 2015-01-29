@@ -54,50 +54,6 @@
   </table>
 </div>
   
-<span class="title-anchor" id="address_gen"></span>
-<h3 class="text-purple">Address Generation</h3>
-
-<p>The generation API is offered for convenience purpose, for security reasons please always use HTTPS to use this resource. No information is required in the POST request, the following information will be returned:</p>
-
-<div class="table-responsive">
-  <table class="table bc-table">
-    <thead>
-      <tr>
-        <th>Property</th>
-        <th>Example (abbreviated URLs and hashes)</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>address</code></td>
-        <td>181w71oR7nTEsKducLBTUJkdbTvLDQzymL</td>
-        <td>Standard address representation.</td>
-      </tr>
-      <tr>
-        <td><code>public</code></td>
-        <td>028b3b3fc5d437...</td>
-        <td>Public key.</td>
-      </tr>
-      <tr>
-        <td><code>private</code></td>
-        <td>028b3b3fc5d437...</td>
-        <td>Private key.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<p>To get a newly generated address::</p>
-
-<pre><code class="language-http">POST https://api.blockcypher.com/v1/btc/main/addrs</code>
-<code class="language-javascript">{
-  "private": "07f6f3dd1f383a8e2085a031f6f3e5183145f3fa1080a5a7f3f39fee981ddd5b",
-  "public": "039920d51829763242314cb61f6bbd69e8daa71e1909f66cf0daa2adf555db29ed",
-  "address": "181w71oR7nTEsKducLBTUJkdbTvLDQzymL"
-}
-</code></pre>
-
 <span class="title-anchor" id="address_details"></span>
 <h3 class="text-purple">Address Details</h3>
 
@@ -123,6 +79,16 @@
         <td><code>address</code></td>
         <td>1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</td>
         <td>The requested address.</td>
+      </tr>
+      <tr>
+        <td><code>total_received</code></td>
+        <td>283181777</td>
+        <td>Total amount, in satoshis, received by this address.</td>
+      </tr>
+      <tr>
+        <td><code>total_sent</code></td>
+        <td>283181777</td>
+        <td>Total amount, in satoshis, sent by this address.</td>
       </tr>
       <tr>
         <td><code>balance</code></td>
@@ -265,9 +231,14 @@
 <pre><code class="language-http">http://api.blockcypher.com/v1/btc/main/addrs/1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7</code>
 <code class="language-javascript">{
   "address": "1PuwQ6uWXNeGcEnLCAXmRJozdLZ9M4NWQ7",
+  "total_received": 283181777,
+  "total_sent": 283181777,
   "balance": 0,
   "unconfirmed_balance": 0,
   "final_balance": 0,
+  "n_tx": 2,
+  "unconfirmed_n_tx": 0,
+  "final_n_tx": 2,
   "txrefs": [
     {
       "tx_hash": "0d7ac056a96ffc200f53f2a64291a967e5f696c43997f877ef42cb871bb07231",
@@ -276,7 +247,9 @@
       "tx_output_n": -1,
       "value": 283181777,
       "spent": false,
-      "confirmations": 21405
+      "confirmations": 62385,
+      "confirmed": "2014-01-05T04:08:17Z",
+      "double_spend": false
     },
     {
       "tx_hash": "baee4a85bcc1109fd4133602e6900e13b1b084c617ee75d25418ee3f3e84dcea",
@@ -285,10 +258,61 @@
       "tx_output_n": 0,
       "value": 283181777,
       "spent": true,
-      "confirmations": 21511
+      "spent_by": "0d7ac056a96ffc200f53f2a64291a967e5f696c43997f877ef42cb871bb07231",
+      "confirmations": 62491,
+      "confirmed": "2014-01-04T11:51:33Z",
+      "double_spend": false
     }
   ],
-  "unconfirmed_txrefs": [],
   "tx_url": "https://api.blockcypher.com/v1/btc/main/txs/"
 }</code></pre>
  
+<span class="title-anchor" id="address_gen"></span>
+<h3 class="text-purple">Address Generation</h3>
+
+<p>The generation API is offered for convenience purpose, for security reasons please always use HTTPS to use this resource. No information is required in the POST request, the following information will be returned:</p>
+
+<div class="table-responsive">
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Example (abbreviated URLs and hashes)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>address</code></td>
+        <td>181w71oR7nTEsKducLBTUJkdbTvLDQzymL</td>
+        <td>Standard address representation.</td>
+      </tr>
+      <tr>
+        <td><code>public</code></td>
+        <td>028b3b3fc5d437...</td>
+        <td>Public key.</td>
+      </tr>
+      <tr>
+        <td><code>private</code></td>
+        <td>028b3b3fc5d437...</td>
+        <td>Private key.</td>
+      </tr>
+      <tr>
+        <td><code>wif</code></td>
+        <td>L2wW7Aq...</td>
+        <td>Wallet import format, a common encoding for the private key.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>To get a newly generated address::</p>
+
+<pre><code class="language-http">curl -X POST http://api.blockcypher.com/v1/btc/main/addrs</code>
+<code class="language-javascript">{
+  "private": "aaafae34b5c2ccd4d36ad71ee6067f77b2e77906450fffac9170e2d2f4c13023",
+  "public": "034beb69b8aaf196f14249d7f086369ad83f340ca50d89ef5cd18bbb64e9694dec",
+  "address": "18vXq4DbQBTWz1WPaNWScPSuY3XDMypSeX",
+  "wif": "L2wW7AqiQ4BDeJ3FFW4mb9TikHcBviM4VhjW1pgoSrPKuyRdBPqY"
+}</code></pre>
+
