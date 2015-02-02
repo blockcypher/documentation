@@ -51,6 +51,13 @@
         <td>POST</td>
         <td>If you're already building your own signed transaction, allows you to validate them and transmit them over the network. Takes the transaction's hex-encoded string in a {"tx": "12A45F67..."} JSON wrapper.</td>
       </tr>
+      <tr>
+        <td>Decode</td>
+        <td>/v1/{coin}/{chain}/txs/decode</td>
+        <td>/v1/btc/main/txs/decode</td>
+        <td>POST</td>
+        <td>Decodes a hex-encoded raw transaction into a transaction JSON. Takes the transaction's hex-encoded string in a {"tx": "12A45F67..."} JSON wrapper. Does not do any additional processing (does not push).</td>
+      </tr>
     </tbody>
   </table>
 </div>
