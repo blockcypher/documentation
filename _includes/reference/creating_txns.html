@@ -255,11 +255,11 @@
 <p>Here's an example showing how to sign the transaction in Javascript using the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">bitcoinjs</a> library:</p>
 
 <pre><code class="language-javascript">
-  var key     = Bitcoin.ECKey.fromHex(source.private);
+  var key     = new bitcoin.ECKey(bigi.fromHex(source.private), true);
   var pubkeys = [];
-  var signatures = newtx.tosign.map(function(tosign) {
+  var signatures  = newtx.tosign.map(function(tosign) {
     pubkeys.push(source.public);
-    return bytesToHex(key.sign(hexToBytes(tosign)));
+    return key.sign(new buffer.Buffer(tosign, "hex")).toDER().toString("hex");
   });
   newtx.signatures  = signatures;
   newtx.pubkeys     = pubkeys;
