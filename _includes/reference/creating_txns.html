@@ -277,9 +277,9 @@
 <p>The simplest way to send a micro-transaction is the following, passing a hex-encoded private key (again keep in mind that passing your private key is discouraged for everything but low-value wallets):</p>
 
 <pre><code class="language-bash">curl -H "Content-Type: application/json" \
-  -d '{"from_private": "...", "to_address": "...", "value_satoshis": 500000, \
-       "wait_guarantee": true, "token": "..."}' \
-  https://api.blockcypher.com/v1/btc/main/txs/micro
+     -d '{"from_private": "...", "to_address": "...", "value_satoshis": 500000, \
+          "wait_guarantee": true, "token": "..."}' \
+     https://api.blockcypher.com/v1/btc/main/txs/micro
 </code></pre>
 
 <p>This call will hold until the transaction confidence has reached 99%. When it returns the transaction is guaranteed by our services. The response will also include a hash property which is the hash of the broadcasted transaction.</p>
