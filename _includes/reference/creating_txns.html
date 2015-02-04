@@ -1,14 +1,17 @@
 <span class="title-anchor" id="creating_transactions"></span>
 <h2 class="section-title">Creating Transactions</h2>
 
-<p>For security reasons we do not keep any private keys: you are the only one who can sign transactions. There are 2 ways to send a transaction using our API:</p>
+<span class="title-anchor" id="generic_transactions"></span>
+<h3 class="text-purple">Generic Transactions</h3>
+
+<p>There are 2 ways to send a generic transaction using our API:</p>
 
 <ul class="list">
   <li>Build the transaction yourself (using a 3rd party library) and push the raw hex-encoded string. We will broadcast to the network and track it for you.</li>
   <li>Create the transaction with our API, the 2 addresses and the amount.</li>
 </ul>
 
-<p>Using our API, creating a transaction from scratch is a 3-step process:</p>
+<p>For security reasons, we do not keep any private keys, you are the only one who can sign transactions. Using our API, creating a transaction from scratch is a 3-step process:</p>
 
 <ol class="list">
   <li>We build the unsigned transaction and the data to sign it from basic information: an input address, an output address, and the value transferred.</li>
@@ -65,7 +68,7 @@
 <p>When a transaction has been successfully sent (using the Send or Push endpoints), an HTTP status of 201 is returned.</p>
 
 <span class="title-anchor" id="transaction_skeleton"></span>
-<h3 class="text-purple">Transaction Skeleton</h3>
+<h4 class="text-purple">Transaction Skeleton</h4>
 
 <p>A partially filled transaction is needed to create a full transaction. We require at least one input with a minimum of one address and at least one output with an address and value (in satoshis). For example:</p>
 
@@ -153,7 +156,7 @@
   <li>unknown (non-standard script)</li>
 </ol>
 
-<h4>Example</h4>
+<h5 class="text-purple">Example</h5>
 
 <p>The following example will create 2 inputs because 2 previous transactions must be used for the requested amount. It also creates 2 outputs, one for the required transaction and another for the change.</p>
 
@@ -229,6 +232,185 @@
   ]
 }</code></pre>
 
+<span class="title-anchor" id="error_handling"></span>
+<h4 class="text-purple">Error Handling</h4>
+
+<p>When something is wrong with the provided transaction, the server will reply with a 400 HTTP error code. It will also return a JSON document that includes the transaction and an <i>errors</i> section listing the different issues that were encountered. If you're experiencing any difficulty, please check the returned errors.</p>
+
+<pre><code class="language-javascript">{
+  "tx": { ... },
+  "errors": [
+    {"error": "..."}
+  ]
+}</code></pre>
+
+<p>The most common issue is the absence of confirmed unspent outputs to build the transaction from. By default, spending unconfirmed transactions isn't enabled, so you may not be able to issue a 2nd transaction until the first has been confirmed. To enable spending from unconfirmed transactions, in the partially filled transaction provided to the new endpoint add "confirmations: -1".</p>
+
+<p>The second most common issue is to use uncompressed public keys when compressed public keys were used to generate the address. If the script generated can't be verified, try passing compressed public keys instead.</p>
+
+<a class="title-anchor" id="change_fees"></a>
+<h4 class="text-purple">Change and Fees</h4>
+<p>No matter the type of transaction built, the change (leftover from the inputs once all outputs are credited the requested amount) will generally be credited to the address referenced in the first transaction input. An additional output will be created to set this up.<p>
+<p>To force change to be credited to a specific address, set the <em>change_address</em> property on the transaction skeleton provided to the transaction API.</p>
+<p>Fee calculation in cryptocurrencies can be complex. We provide 2 different ways for you to control the fees included in your transactions:</p>
+<ul>
+  <li>Set the <em>preference</em> property in your transaction skeleton to "high", "medium" or "low". This will calculate and include appropriate fees for your transaction to be included in the next 1-2 blocks, 3-5 blocks or 5 or more blocks respectively. The default fee calculation is based on a high preference. A preference set to "zero" will set no fee.</li>
+  <li>Force the fee to a desired amount by setting it in the <em>fees</em> property of the transaction skeleton. Note that a fee too low may result in an error for some transactions that would require it.</li>
+</ul>
+<p>Fees are required for many transactions and you can't easily determine whether a transaction will require a fee. If you still want to generate a 0-fee transaction, use the "zero" preference to test whether it is valid first. We will return an error if the transaction require a fee, at which point you can set the preference to a higher level accordingly.</p>
+<p>To learn more about fees, <a href="http://bitcoinfees.com/">bitcoinfees.com</a> is a good resource.</p>
+
+<span class="title-anchor" id="micro_transactions"></span>
+<h3 class="text-purple">Micro Transactions</h3>
+
+<p>Micro transactions have the following characteristics:</p>
+<ul>
+  <li>The value is between 2000 satoshis (~0.5 cents) and 4000000 satoshis (~$9).</li>
+  <li>BlockCypher pays the mining fees (up to your first 8,000 transactions).</li>
+  <li>Transactions are guaranted by BlockCypher as soon as our <a href="http://dev.blockcypher.com/#zero_confirmations">confidence factor</a> reaches 99% (after 8 sec on average).</li>
+</ul>
+
+<h4 class="text-purple">Getting Started</h4>
+
+<p>To facilitate testing and integration in cases where addresses only have low value (which is very common for micro-transactions), we allow passing a private key so we can directly build, sign and send the transaction. Passing a change address is also supported to mitigate long-term risks. In all other cases, passing only the public key and signing yourself is recommended for security reasons (see <a href="#microtx-security">security considerations</a>).</p>
+
+<p>The simplest way to send a micro-transaction is the following, passing a hex-encoded private key (again keep in mind that passing your private key is discouraged for everything but low-value wallets):</p>
+
+<pre><code class="bash">
+curl -H "Content-Type: application/json" -d '{"from_private": "...", "to_address": "...", "value_satoshis": 500000, "wait_guarantee": true, "token": "..."}' https://api.blockcypher.com/v1/btc/main/txs/micro
+</code></pre>
+
+<p>This call will hold until the transaction confidence has reached 99%, when it returns the transaction is guaranteed by our services. The response will also include a hash property which is the hash of the broadcasted transaction.</p>
+
+<p>The same can be achieved securely for higher value addresses by providing the public key instead. You will have to sign the required data returned by the microtx endpoint to complete the transaction (see <a href="#signing_sending">Signing and Sending</a>). Here is an example command-line session on bitcoin's testnet:</p>
+
+<pre><code class="bash">
+# the returned document includes the hex to sign
+$ curl -X POST https://api.blockcypher.com/v1/btc/test3/txs/micro?from_pubkey=03bb31...&to_address=mrS8...&value_satoshis=5000&token=...
+{
+  "from_pubkey": "03bb318b00de944086fad67ab78a832eb1bf26916053ecd3b14a3f48f9fbe0821f",
+  "to_address": "mrS82nWF3TCfhafSaKnmUUktGNYuTZn1Ap",
+  "value_satoshis": 5000,
+  "tosign": [
+    "a1b1d20af6588531dd3812921221ac1b49496f5b05a63e50e78365c0a3d208d7"
+  ],
+  "token": "477a17a15d55b408038404a46c059ef9"
+}
+# any signing library should work, here we use the tool at
+# https://github.com/blockcypher/btcutils/tree/master/signer
+$ ./signer a1b1d20af6588531dd3812921221ac1b49496f5b05a63e50e78365c0a3d208d7 $PRIVATE_KEY
+3045022100...
+# we build a json document including our original transaction and simply adding the generated signature
+$ cat microtx_signed.json 
+{
+  "from_pubkey": "03bb318b00de944086fad67ab78a832eb1bf26916053ecd3b14a3f48f9fbe0821f",
+  "to_address": "mrS82nWF3TCfhafSaKnmUUktGNYuTZn1Ap",
+  "value_satoshis": 5000,
+  "token": "477a17a15d55b408038404a46c059ef9",
+  "signatures": [
+    "3045022100..."
+  ]
+}
+# calling the microtx endpoint again this time passing the signatures will send the transaction
+$ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.blockcypher.com/v1/btc/test3/txs/micro
+{
+  "from_pubkey": "03bb318b00de944086fad67ab78a832eb1bf26916053ecd3b14a3f48f9fbe0821f",
+  "to_address": "mrS82nWF3TCfhafSaKnmUUktGNYuTZn1Ap",
+  "value_satoshis": 5000,
+  "hash": "1611421e265a831f108fc004b02b293ee381c8bfdc01e52a717cc154f7173904"
+}
+</code></pre>
+
+<p>Note that the public keys as well as the signatures are hex-encoded.</p>
+
+<h4 class="text-purple">Micro Transaction Properties</h4>
+
+<p>The properties for micro-transactions can either be provided in a JSON document or in the URL query string. They're sent as a POST to the /txs/micro endpoint.</p>
+
+<p>When initiating a micro-transaction using the public key, the response to a POST on the endpoint will return an array of hex-encoded data that should be signed. The signatures should be sent back using the same request as previous, adding the <em>signatures</em> property (send <a href="signing_sending">Signing and Sending</a> for more details).</p>
+
+<div class="table-responsive">
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Example</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>from_pubkey</td>
+        <td>03bb318b00...</td>
+        <td>Hex-encoded public key to send the coins from.</td>
+      </tr>
+      <tr>
+        <td>from_private</td>
+        <td>1af97b1f...</td>
+        <td>Hex-encoded private key to send the coins from.</td>
+      </tr>
+      <tr>
+        <td>from_wif</td>
+        <td>L4hgYtQ9...</td>
+        <td>WIF encoding of the private key to send the coins from.</td>
+      </tr>
+      <tr>
+        <td>to_address</td>
+        <td>1GGdUQcS1f2ynd9MbDyxHJmKBWPKKtKDX9</td>
+        <td>Target address that will receive the coins.</td>
+      </tr>
+      <tr>
+        <td>change_address</td>
+        <td>1FY2VfGAfrkLLkFkENrDCiqFhbNxHjhRU1</td>
+        <td>Address to use to send back the change. Will be the calculated from address</td>
+      </tr>
+      <tr>
+        <td>value_satoshis</td>
+        <td>10000</td>
+        <td>Amount transferred in satoshis.</td>
+      </tr>
+      <tr>
+        <td>wait_guarantee</td>
+        <td>true</td>
+        <td>Wait for the transaction to be guaranteed by BlockCypher (usually ~8 sec). If false will return as soon as the transaction is broadcasted.</td>
+      </tr>
+      <tr>
+        <td>token</td>
+        <td></td>
+        <td>Your API token.</td>
+      </tr>
+      <tr>
+        <td>tosign</td>
+        <td>["ab125a...", "9f034de..."]</td>
+        <td>Data to sign after having initiated the micro-transaction. Sent in reply to a micro-transaction passing the pubkey.</td>
+      </tr>
+      <tr>
+        <td>signatures</td>
+        <td>["3045...", "3046..."]</td>
+        <td>Hex-encoded signatures to send back after having received the data to sign.</td>
+      </tr>
+      <tr>
+        <td>hash</td>
+        <td>3cf5c1fb0443...</td>
+        <td>The hash of the finalized transaction, once sent.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>Only the transaction value, the target address, your API token and one of the from pubkey, private or wif are required.</p>
+
+<h4 class="text-purple">Security Considerations</h4>
+
+<p>In general, sending any private key to an outside service is bad security practice and should be frowned upon. However security and ease of use are often in opposition. When it comes to deciding whether passing a private key for micro-transactions is a reasonable tradeoff, the following should be considered:</p>
+<ul>
+  <li>The private key data is sent in a JSON document over SSL, protecting against eavesdroppers.</li>
+  <li>We never log or keep any private key. They're just present on our systems during the time of signing.</li>
+  <li>The use of a different change addresses is encouraged, so the money gets transferred to another private key (porentially over several uses).</li>
+  <li>Regardless of the above, never pass a private key for addresses with high value. The micro-transaction API is meant for low-value transactions and low-value addresses.</li>
+</ul>
+<p>Finally, the option of passing private keys is only offered because signing on the client side can be difficult depending on the environment. We hope that using this information, you can make the right tradeoff for your situation.</p>
+
 <span class="title-anchor" id="signing_sending"></span>
 <h3 class="text-purple">Signing and Sending</h3>
 
@@ -265,37 +447,9 @@
   newtx.pubkeys     = pubkeys;
 </code></pre>
 
-<p>Once signatures are inserted, POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send). The same document will be returned with the finalized transaction. If no errors are returned, your transaction was successfully issued and broadcasted across the network.</p>
+<p>Once signatures are inserted, POST the resulting document to the send resource (under /v1/{coin}/{chain}/txs/send for generic transacions, /v1/{coin}/{chain}/txs/microtx for micro-transactions). The same document will be returned with the finalized transaction. If no errors are returned, your transaction was successfully issued and broadcasted across the network.</p>
 
 <p>See our <a href="/samples/create-tx.html">full sample</a> to issue a transaction on testnet from your browser.</p>
-
-<span class="title-anchor" id="error_handling"></span>
-<h3 class="text-purple">Error Handling</h3>
-
-<p>When something is wrong with the provided transaction, the server will reply with a 400 HTTP error code. It will also return a JSON document that includes the transaction and an <i>errors</i> section listing the different issues that were encountered. If you're experiencing any difficulty, please check the returned errors.</p>
-
-<pre><code class="language-javascript">{
-  "tx": { ... },
-  "errors": [
-    {"error": "..."}
-  ]
-}</code></pre>
-
-<p>The most common issue is the absence of confirmed unspent outputs to build the transaction from. By default, spending unconfirmed transactions isn't enabled, so you may not be able to issue a 2nd transaction until the first has been confirmed. To enable spending from unconfirmed transactions, in the partially filled transaction provided to the new endpoint add "confirmations: -1".</p>
-
-<p>The second most common issue is to use uncompressed public keys when compressed public keys were used to generate the address. If the script generated can't be verified, try passing compressed public keys instead.</p>
-
-  <a class="title-anchor" id="change_fees"></a>
-  <h3 class="text-purple">Change and Fees</h3>
-  <p>No matter the type of transaction built, the change (leftover from the inputs once all outputs are credited the requested amount) will generally be credited to the address referenced in the first transaction input. An additional output will be created to set this up.<p>
-  <p>To force change to be credited to a specific address, set the <em>change_address</em> property on the transaction skeleton provided to the transaction API.</p>
-  <p>Fee calculation in cryptocurrencies can be complex. We provide 2 different ways for you to control the fees included in your transactions:</p>
-  <ul>
-    <li>Set the <em>preference</em> property in your transaction skeleton to "high", "medium" or "low". This will calculate and include appropriate fees for your transaction to be included in the next 1-2 blocks, 3-5 blocks or 5 or more blocks respectively. The default fee calculation is based on a high preference. A preference set to "zero" will set no fee.</li>
-    <li>Force the fee to a desired amount by setting it in the <em>fees</em> property of the transaction skeleton. Note that a fee too low may result in an error for some transactions that would require it.</li>
-  </ul>
-  <p>Fees are required for many transactions and you can't easily determine whether a transaction will require a fee. If you still want to generate a 0-fee transaction, use the "zero" preference to test whether it is valid first. We will return an error if the transaction require a fee, at which point you can set the preference to a higher level accordingly.</p>
-  <p>To learn more about fees, <a href="http://bitcoinfees.com/">bitcoinfees.com</a> is a good resource.</p>
 
 <span class="title-anchor" id="multisig"></span>
 <h3 class="text-purple">Multisig Transactions</h3>
