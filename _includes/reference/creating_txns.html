@@ -279,7 +279,7 @@
 <pre><code class="language-bash">curl -H "Content-Type: application/json" -d '{"from_private": "...", "to_address": "...", "value_satoshis": 500000, "wait_guarantee": true, "token": "..."}' https://api.blockcypher.com/v1/btc/main/txs/micro
 </code></pre>
 
-<p>This call will hold until the transaction confidence has reached 99%, when it returns the transaction is guaranteed by our services. The response will also include a hash property which is the hash of the broadcasted transaction.</p>
+<p>This call will hold until the transaction confidence has reached 99%. When it returns the transaction is guaranteed by our services. The response will also include a hash property which is the hash of the broadcasted transaction.</p>
 
 <p>The same can be achieved securely for higher value addresses by providing the public key instead. You will have to sign the required data returned by the microtx endpoint to complete the transaction (see <a href="#signing_sending">Signing and Sending</a>). Here is an example command-line session on bitcoin's testnet:</p>
 
@@ -360,7 +360,7 @@ $ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.b
       <tr>
         <td>change_address</td>
         <td>1FY2VfGAfrkLLkFkENrDCiqFhbNxHjhRU1</td>
-        <td>Address to use to send back the change. Will be the calculated from address</td>
+        <td>Address to use to send back the change. Defaults to the address calculated from the input public or private keys.</td>
       </tr>
       <tr>
         <td>value_satoshis</td>
@@ -370,7 +370,7 @@ $ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.b
       <tr>
         <td>wait_guarantee</td>
         <td>true</td>
-        <td>Wait for the transaction to be guaranteed by BlockCypher (usually ~8 sec). If false will return as soon as the transaction is broadcasted.</td>
+        <td>Wait for the transaction to be guaranteed by BlockCypher (usually ~8 sec). If <em>false</em> will return as soon as the transaction is broadcasted.</td>
       </tr>
       <tr>
         <td>token</td>
@@ -400,14 +400,14 @@ $ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.b
 
 <h4 class="text-purple">Security Considerations</h4>
 
-<p>In general, sending any private key to an outside service is bad security practice and should be frowned upon. However security and ease of use are often in opposition. When it comes to deciding whether passing a private key for micro-transactions is a reasonable tradeoff, the following should be considered:</p>
+<p>In general, sending any private key to an outside service is a bad security practice and is discouraged. However security and ease of use are often in opposition. When it comes to deciding whether to pass a private key for micro-transactions is a reasonable tradeoff, the following should be considered:</p>
 <ul>
   <li>The private key data is sent in a JSON document over SSL, protecting against eavesdroppers.</li>
   <li>We never log or keep any private key. They're just present on our systems during the time of signing.</li>
-  <li>The use of a different change addresses is encouraged, so the money gets transferred to another private key (porentially over several uses).</li>
+  <li>The use of a different change addresses is encouraged, so the money gets transferred to another private key (potentially over several uses).</li>
   <li>Regardless of the above, never pass a private key for addresses with high value. The micro-transaction API is meant for low-value transactions and low-value addresses.</li>
 </ul>
-<p>Finally, the option of passing private keys is only offered because signing on the client side can be difficult depending on the environment. We hope that using this information, you can make the right tradeoff for your situation.</p>
+<p>Finally, the option of passing private keys is only offered because signing on the client side can be difficult depending on the environment. We hope that using this information, you will make the right tradeoff for your situation.</p>
 
 <span class="title-anchor" id="signing_sending"></span>
 <h3 class="text-purple">Signing and Sending</h3>
