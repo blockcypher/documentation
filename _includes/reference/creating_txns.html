@@ -276,16 +276,14 @@
 
 <p>The simplest way to send a micro-transaction is the following, passing a hex-encoded private key (again keep in mind that passing your private key is discouraged for everything but low-value wallets):</p>
 
-<pre><code class="bash">
-curl -H "Content-Type: application/json" -d '{"from_private": "...", "to_address": "...", "value_satoshis": 500000, "wait_guarantee": true, "token": "..."}' https://api.blockcypher.com/v1/btc/main/txs/micro
+<pre><code class="language-bash">curl -H "Content-Type: application/json" -d '{"from_private": "...", "to_address": "...", "value_satoshis": 500000, "wait_guarantee": true, "token": "..."}' https://api.blockcypher.com/v1/btc/main/txs/micro
 </code></pre>
 
 <p>This call will hold until the transaction confidence has reached 99%, when it returns the transaction is guaranteed by our services. The response will also include a hash property which is the hash of the broadcasted transaction.</p>
 
 <p>The same can be achieved securely for higher value addresses by providing the public key instead. You will have to sign the required data returned by the microtx endpoint to complete the transaction (see <a href="#signing_sending">Signing and Sending</a>). Here is an example command-line session on bitcoin's testnet:</p>
 
-<pre><code class="bash">
-# the returned document includes the hex to sign
+<pre><code class="language-bash"># the returned document includes the hex to sign
 $ curl -X POST https://api.blockcypher.com/v1/btc/test3/txs/micro?from_pubkey=03bb31...&to_address=mrS8...&value_satoshis=5000&token=...
 {
   "from_pubkey": "03bb318b00de944086fad67ab78a832eb1bf26916053ecd3b14a3f48f9fbe0821f",
