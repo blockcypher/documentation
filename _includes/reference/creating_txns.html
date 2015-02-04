@@ -459,7 +459,7 @@ $ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.b
   <li>Public keys must be provided instead of addresses for the multisig inputs or outputs.</li>
 </ul>
 
-<p>For a multisig interaction to happen, first the multisig address has to be sent some money using a transaction that includes N public keys in its output. Then that transaction can be spent by another by repeatedly issuing the required M number of signature. The interaction can be broken down as follows:</p>
+<p>For a multisig interaction to happen, first the multisig address has to be sent some money using a transaction that includes M public keys in its output. Then that transaction can be spent by another by repeatedly issuing the required N number of signature. The interaction can be broken down as follows:</p>
 
 <ol class="list">
   <li>Call the <a href="#transaction_skeleton">txs/new</a> endpoint to create a funding transaction. For a 2-of-3 transaction:
