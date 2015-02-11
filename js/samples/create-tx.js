@@ -2,13 +2,13 @@ var bitcoin = require("bitcoinjs-lib");
 var bigi    = require("bigi");
 var buffer  = require('buffer');
 
-var rootUrl = "https://api.blockcypher.com/v1/btc/main";
+var rootUrl = "https://api.blockcypher.com/v1/btc/test3";
 // please do not drain our test account, if you need testnet BTC use a faucet
 // https://tpfaucet.appspot.com/
 var source = {
-  private : "a2f21b63e2ded430707532030e0fa38ab7becbb0a213c8286110b73abe910bc6",
-  public  : "034aa78e5e57b45163abe7e3815c3881d7e218026bc0e32f9063d7f3b71b134f3f",
-  address : "15qx9ug952GWGTNn7Uiv6vode4RcGrRemh"
+  private : "1af97b1f428ac89b7d35323ea7a68aba8cad178a04eddbbf591f65671bae48a2",
+  public  : "03bb318b00de944086fad67ab78a832eb1bf26916053ecd3b14a3f48f9fbe0821f",
+  address : "mtWg6ccLiZWw2Et7E5UqmHsYgrAi5wqiov"
 }
 var key   = new bitcoin.ECKey(bigi.fromHex(source.private), true);
 var dest  = null;
@@ -24,7 +24,7 @@ function logAddr(addr) {
 function newTransaction() {
   var newtx = {
     "inputs": [{"addresses": [source.address]}],
-    "outputs": [{"addresses": ["18vXq4DbQBTWz1WPaNWScPSuY3XDMypSeX"], "value": 10000000}]
+    "outputs": [{"addresses": [dest.address], "value": 25000}]
   }
   return $.post(rootUrl+"/txs/new", JSON.stringify(newtx));
 }
