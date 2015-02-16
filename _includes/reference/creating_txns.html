@@ -433,6 +433,8 @@ $ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.b
   ]
 }</code></pre>
 
+<p><em>Note:</em> for multisig transactions, the pubkeys are already provided which each input so they should not be included again.</p>
+
 <p>Additionally, for each input the public key matching the input address must be provided because the input address cannot be calculated from the address. In general, repeat the public key for the address provided in the transaction skeleton input.</p>
 
 <p>Here's an example showing how to sign the transaction in Javascript using the <a href="https://github.com/bitcoinjs/bitcoinjs-lib">bitcoinjs</a> library:</p>
