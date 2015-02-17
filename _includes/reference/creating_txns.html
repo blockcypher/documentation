@@ -457,7 +457,7 @@ $ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.b
 <span class="title-anchor" id="validate_tosign"></span>
 <h4 class="text-purple">Validating the Data to Sign</h4>
 
-<p>To protect yourself further from a potential malicious attack on our services, you may want to validate the data we're asking you to sign. Unfortunately it's impossible as the data is hashed twice using SHA256 so you can't get back to the original transaction. To allow you to still validate, an additional <em>includeToSignTx</em> URL property is accepted on the call the <em>txs/new</em>. An additional <em>tosign_tx</em> array will be returned that you can use in the following way:</p>
+<p>To protect yourself further from a potential malicious attack on our services, you may want to validate the data we're asking you to sign. Unfortunately it's impossible drectly as the data is hashed twice using SHA256 so you can't get back to the original transaction. To allow you to still validate, the <em>includeToSignTx</em> URL property is accepted on the call the <em>txs/new</em>. An additional <em>tosign_tx</em> array will be returned that you can use in the following way:</p>
 
 <ul class="list">
   <li>Hashing the hex-encoded string twice using SHA256 should give you back the corresponding <em>tosign</em> data.</li>
