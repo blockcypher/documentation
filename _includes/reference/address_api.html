@@ -1,7 +1,7 @@
 <span class="title-anchor" id="address_api"></span>
 <h2 class="section-title">Address API</h2>
 
-<p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. A collection resource and a detail resource make up the Address API.</p>
+<p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. A collection resource and a detail resource make up the Address API. A wallet name can also be used with this API.</p>
 
 <div class="table-responsive">
   <table class="table bc-table">
@@ -28,7 +28,7 @@
           </a>)
         </td>
         <td>GET</td>
-        <td>All details about a given address, including all inputs and outputs affecting it. Allows retrieval of unspents (UTXO) using the <em>unspentOnly=true</em> URL parameter.</td>
+        <td>All details about a given address/wallet, including all inputs and outputs affecting it. Allows retrieval of unspents (UTXO) using the <em>unspentOnly=true</em> URL parameter. A wallet name can be used instead of an address, which will return aggregated (summed) details for all addresses in the wallet.</td>
       </tr>
       <tr>
         <td>Full Address Transactions</td>
@@ -38,7 +38,7 @@
           </a>)
         </td>
         <td>GET</td>
-        <td>All details about a given address, including full transaction information. More comprehensive than the previous endpoint but slower (as it returns more data).</td>
+        <td>All details about a given address/wallet, including full transaction information. More comprehensive than the previous endpoint but slower (as it returns more data).</td>
       </tr>
       <tr>
         <td>Address</td>
@@ -48,7 +48,7 @@
           </a>)
         </td>
         <td>GET</td>
-        <td>Only balance and number of transactions for a given address.</td>
+        <td>Only balance and number of transactions for a given address/wallet.</td>
       </tr>
     </tbody>
   </table>

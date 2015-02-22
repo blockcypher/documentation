@@ -1,0 +1,99 @@
+<span class="title-anchor" id="wallet_api"></span>
+<h2 class="section-title">Wallet API</h2>
+
+<p>The wallet API groups multiple addresses under a single name. Addresses can be added and removed, and the name can be used with our other APIs. We also support HD (<a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki">BIP 32</a>) wallets. While for normal wallets any address can be added/removed, a HD wallet handles addresses derived from a single pair of master keys.</p>
+
+<div class="table-responsive">
+  <table class="table bc-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>URL Pattern</th>
+        <th>Method</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Create Wallet</td>
+        <td>/v1/{coin}/{chain}/wallet/ (/v1/btc/main/wallet/)</td>
+        <td>POST</td>
+        <td>Creates a new standard wallet identified by <em>name</em> and associates <em>addresses</em> with it.</td>
+      </tr>
+      <tr>
+        <td>Create HD Wallet</td>
+        <td>/v1/{coin}/{chain}/wallet/hd (/v1/btc/main/wallet/hd)</td>
+        <td>POST</td>
+        <td>Creates a new HD wallet. If no parameters are sent, a new wallet is generated and returned. See example below for return values. If you have already generated a HD wallet yourself, you can add it here by sending <em>public_parent_key</em> and <em>chain_code</em>.</td>
+      </tr>
+      <tr>
+        <td>Generate Address</td>
+        <td>/v1/{coin}/{chain}/wallet/{name}/addresses/generate (/v1/btc/main/wallet/alice/addresses/generate)</td>
+        <td>POST</td>
+        <td>For a HD wallet, a new address is derived from the public parent key. For a non-HD wallet, a new address is generated similar to <a href="#address_gen">Address Generation</a> and associated it with the given wallet. </td>
+      </tr>
+      <tr>
+        <td>Addresses</td>
+        <td>/v1/{coin}/{chain}/wallet/{name}/addresses (/v1/btc/main/wallet/alice/addresses)</td>
+        <td>GET</td>
+        <td>All addresses in a given wallet.</td>
+      </tr>
+      <tr>
+        <td>Add Addresses</td>
+        <td>/v1/{coin}/{chain}/wallet/{name}/addresses/ (/v1/btc/main/wallet/alice/addresses)</td>
+        <td>POST</td>
+        <td>Associates <em>addresses</em> with the wallet.</td>
+      </tr>
+      <tr>
+        <td>Remove Addresses</td>
+        <td>/v1/{coin}/{chain}/wallet/{name}/addresss/ (/v1/btc/main/wallet/alice/addreses)</td>
+        <td>DELETE</td>
+        <td><em>addresses</em> will no longer be associated with the wallet.</td>
+      </tr>
+      <tr>
+        <td>Delete</td>
+        <td>/v1/{coin}/{chain}/wallet/{name}/ (/v1/btc/main/wallet/alice/)</td>
+        <td>DELETE</td>yes
+        <td>Deletes the wallet (removes the association between <em>name</em> and any addresses).</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<span class="title-anchor" id="wallet"></span>
+<h3 class="text-purple">Wallet</h3>
+
+<p>To create a new standard wallet:</p>
+
+<pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/wallet/
+{
+  "name": "alice",
+  "addresses": ["16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX", "17astdTmG8zzVmry8mV8A7atAr3XefEgRX"]
+}</code></pre>
+
+<h3 class="text-purple">HD wallet</h3>
+
+<span class="title-anchor" id="hd_wallet"></span>
+<p>To generate a new HD wallet:</p>
+
+<pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/wallet/hd
+{
+  "name": "alice",
+}</code></pre>
+
+This will return the private parent key, the public parent key and the chain code. See <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki">BIP 32</a>.
+
+<pre><code class="language-javascript">{
+  "private_parent_key": "142ef411103ade32682cde5ded3a9085200c5efe65f1616d573d0d7fda37b1d9",
+  "public_parent_key": "cd11ec8c9764b02b398b6cf772900fc52dace5db63d888e372a65baf3546dd44",
+  "chain_code": "8b62b4a852ab78e8d4c07d5eae40de315f9d7446321b19a20f59aef083330aa9"
+}</code></pre>
+
+<p>If you want to generate the HD wallet yourself, you can add it by sending the non-private parts. This provides the same functionality as if blockcypher generated the wallet, as we do not keep any private keys.</p>
+
+<pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/wallet/hd
+{
+  "name": "alice",
+  "public_parent_key": "cd11ec8c9764b02b398b6cf772900fc52dace5db63d888e372a65baf3546dd44",
+  "chain_code": "8b62b4a852ab78e8d4c07d5eae40de315f9d7446321b19a20f59aef083330aa9"
+}</code></pre>

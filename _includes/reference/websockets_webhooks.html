@@ -54,9 +54,14 @@
         <td>Only objects with a matching hash will be sent. The hash can either be for a block or a transaction.</td>
       </tr>
       <tr>
+        <td><code>wallet_name</code></td>
+        <td>"wallet_name": "alice"</td>
+        <td>Only transactions associated with the given wallet will be sent. Can be either a HD or normal wallet. Requires a user token.</td>
+      </tr>
+      <tr>
         <td><code>address</code></td>
         <td>"address": "1CjPR7Z5ZSyWk6WtXvSFgkptmpoi4UM9BC"</td>
-        <td>Only transactions associated with the given address will be sent.</td>
+        <td>Only transactions associated with the given address will be sent. A wallet name can also be used instead of an address, which will then match on any address in the wallet.</td>
       </tr>
       <tr>
         <td><code>script</code></td>
