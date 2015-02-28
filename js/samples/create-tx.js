@@ -48,7 +48,7 @@ function waitForConfirmation(finaltx) {
   log("Transaction " + finaltx.tx.hash + " to " + dest.address + " of " +
         finaltx.tx.outputs[0].value/100000000 + " BTC sent.");
 
-  var ws = new WebSocket("ws://socket.blockcypher.com/v1/btc/test3");
+  var ws = new WebSocket("wss://socket.blockcypher.com/v1/btc/test3");
 
   // We keep pinging on a timer to keep the websocket alive
   var ping = pinger(ws);

@@ -57,7 +57,7 @@ function waitForConfirmation(finaltx) {
         finaltx.tx.outputs[0].value/100000000 + " BTC sent.");
 
   var confirmed = $.Deferred();
-  var ws = new WebSocket("ws://socket.blockcypher.com/v1/btc/test3");
+  var ws = new WebSocket("wss://socket.blockcypher.com/v1/btc/test3");
   // We keep pinging on a timer to keep the websocket alive
   var ping = pinger(ws);
 

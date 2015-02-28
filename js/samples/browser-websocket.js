@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://socket.blockcypher.com/v1/btc/main");
+var ws = new WebSocket("wss://socket.blockcypher.com/v1/btc/main");
 var count = 0;
 ws.onmessage = function (event) {
   var tx = JSON.parse(event.data);
