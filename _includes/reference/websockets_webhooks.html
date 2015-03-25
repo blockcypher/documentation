@@ -101,7 +101,7 @@
 
 <ul class="list">
   <li>The JSON document describing the event subscription should be sent using a POST request to https://api.blockcypher.com/v1/btc/main/hooks and include an additional property containing the URL to be called.</li>
-  <li>The transaction or block associated with the event you subscribed to will be POSTed to the provided URL. The POST request will also include a X-EventType HTTP header specifying the type of event which triggered the request.</li>
+  <li>The transaction or block associated with the event you subscribed to will be POSTed to the provided URL. The POST request will also include a X-EventType and a X-EventId HTTP header specifying the type of and id of the webhook which triggered the request.</li>
 </ul>
 
 <p>See <a href="#events">above</a> for all the different type of events you can listen to with a WebHook. To create a new WebHook:</p>
