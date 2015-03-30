@@ -19,7 +19,7 @@
   <li><em>unconfirmed-tx</em>: Triggered for every new transaction before it goes into a block; basically, for every unconfirmed transactions. The payload is the unconfirmed <a href="#transactions">transaction</a>.</li>
   <li><em>new-block</em>: Triggered for every new block added to the main chain. The payload is the <a href="#blocks">block</a>.</li>
   <li><em>confirmed-tx</em>: Triggered for every new transaction making it into a new block on the main chain; basically, for every first transaction confirmation. This is equivalent to listening to the above events and fetching each transaction in the block. The payload is the confirmed <a href="#transactions">transaction</a>.</li>
-  <li><em>tx-confirmation</em>: Simplifies listening to confirmations on all transactions on a given address up to a provided threshold (maximum 10, default 6). Use the "confirmations" property to specify the number of confirmations desired.</li>
+  <li><em>tx-confirmation</em>: Simplifies listening to confirmations on all transactions for a given address up to a provided threshold. Sends first the unconfirmed transaction and then the transaction for each confirmation. Use the "confirmations" property to specify the number of confirmations desired (maximum 10, default 6).</li>
   <li><em>double-spend-tx</em>: Triggered any time a double spend is detected. The payload is the transaction that triggered the even and the hash of the transaction that it's trying to double spend is included in its <em>double_spend_tx</em> property.</li>
 </ul>
 
