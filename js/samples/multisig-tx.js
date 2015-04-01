@@ -95,7 +95,7 @@ function signForAddressAndSend(addressNum) {
     if (checkError(newtx)) return;
     console.log(addrs[addressNum-1]);
 
-    var key = Bitcoin.ECKey.fromHex(addrs[addressNum-1].private);
+    var key = new bitcoin.ECKey(bigi.fromHex(addrs[addressNum-1].private), true);
     newtx.signatures  = newtx.tosign.map(function(tosign) {
       return key.sign(new buffer.Buffer(tosign, "hex")).toDER().toString("hex");
     });
