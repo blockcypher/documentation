@@ -30,7 +30,7 @@ function newFundingTransaction() {
     "outputs": [{
       "addresses"   : [addrs[0].public, addrs[1].public, addrs[2].public],
       "script_type" : "multisig-2-of-3",
-      "value"       : 30000,
+      "value"       : 40000,
     }]
   }
   return $.post(rootUrl+"/txs/new", JSON.stringify(newtx));
