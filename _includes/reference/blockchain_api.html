@@ -288,6 +288,11 @@
         <td>Fees collected by miners in the transaction, in satoshis.</td>
       </tr>
       <tr>
+        <td><code>hex</code></td>
+        <td>0100000002a35...</td>
+        <td>Hex encoded bytes of the raw transaction (as sent over the network). Only included when the <i>includeHex</i> URL property is set to true.</td>
+      </tr>
+      <tr>
         <td><code>relayed_by</code></td>
         <td>50.154.237.192:8333</td>
         <td>Address of the peer that sent us this transaction.</td>
@@ -394,6 +399,11 @@
       <td><code>output_value</code></td>
       <td>1</td>
       <td>Value of the output being spent. Does not exist for <a href="https://en.bitcoin.it/wiki/Protocol_specification#Transaction_Verification">coinbase</a> transactions.</td>
+    </tr>
+    <tr>
+      <td><code>age</code></td>
+      <td>26</td>
+      <td>Number of confirmations since the transaction referenced by this input was included in the blockchain. Only present for unconfirmed transactions for now.</td>
     </tr>
     <tr>
       <td><code>script_type</code></td>
