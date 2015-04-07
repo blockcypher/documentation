@@ -11,9 +11,9 @@
   <li>Easily fund a multisig address from any wallet by providing a using a classic address that will automatically transfer to the multisig.</li>
 </ul>
 
-<p>Payments are free (other than the required 0.1 mBTC miner fee).</p>
+<p>We do not take a fee on payment forwarding, (other than the required 0.1 mBTC miner fee), payments are free. However as part of your own services, you can include a fee that will also be automatically transfered to your own address in the same transaction.</p>
 
-<p>To create a new payment forwarding:</p>
+<p>To create a basic payment forwarding:</p>
 
 <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/payments
 {
@@ -48,6 +48,17 @@
 <pre><code class="language-bash">$ curl -d '{"destination": "17astdTmG8zzVmry8mV8A7atAr3XefEgRX"}' https://api.blockcypher.com/v1/btc/main/payments</code></pre>
 
 <p>Send some money to the returned <em>input_address</em> and watch it being instantly forwarded to your desintation address.</p>
+
+<p>As previously mentioned, you may include an address you control to collect processing fees as part of your own service. The processing fee can be either a fixed fee in satoshis or a percentage of the whole amount. The mining fee will always be perceived on the processing fee (if large enough). Here is an example POST request to create a payment collecting a 10% fee:</p>
+
+<pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/payments
+{
+  "destination": "15qx9ug952GWGTNn7Uiv6vode4RcGrRemh",
+  "callback_url": "https://my.domain.com/callbacks/new-block"
+  "process_fees_address": "1LWw6FdzNUcX8bnekMMZ7eofcGF7SXmbrL",
+  "process_fees_percent": 0.1,
+  "token": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+}</code></pre>
 
 <span class="title-anchor" id="payments_details"></span>
 <h3 class="text-purple">Details</h3>
@@ -124,6 +135,21 @@
         <td>The address the payment should be made to to be forwarded, generated when the payment forwarding is created.</td>
       </tr>
       <tr>
+        <td><code>process_fees_address</code></td>
+        <td>16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX</td>
+        <td>Address to forward processing fees to, if specified. Allows you to perceive a fee for your own services. A satoshi amount or percentage are required if specified.</td>
+      </tr>
+      <tr>
+        <td><code>process_fees_satoshis</code></td>
+        <td>100000</td>
+        <td>Fixed processing fee amount to be sent to the fee address. A fixed satoshi amount or a percentage is required if a processing fee address has been provided.</td>
+      </tr>
+      <tr>
+        <td><code>process_fees_percent</code></td>
+        <td>0.05</td>
+        <td>Percentage of the transaction to be sent to the fee address. A fixed satoshi amount or a percentage is required if a processing fee address has been provided.</td>
+      </tr>
+      <tr>
         <td><code>callback_url</code></td>
         <td>https://my.domain.com/callbacks/payments</td>
         <td>The URL to call anytime a new payment is forwarded. Optional.</td>
@@ -132,6 +158,11 @@
         <td><code>enable_confirmations</code></td>
         <td>true</td>
         <td>Whether to also call the <em>callback_url</em> with subsequent confirmations of the forwarding transactions. Automatically sets up a WebHook.</td>
+      </tr>
+      <tr>
+        <td><code>mining_fees_satoshis</code></td>
+        <td>5000</td>
+        <td>The URL to call anytime a new payment is forwarded. Optional.</td>
       </tr>
       <tr>
         <td><code>transactions</code></td>

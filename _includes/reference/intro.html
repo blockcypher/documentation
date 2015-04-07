@@ -1,7 +1,9 @@
 <span class="title-anchor" id="introduction"></span>
 <h2 class="section-title">Introduction</h2>
 
-<p>BlockCypher runs the Main and Test Bitcoin and Litecoin block chains as well as the Uro block chain. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a>.
+<p>BlockCypher runs the Main and Test Bitcoin, Litecoin and Dogecoin block chains. The BlockCypher API is a simple, mostly RESTful JSON API, accessed over HTTP or HTTPS from the api.blockcypher.com domain. All URLs are versioned. We provide push-style APIs using <a href="https://developer.mozilla.org/en-US/docs/WebSockets">WebSockets</a> and allow you to register a URL to POST to via <a href="https://webhooks.pbworks.com/w/page/13385124/FrontPage">WebHooks</a>.
+
+<p>Alternatively, <a href="#lang-libs">libraries native to multiple programming languages</a> can be used.</p>
 
 <p>Several code samples are provided throughout this documentation. If you would like to check them first, they're listed here:</p>
 <ul>
@@ -11,12 +13,29 @@
   <li><a href="{{ "samples/multisig-tx.html" | prepend: site.baseurl }}">Using Multisig</a></li>
 </ul>
 
-<p>Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
+<p>Low volume access to our APIs is fully open but <a href="https://accounts.blockcypher.com">obtaining an API token</a> is recommended to avoid rate limiting. Please <a href="mailto:contact@blockcypher.com">contact us</a> if you have any questions.</p>
 
-<p>Most resources exist under a given block chain. The URLs to Bitcoin, Litecoin, Uro and BlockCypher chains are:</p>
+<a class="title-anchor" id="lang-libs"></a>
+<h3 class="text-purple">Language Specific Libraries</h3>
+
+<p>Multiple libraries exist for most mainstream programming languages, either provided by BlockCypher or by the community:</p>
+
+<ul>
+  <li><strong>Python</strong> - <a href="https://github.com/blockcypher/blockcypher-python">https://github.com/blockcypher/blockcypher-python</a></li>
+  <li><strong>Java</strong> - <a href="https://github.com/blockcypher/java-client">https://github.com/blockcypher/java-client</a></li>
+  <li><strong>.Net</strong> - <a href="https://github.com/bscheiman/BlockCypher">https://github.com/bscheiman/BlockCypher</a></li>
+  <li><strong>Ruby</strong> - <a href="https://github.com/blockcypher/ruby-client">https://github.com/blockcypher/ruby-client</a></li>
+  <li><strong>Node.js (under development)</strong> - <a href="https://github.com/blockcypher/node-client">https://github.com/blockcypher/node-client</a></li>
+</ul>
+
+<a class="title-anchor" id="resources"></a>
+<h3 class="text-purple">RESTful Resources</h3>
+
+<p>Most resources exist under a given block chain. The URLs to Bitcoin, Dogecoin, Litecoin, Uro and BlockCypher chains are:</p>
 
 <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main
 https://api.blockcypher.com/v1/btc/test3
+https://api.blockcypher.com/v1/doge/main
 https://api.blockcypher.com/v1/ltc/main
 https://api.blockcypher.com/v1/uro/main
 https://api.blockcypher.com/v1/bcy/test</code></pre>
@@ -42,14 +61,14 @@ https://api.blockcypher.com/v1/bcy/test</code></pre>
   <li>WebHooks and WebSockets, up to 600 requests/hr</li>
 </ul>
 
-<p>If you exceed a limit, an HTTP status code 429 will be returned. Please <a href="mailto:contact@blockcypher.com">email us</a> for a user token if your usage will exceed those limits, we'll email you one within minutes. Our future pricing plan will be tiered based on usage and volume. We will have a free tier and an extended free plan for our early users.</p>
+<p>If you exceed a limit, an HTTP status code 429 will be returned. Please <a href="https://accounts.blockcypher.com">register</a> for a user token if your usage can exceed those limits. Our future pricing plan will be tiered based on usage and volume. We will have a free tier and an extended free plan for our early users. To request higher limits or SLAs, please <a href="mailto:contact@blockcypher.com">email us</a>.</p>
 
 <p>When you have a token, just pass it as a URL parameter to every single of youre requests, for example:</p>
 
 <pre><code class="language-http">https://api.blockcypher.com/v1/btc/main?token=$USER_TOKEN</code></pre>
 
 <a class="title-anchor" id="batching"></a>
-<h2>Batching</h2>
+<h3 class="text-purple">Batching</h3>
   <p>All the endpoints that can be used to retrieve a single object (an address, block, transaction, etc.) can also be used to retrieve multiple at once. Compose your URLs by appending each identifier to the previous using a semicolon as a separator. For example (click on the links to see non-abbreviated URLs):</p>
   <p>
     <a href="http://api.blockcypher.com/v1/btc/main/blocks/5;6;7">http://api.blockcypher.com/v1/btc/main/blocks/5;6;7</a><br>
@@ -62,7 +81,7 @@ https://api.blockcypher.com/v1/bcy/test</code></pre>
 <a class="title-anchor" id="testing"></a>
 <h3 class="text-purple">Testing</h3>
 
-<p>To facilitate the testing of your application when using BlockCypher's API, we provide our own test blockchain that supports all of our web services. This blockchain has characteristics very similar to Bitcoin's main chain and a "faucet", which allows you to very easily get free coins for automated testing.</p>
+<p>To facilitate the testing of your application when using BlockCypher's API, we provide our own test blockchain that supports all of our web services. This blockchain has characteristics very similar to Bitcoin's main chain and a <a href="https://accounts.blockcypher.com/blockcypher-faucet">"faucet"</a>, which allows you to very easily get free coins for automated testing.</p>
 
 <p>The only differences with the Bitcoin main chain are the following:</p>
 
@@ -87,6 +106,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 {
   "tx_ref": "02dbf5585d438a1cba82a9041dd815635a6b0df684225cb5271e11397a759479"
 }</code></pre>
+
+<p>The faucet can also be used <a href="https://accounts.blockcypher.com/blockcypher-faucet">from your browser</a> if you want to play with it before automating.</p>
 
 <p>A token is required to use the faucet. The faucet will refuse to fund an address with more than 50 billion coins and will not fund more than 10 million coins at a time.</p>
 

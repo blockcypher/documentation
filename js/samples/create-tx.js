@@ -1,5 +1,6 @@
-var bytesToHex = Bitcoin.convert.bytesToHex;
-var hexToBytes = Bitcoin.convert.hexToBytes;
+var bitcoin = require("bitcoinjs-lib");
+var bigi    = require("bigi");
+var buffer  = require('buffer');
 
 var rootUrl = "https://api.blockcypher.com/v1/btc/test3";
 // please do not drain our test account, if you need testnet BTC use a faucet
@@ -9,7 +10,7 @@ var source = {
   public  : "03bb318b00de944086fad67ab78a832eb1bf26916053ecd3b14a3f48f9fbe0821f",
   address : "mtWg6ccLiZWw2Et7E5UqmHsYgrAi5wqiov"
 }
-var key   = Bitcoin.ECKey.fromHex(source.private);
+var key   = new bitcoin.ECKey(bigi.fromHex(source.private), true);
 var dest  = null;
 
 // 0. We get a newly generated address
@@ -36,7 +37,7 @@ function signAndSend(newtx) {
   newtx.pubkeys     = [];
   newtx.signatures  = newtx.tosign.map(function(tosign) {
     newtx.pubkeys.push(source.public);
-    return bytesToHex(key.sign(hexToBytes(tosign)));
+    return key.sign(new buffer.Buffer(tosign, "hex")).toDER().toString("hex");
   });
   return $.post(rootUrl+"/txs/send", JSON.stringify(newtx));
 }
@@ -47,7 +48,7 @@ function waitForConfirmation(finaltx) {
   log("Transaction " + finaltx.tx.hash + " to " + dest.address + " of " +
         finaltx.tx.outputs[0].value/100000000 + " BTC sent.");
 
-  var ws = new WebSocket("ws://socket.blockcypher.com/v1/btc/test3");
+  var ws = new WebSocket("wss://socket.blockcypher.com/v1/btc/test3");
 
   // We keep pinging on a timer to keep the websocket alive
   var ping = pinger(ws);
