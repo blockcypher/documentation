@@ -1,7 +1,7 @@
 <span class="title-anchor" id="wallet_api"></span>
 <h2 class="section-title">Wallet API</h2>
 
-<p>The wallet API groups multiple addresses under a single name. Addresses can be added and removed, and the name can be used with our other APIs. <!-- We also support HD (<a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki">BIP 32</a>) wallets. While for normal wallets any address can be added/removed, a HD wallet handles addresses derived from a single pair of master keys. -->
+<p>The wallet API groups multiple addresses under a single name. A wallet can be created, deleted and have a new address generated. Addresses can be added and removed. Wallets (and optional user token) can be used with the Address API. Wallets can also be used with the WebSockets and WebHooks API and with the Transactions API, in which case a user token is mandatory. In general, using a wallet instead of an address with a API will have the effect of using the set of addresses in the wallet with the API. See each API for more details. <!-- We also support HD (<a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki">BIP 32</a>) wallets. While for normal wallets any address can be added/removed, a HD wallet handles addresses derived from a single pair of master keys. -->
 </p>
 
 <div class="table-responsive">
@@ -71,7 +71,15 @@
 <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/wallet/
 {
   "name": "alice",
-  "addresses": ["16uKw7GsQSzfMaVTcT7tpFQkd7Rh9qcXWX", "17astdTmG8zzVmry8mV8A7atAr3XefEgRX"]
+  "addresses": ["1JcX75oraJEmzXXHpDjRctw3BX6qDmFM8e"]
+}</code></pre>
+
+<p>To add an address:</p>
+
+<pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/wallet/alice/addresses
+{
+  "name": "alice",
+  "addresses": ["13cj1QtfW61kQHoqXm3khVRYPJrgQiRM6j"]
 }</code></pre>
 
 <!--
