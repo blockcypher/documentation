@@ -76,7 +76,8 @@ https://api.blockcypher.com/v1/bcy/test</code></pre>
     <a href="http://api.blockcypher.com/v1/btc/main/txs/950d61ab2f51ea877e6183c8210de1677d78e16abfd4103990c3703f17de13a7;6370d43593fc47daf9443e0773faf289c54ca0bd9b92c2e538c77a6db67b0780">http://api.blockcypher.com/v1/btc/main/txs/950d61...;6370d435...</a><br>
   </p>
   <p>The results are aggregated in a JSON array and may not be ordered, especially for bigger batches. This should not matter as the requested identifiers are always present in the returned objects.</p>
-  <p>Note that this works even when the identifiers arent the last part of the URL (like the address balance request above). The number of elements that can be retrieved at once is limited to 100. <p>
+  <p>Batching also works even when the identifiers arent the last part of the URL (like the address balance request above). The number of elements that can be retrieved at once is limited to 100. <p>
+  <p><em>Note</em>: as the default rate limit per second is 5, larger batches will require you have an API token. To use larger batches <a href="https://accounts.blockcypher.com">please register</a>.</p>
 
 <a class="title-anchor" id="testing"></a>
 <h3 class="text-purple">Testing</h3>
