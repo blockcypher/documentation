@@ -1,7 +1,9 @@
 <span class="title-anchor" id="wallet_api"></span>
-<h2 class="section-title">Wallet API</h2>
+<h2 class="section-title">Address Wallet API</h2>
 
-<p>The wallet API groups multiple addresses under a single name. A wallet can be created, deleted and have a new address generated. Addresses can be added and removed. Wallets (and optional user token) can be used with the Address API. Wallets can also be used with the WebSockets and WebHooks API and with the Transactions API, in which case a user token is mandatory. In general, using a wallet instead of an address with a API will have the effect of using the set of addresses in the wallet with the API. See each API for more details. <!-- We also support HD (<a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki">BIP 32</a>) wallets. While for normal wallets any address can be added/removed, a HD wallet handles addresses derived from a single pair of master keys. -->
+<p>The wallet API groups multiple addresses under a single name. It only holds public information and does not require any private key. A wallet can be created, deleted and have a new address added. Addresses can be added and removed from a wallet. The wallet itself can have any custom name as long as it does not start with the standard address prefix (1 or 3 for Bitcoin).</p>
+
+<p>Wallets can be leveraged by the Address API, just by using their name as an address. They can also be used with the WebSockets and WebHooks API and with the Transactions API, in which case a user token is mandatory. In general, using a wallet instead of an address with an API will have the effect of using the set of addresses in the wallet with the API. See each API for more details. <!-- We also support HD (<a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki">BIP 32</a>) wallets. While for normal wallets any address can be added/removed, a HD wallet handles addresses derived from a single pair of master keys. -->
 </p>
 
 <div class="table-responsive">
@@ -17,7 +19,7 @@
     <tbody>
       <tr>
         <td>Create Wallet</td>
-        <td>/v1/{coin}/{chain}/wallet/ (/v1/btc/main/wallet/)</td>
+        <td>/v1/{coin}/{chain}/wallets (/v1/btc/main/wallets)</td>
         <td>POST</td>
         <td>Creates a new wallet identified by <em>name</em> and associates <em>addresses</em> with it.</td>
       </tr>
@@ -30,32 +32,32 @@
       </tr>
       -->
       <tr>
-        <td>Generate Address</td>
-        <td>/v1/{coin}/{chain}/wallet/{name}/addresses/generate (/v1/btc/main/wallet/alice/addresses/generate)</td>
-        <td>POST</td>
-        <td>A new address is generated similar to <a href="#address_gen">Address Generation</a> and associated it with the given wallet. </td>
-      </tr>
-      <tr>
         <td>Addresses</td>
-        <td>/v1/{coin}/{chain}/wallet/{name}/addresses (/v1/btc/main/wallet/alice/addresses)</td>
+        <td>/v1/{coin}/{chain}/wallets/{name}/addresses (/v1/btc/main/wallets/alice/addresses)</td>
         <td>GET</td>
         <td>All addresses in a given wallet.</td>
       </tr>
       <tr>
         <td>Add Addresses</td>
-        <td>/v1/{coin}/{chain}/wallet/{name}/addresses/ (/v1/btc/main/wallet/alice/addresses)</td>
+        <td>/v1/{coin}/{chain}/wallets/{name}/addresses/ (/v1/btc/main/wallets/alice/addresses)</td>
         <td>POST</td>
         <td>Associates <em>addresses</em> with the wallet.</td>
       </tr>
       <tr>
         <td>Remove Addresses</td>
-        <td>/v1/{coin}/{chain}/wallet/{name}/addresss/ (/v1/btc/main/wallet/alice/addreses)</td>
+        <td>/v1/{coin}/{chain}/wallets/{name}/addresss/ (/v1/btc/main/wallets/alice/addreses)</td>
         <td>DELETE</td>
         <td><em>addresses</em> will no longer be associated with the wallet.</td>
       </tr>
       <tr>
+        <td>Generate Address</td>
+        <td>/v1/{coin}/{chain}/wallets/{name}/addresses/generate (/v1/btc/main/wallets/alice/addresses/generate)</td>
+        <td>POST</td>
+        <td>A new address is generated similar to <a href="#address_gen">Address Generation</a> and associated it with the given wallet. </td>
+      </tr>
+      <tr>
         <td>Delete</td>
-        <td>/v1/{coin}/{chain}/wallet/{name}/ (/v1/btc/main/wallet/alice/)</td>
+        <td>/v1/{coin}/{chain}/wallets/{name}/ (/v1/btc/main/wallets/alice/)</td>
         <td>DELETE</td>
         <td>Deletes the wallet (removes the association between <em>name</em> and any addresses).</td>
       </tr>
@@ -68,7 +70,7 @@
 
 <p>To create a new wallet:</p>
 
-<pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/wallet/
+<pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/wallets
 {
   "name": "alice",
   "addresses": ["1JcX75oraJEmzXXHpDjRctw3BX6qDmFM8e"]
@@ -78,9 +80,12 @@
 
 <pre><code class="language-javascript">POST https://api.blockcypher.com/v1/btc/main/wallet/alice/addresses
 {
-  "name": "alice",
   "addresses": ["13cj1QtfW61kQHoqXm3khVRYPJrgQiRM6j"]
 }</code></pre>
+
+<p>After which querying the wallet like would your query any address will produce the wallet balance, transaction count, transaction details, etc.</p>
+
+<pre><code class="language-bash">curl https://api.blockcypher.com/v1/btc/main/wallets/alice?token=$TOKEN</code></pre>
 
 <!--
 <h3 class="text-purple">HD wallet</h3>
