@@ -41,7 +41,7 @@
   "transaction_hash": "1aa6103d8dfc067ad42c4b9a5b157d0fc403b85064d852abbc162bb274cd9def"
 }</code></pre>
 
-<p>All payments will be debited with a 10,000 satoshis mining fee.</p>
+<p><em>Note</em>: by default, all payments will be debited with a 10,000 satoshis mining fee. The amount of the fee is configurable. But for very small payments, if the amount sent is even lower than the fees, the forward will fail.</p>
 
 <p>A quick and easy way to test payments is to use curl to create a simple one without a callback (replace with your own address):</p>
 
