@@ -82,7 +82,15 @@ https://api.blockcypher.com/v1/bcy/test</code></pre>
 <a class="title-anchor" id="testing"></a>
 <h3 class="text-purple">Testing</h3>
 
-<p>To facilitate the testing of your application when using BlockCypher's API, we provide our own test blockchain that supports all of our web services. This blockchain has characteristics very similar to Bitcoin's main chain and a <a href="https://accounts.blockcypher.com/blockcypher-faucet">"faucet"</a>, which allows you to very easily get free coins for automated testing.</p>
+<p>We faciliate the testing of your applications in 2 different ways:</p>
+<ul>
+  <li>A BlockCypher test chain, supporting all our services as well as an automated faucet.</li>
+  <li>An automated faucet for the bitcoin testnet.</li>
+</ul>
+
+<h4 class="text-purple">BlockCypher Test Block Chain</h4>
+
+<p>For automated testing, we recommend the use of our test block chain. It has characteristics very similar to Bitcoin's main chain but is more stable, offers faster confirmations and has a <a href="https://accounts.blockcypher.com/blockcypher-faucet">"faucet"</a>, which allows you to very easily get free coins for automated testing.</p>
 
 <p>The only differences with the Bitcoin main chain are the following:</p>
 
@@ -95,7 +103,10 @@ https://api.blockcypher.com/v1/bcy/test</code></pre>
 <p>This blockchain is available under the following URL:</p>
 
 <pre><code class="language-http">https://api.blockcypher.com/v1/bcy/test</code></pre>
-<p>In addition to all our APIs, a faucet endpoint is available. Calling it passing an address will automatically create a new transaction funding the address with the provided amount. For example to create a new test address and fund it with 100,000 of our coins:</p>
+
+<h4 class="text-purple">Test Faucet</h4>
+
+<p>In addition to all our APIs a faucet endpoint is available, which works both on our test chain and on the bitcoin testnet. Calling it passing an address will automatically create a new transaction funding the address with the provided amount. For example to create a new test address and fund it with 100,000 of our coins:</p>
 
 <pre><code class="language-bash">$ curl -X POST http://api.blockcypher.com/v1/bcy/test/addrs?token=$TOKEN
 {
@@ -108,9 +119,8 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
   "tx_ref": "02dbf5585d438a1cba82a9041dd815635a6b0df684225cb5271e11397a759479"
 }</code></pre>
 
+<p>The exact same interaction can be achieved on the bitcoin testnet by replacing bcy/test with btc/test3 in all URLs above.</p>
+
 <p>The faucet can also be used <a href="https://accounts.blockcypher.com/blockcypher-faucet">from your browser</a> if you want to play with it before automating.</p>
 
-<p>A token is required to use the faucet. The faucet will refuse to fund an address with more than 50 billion coins and will not fund more than 10 million coins at a time.</p>
-
-<p>Of course, you can still test your applications against the Bitcoin testnet. Our test blockchain just provides more stability and a reliable automated faucet.</p>
- 
+<p>A token is required to use the faucet. On the BlockCypher test chain, the faucet will refuse to fund an address with more than 50 billion coins and will not fund more than 10 million coins at a time. On the bitcoin testnet those numbers are adjusted to 10 million and 500,000 testnet satoshis respectively.</p> 
