@@ -104,9 +104,17 @@ https://api.blockcypher.com/v1/bcy/test</code></pre>
 
 <pre><code class="language-http">https://api.blockcypher.com/v1/bcy/test</code></pre>
 
-<h4 class="text-purple">Test Faucet</h4>
+<h4 class="text-purple">Test Faucets</h4>
 
-<p>In addition to all our APIs a faucet endpoint is available, which works both on our test chain and on the bitcoin testnet. Calling it passing an address will automatically create a new transaction funding the address with the provided amount. For example to create a new test address and fund it with 100,000 of our coins:</p>
+<p>In addition to all our APIs a faucet endpoint is available, which works both on our test chain and on the bitcoin testnet. Calling it passing an address will automatically create a new transaction funding the address with the provided amount.</p>
+
+<p>The faucets can be used from your browser if you want to play with them before automating:</p>
+<ul>
+  <li><a href="https://accounts.blockcypher.com/testnet-faucet">Bitcoin Testnet Faucet</a></li>
+  <li><a href="https://accounts.blockcypher.com/blockcypher-faucet">BlockCypher Testnet Faucet</a></li>
+</ul>
+
+<p>To use them programmatically, the following example demonstrates how to create a new test address and fund it with 100,000 of our coins:</p>
 
 <pre><code class="language-bash">$ curl -X POST http://api.blockcypher.com/v1/bcy/test/addrs?token=$TOKEN
 {
@@ -120,7 +128,5 @@ $ curl -d '{"address": "CFqoZmZ3ePwK5wnkhxJjJAQKJ82C7RJdmd", "amount": 100000}' 
 }</code></pre>
 
 <p>The exact same interaction can be achieved on the bitcoin testnet by replacing bcy/test with btc/test3 in all URLs above.</p>
-
-<p>The faucet can also be used <a href="https://accounts.blockcypher.com/blockcypher-faucet">from your browser</a> if you want to play with it before automating.</p>
 
 <p>A token is required to use the faucet. On the BlockCypher test chain, the faucet will refuse to fund an address with more than 50 billion coins and will not fund more than 10 million coins at a time. On the bitcoin testnet those numbers are adjusted to 10 million and 500,000 testnet satoshis respectively.</p> 
