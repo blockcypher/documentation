@@ -478,7 +478,7 @@ $ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.b
 
 <p>Note that the Bitcoin signature algorithm does not necessarily preserve inputs. Inputs other than the one you're signing are usually empty and the input you're signing will have a different script.</p>
 
-<p>Here is a full example using the command line (or <a href="https://gist.github.com/matthieu/f18b54cb91c31d39ba54">this gist</a> for the full non-abbreviated session):</p>
+<p>Following is a full example using the command line (or <a href="https://gist.github.com/matthieu/f18b54cb91c31d39ba54">this gist</a> for the full non-abbreviated session). The hashes returned on Mac OS may be wrong due to a bug in xxd.</p>
 <pre><code class="language-javascript">
 $ curl -d '{"inputs": [{"addresses": ["mtWg6ccLiZWw2Et7E5UqmHsYgrAi5wqiov"]}],
             "outputs":[{"addresses": ["mzUqjgiGc3Mqh5zMiP5vXDNd7Hwx3K1xCU"], "value": 25000}]}' \
