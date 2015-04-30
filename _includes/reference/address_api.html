@@ -1,7 +1,7 @@
 <span class="title-anchor" id="address_api"></span>
 <h2 class="section-title">Address API</h2>
 
-<p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. A collection resource and a detail resource make up the Address API. A wallet name can also be used with this API.</p>
+<p><a href="https://en.bitcoin.it/wiki/Address">Addresses</a> are identifiers used to send and receive payments. A collection resource and a detail resource make up the Address API. A <a href="#wallet_api">wallet</a> name can also be used with this API.</p>
 
 <div class="table-responsive">
   <table class="table bc-table">
@@ -14,12 +14,6 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Addresses</td>
-        <td>/v1/{coin}/{chain}/addrs<br>(/v1/btc/main/addrs)</td>
-        <td>POST</td>
-        <td>Returns a newly generated address with the corresponding public and private keys.</td>
-      </tr>
       <tr>
         <td>Address</td>
         <td>/v1/{coin}/{chain}/addrs/{hash}<br>
@@ -49,6 +43,12 @@
         </td>
         <td>GET</td>
         <td>Only balance and number of transactions for a given address/wallet.</td>
+      </tr>
+      <tr>
+        <td>Addresses</td>
+        <td>/v1/{coin}/{chain}/addrs<br>(/v1/btc/main/addrs)</td>
+        <td>POST</td>
+        <td>Returns a newly generated address with the corresponding public and private keys or calculate the multisig address from a set of public keys.</td>
       </tr>
     </tbody>
   </table>
@@ -269,8 +269,13 @@
  
 <span class="title-anchor" id="address_gen"></span>
 <h3 class="text-purple">Address Generation</h3>
+<p>The address generation endpoint allows you to either:</p>
+<ul class="list">
+  <li>Generate a brand new set of private key, public key and address.</li>
+  <li>Compute a multisig address from a set of public keys.</li>
+</ul>
 
-<p>The generation API is offered for convenience purpose, for security reasons please always use HTTPS to use this resource. No information is required in the POST request, the following information will be returned:</p>
+<p>The generation API returns a private key (immediately discarded by our servers), for security reasons please always use HTTPS to use this resource. No information is required in the POST request, the following information will be returned:</p>
 
 <div class="table-responsive">
   <table class="table bc-table">
@@ -302,17 +307,36 @@
         <td>L2wW7Aq...</td>
         <td>Wallet import format, a common encoding for the private key.</td>
       </tr>
+      <tr>
+        <td><code>pubkeys</code></td>
+        <td>[]</td>
+        <td>Array of public keys to provide to generate a multisig address.</td>
+      </tr>
+      <tr>
+        <td><code>script_type</code></td>
+        <td>multisig-2-of-3</td>
+        <td>Type of multisig script to generate a multisig address for.</td>
+      </tr>
     </tbody>
   </table>
 </div>
 
-<p>To get a newly generated address::</p>
+<p>To get a newly generated address:</p>
 
-<pre><code class="language-http">curl -X POST http://api.blockcypher.com/v1/btc/test3/addrs</code>
+<pre><code class="language-bash">curl -X POST http://api.blockcypher.com/v1/btc/test3/addrs</code>
 <code class="language-javascript">{
   "private": "86751cb880a9a1addcc3b67979976158dd800afe9d14b68349921299b20c94dd",
   "public": "03866586fbe3652eb219c5ed99c3fc72d125472248183f966e0673be08a1c543de",
   "address": "n1ucSDLByN5GLLQuE7BMrtTWHwHtkaVkfA",
   "wif": "cS64ygfjWjN73S78oUbJQeikDn9uS7KNWS1PL7NqeBUuF4UobnAy"
 }</code></pre>
+
+<p>To generate a multisig address from a set of public keys:</p>
+<pre><code class="language-bash">
+$ curl -d '{"pubkeys": ["02c716d071a76cbf0d29c29cacfec76e0ef8116b37389fb7a3e76d6d32cf59f4d3",
+                        "033ef4d5165637d99b673bcdbb7ead359cee6afd7aaf78d3da9d2392ee4102c8ea",
+                        "022b8934cc41e76cb4286b9f3ed57e2d27798395b04dd23711981a77dc216df8ca"],
+            "script_type": "multisig-2-of-3"}' \
+            https://api.blockcypher.com/v1/btc/main/addrs
+</code></pre>
 

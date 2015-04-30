@@ -480,7 +480,7 @@ $ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.b
 
 <p>Here is a full example using the command line (or <a href="https://gist.github.com/matthieu/f18b54cb91c31d39ba54">this gist</a> for the full non-abbreviated session):</p>
 <pre><code class="language-javascript">
-$ curl -d '{"inputs": [{"addresses": ["mtWg6ccLiZWw2Et7E5UqmHsYgrAi5wqiov"]}], \
+$ curl -d '{"inputs": [{"addresses": ["mtWg6ccLiZWw2Et7E5UqmHsYgrAi5wqiov"]}],
             "outputs":[{"addresses": ["mzUqjgiGc3Mqh5zMiP5vXDNd7Hwx3K1xCU"], "value": 25000}]}' \
             https://api.blockcypher.com/v1/btc/test3/txs/new?includeToSignTx=true
 {
@@ -513,6 +513,8 @@ b365bef9aae17e0d35963217d65915a2a00bc782f1bb1be5061a18d92063309e *-
   <li>A script type of multisig-N-of-M must be set (with N and M replaced by actual numbers, like multisig-2-of-3).</li>
   <li>Public keys must be provided instead of addresses for the multisig inputs or outputs.</li>
 </ul>
+
+<p>Note that if you simply want to generate a multisig address from the different public keys instead of a whole transaction, our <a href="http://dev.blockcypher.com/#address_gen">address generation</a> endpoint will help you do that.</p>
 
 <p>For a multisig interaction to happen, first the multisig address has to be sent some money using a transaction that includes M public keys in its output. Then that transaction can be spent by another by repeatedly issuing the required N number of signature. The interaction can be broken down as follows:</p>
 
