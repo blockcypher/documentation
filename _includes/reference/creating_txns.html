@@ -473,7 +473,7 @@ $ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.b
 
 <ul class="list">
   <li>Hashing the hex-encoded string twice using SHA256 should give you back the corresponding <em>tosign</em> data.</li>
-  <li>Decoding the hex-encoded string using our <em>txs/decode</em> endpoint should give you output addresses and amounts that match your transaction skeleton.</li>
+  <li>Decoding the hex-encoded string using our <em>txs/decode</em> endpoint (or an independent source) should give you output addresses and amounts that match your transaction skeleton.</li>
 </ul>
 
 <p>Note that the Bitcoin signature algorithm does not necessarily preserve inputs. Inputs other than the one you're signing are usually empty and the input you're signing will have a different script.</p>
@@ -493,14 +493,15 @@ $ curl -d '{"inputs": [{"addresses": ["mtWg6ccLiZWw2Et7E5UqmHsYgrAi5wqiov"]}],
   ]
 }
 
-# check the tosign_tx data (replace abbreviated string with above data) with decode to validate
-# inputs and outputs
+# Check the tosign_tx data (replace abbreviated string with above data) with decode to validate
+# inputs and outputs. Note that you can also use an independent source to do this verification
+# (like other APIs or Bitcoin Core).
 $ curl -d '{"tx": "0100000001fc6e..."}' https://api.blockcypher.com/v1/btc/test3/txs/decode
 
-# validate that tosign is equal to tosign_tx after 2 rounds of sha256 hashing
-$ echo -n "0100000001fc6e..." | xxd -r -p | sha256sum -b
+# Validate that tosign is equal to tosign_tx after 2 rounds of sha256 hashing
+$ echo -n "0100000001fc6e..." | xxd -r -p | shasum -a 256 -b
 f80804283c023d50bdf3ba6a4f938dc2e65767b8aa55414ea6aae9ef410a55a6 *-
-$ echo -n "f80804283c023d50bdf3ba6a4f938dc2e65767b8aa55414ea6aae9ef410a55a6" | xxd -r -p | sha256sum -b
+$ echo -n "f80804283c023d50bdf3ba6a4f938dc2e65767b8aa55414ea6aae9ef410a55a6" | xxd -r -p | shasum -a 256 -b
 b365bef9aae17e0d35963217d65915a2a00bc782f1bb1be5061a18d92063309e *-
 </code></pre>
 
