@@ -478,6 +478,32 @@ $ curl -H "Content-Type: application/json" -d @microtx_signed.json https://api.b
 
 <p>Note that the Bitcoin signature algorithm does not necessarily preserve inputs. Inputs other than the one you're signing are usually empty and the input you're signing will have a different script.</p>
 
+<p>Here is a full example using the command line (or <a href="https://gist.github.com/matthieu/f18b54cb91c31d39ba54">this gist</a> for the full non-abbreviated session):</p>
+<pre><code class="language-javascript">
+$ curl -d '{"inputs": [{"addresses": ["mtWg6ccLiZWw2Et7E5UqmHsYgrAi5wqiov"]}], \
+            "outputs":[{"addresses": ["mzUqjgiGc3Mqh5zMiP5vXDNd7Hwx3K1xCU"], "value": 25000}]}' \
+            https://api.blockcypher.com/v1/btc/test3/txs/new?includeToSignTx=true
+{
+  "tx": { ... },
+  "tosign_tx": [
+    "0100000001fc6e024dc7e9caa6d5530db88c712b7220d25a9ed5a052b7fd183c4ecdc21a91010000001976a9148e8c1d4adef86c11154fd04b5012306715fd4baf88acffffffff02a8610000000000001976a914d004156436b38ef464b01286cdc9c4b36c99c68788ac38dd6501000000001976a9148e8c1d4adef86c11154fd04b5012306715fd4baf88ac0000000001000000"
+  ],
+  "tosign": [
+    "b365bef9aae17e0d35963217d65915a2a00bc782f1bb1be5061a18d92063309e"
+  ]
+}
+
+# check the tosign_tx data (replace abbreviated string with above data) with decode to validate
+# inputs and outputs
+$ curl -d '{"tx": "0100000001fc6e..."}' https://api.blockcypher.com/v1/btc/test3/txs/decode
+
+# validate that tosign is equal to tosign_tx after 2 rounds of sha256 hashing
+$ echo -n "0100000001fc6e..." | xxd -r -p | sha256sum -b
+f80804283c023d50bdf3ba6a4f938dc2e65767b8aa55414ea6aae9ef410a55a6 *-
+$ echo -n "f80804283c023d50bdf3ba6a4f938dc2e65767b8aa55414ea6aae9ef410a55a6" | xxd -r -p | sha256sum -b
+b365bef9aae17e0d35963217d65915a2a00bc782f1bb1be5061a18d92063309e *-
+</code></pre>
+
 <span class="title-anchor" id="multisig"></span>
 <h3 class="text-purple">Multisig Transactions</h3>
 
