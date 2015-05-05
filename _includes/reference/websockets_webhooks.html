@@ -23,6 +23,8 @@
   <li><em>double-spend-tx</em>: Triggered any time a double spend is detected. The payload is the transaction that triggered the even and the hash of the transaction that it's trying to double spend is included in its <em>double_spend_tx</em> property.</li>
 </ul>
 
+<p><em>Note</em>: events like unconfirmed-tx can produce a lot data. Make sure you <a href="https://accounts.blockcypher.com">register first</a> and use a token, otherwise events may stop being sent as you exceed <a href="#rate_limits">rate limits</a>.</p>
+
 <p>To subscribe to an event, send a document with the following format:</p>
 
 <pre><code class="language-javascript">{
