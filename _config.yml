@@ -6,10 +6,10 @@ description: "Build block chain applications easily with our web APIs and callba
 #local url
 #baseurl: "http://localhost/documentation/_site/"
 #live url
-baseurl: http://dev.blockcypher.com/
+baseurl: https://blockcypher.github.io/documentation/
 #baseurl: http://localhost:8080/
 
-url: "http://dev.blockcypher.com/"
+url: "https://blockcypher.github.io/documentation/"
 
 # Build settings
 markdown: kramdown
